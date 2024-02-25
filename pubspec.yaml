@@ -33,6 +33,8 @@ dependencies:
   firebase_core: ^2.25.4
   flutter:
     sdk: flutter
+  flutter_riverpod: ^2.4.10
+  routemaster: ^1.0.1
 
 dev_dependencies:
   flutter_lints: ^2.0.0
