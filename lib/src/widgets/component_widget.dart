@@ -25,13 +25,18 @@ class ComponentWidget extends StatelessWidget {
           ),
         );
       },
-      child: SizedBox(
-        height: 60,
+      child: Container(
+        height: 40,
+        margin: const EdgeInsets.only(bottom: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        decoration: BoxDecoration(color: Colors.grey.withOpacity(0.2), borderRadius: BorderRadius.circular(8)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(component.name),
-            (component.isSelected == true) ? const Text('Yes') : Container(),
+            SizedBox(
+              width: MediaQuery.of(context).size.width*0.6,
+              child: Text(component.name, textAlign: (component.name.length >= 20)? TextAlign.left: TextAlign.start)),
+            (component.isSelected == true) ? const Text('Done', style: TextStyle(color: Colors.orange),) : Container(),
           ],
         ),
       ),

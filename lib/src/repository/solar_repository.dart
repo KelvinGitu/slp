@@ -53,6 +53,20 @@ class SolarRepository {
     return result;
   }
 
+  Stream<List<ApplicationModel>> getAllApplications() {
+    return _applications
+        .where('isDone', isEqualTo: false)
+        .snapshots()
+        .map((event) {
+      List<ApplicationModel> applications = [];
+      for (var doc in event.docs) {
+        applications
+            .add(ApplicationModel.fromMap(doc.data() as Map<String, dynamic>));
+      }
+      return applications;
+    });
+  }
+
   Future saveComponentsToApplication(
       String applicationId, ComponentsModel componentsModel) async {
     return _applications
@@ -71,6 +85,17 @@ class SolarRepository {
           .add(ComponentsModel.fromMap(doc.data() as Map<String, dynamic>));
     }
     return components;
+  }
+
+  Stream<ComponentsModel> getApplicationComponent(
+      String applicationId, String component) {
+    return _applications
+        .doc(applicationId)
+        .collection('components')
+        .doc(component)
+        .snapshots()
+        .map((event) =>
+            ComponentsModel.fromMap(event.data() as Map<String, dynamic>));
   }
 
   Stream<List<ComponentsModel>> getApplicationComponents(String applicationId) {
@@ -98,7 +123,8 @@ class SolarRepository {
 
     List<ComponentsModel> components = [];
     for (var doc in event.docs) {
-      components.add(ComponentsModel.fromMap(doc.data()));
+      // ignore: unnecessary_cast
+      components.add(ComponentsModel.fromMap(doc.data() as Map<String, dynamic>));
     }
     return components;
   }
@@ -122,8 +148,10 @@ class SolarRepository {
   }
 
   Future updateApplicationComponentsList(
-      String applicationId, List<ComponentsModel> components) async {
-    return _applications.doc(applicationId).update({'components': components});
+      String applicationId, ComponentsModel component) async {
+    return _applications.doc(applicationId).update({
+      'components': FieldValue.arrayUnion([component])
+    });
   }
 
   Future updateApplicationQuotation(String applicationId, int quotation) async {

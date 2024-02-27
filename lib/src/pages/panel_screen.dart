@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:solar_project/models/components_model.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
 
 class PanelScreen extends ConsumerStatefulWidget {
@@ -19,6 +20,15 @@ class PanelScreen extends ConsumerStatefulWidget {
 class _PanelScreenState extends ConsumerState<PanelScreen> {
   final TextEditingController panelsController = TextEditingController();
 
+  late List<String> arguments;
+  
+
+  @override
+  void initState() {
+    arguments = [widget.applicationId, widget.component];
+    super.initState();
+  }
+
   @override
   void dispose() {
     panelsController.dispose();
@@ -33,12 +43,6 @@ class _PanelScreenState extends ConsumerState<PanelScreen> {
         );
   }
 
-  void updateApplicationComponentsList() {
-    ref
-        .watch(solarControllerProvider)
-        .updateApplicationComponentsList(widget.applicationId);
-  }
-
   void updateApplicationCost() {
     cost = int.parse(panelsController.text) * 10000;
     ref.watch(solarControllerProvider).updateApplicationCost(
@@ -48,6 +52,12 @@ class _PanelScreenState extends ConsumerState<PanelScreen> {
         );
   }
 
+  void updateApplicationComponentsList(ComponentsModel component) {
+    ref
+        .watch(solarControllerProvider)
+        .updateApplicationComponentsList(widget.applicationId, component);
+  }
+
   int cost = 0;
 
   Future<int> calculatePanelCost() async {
@@ -55,65 +65,122 @@ class _PanelScreenState extends ConsumerState<PanelScreen> {
     return cost;
   }
 
+  
+
   @override
   Widget build(BuildContext context) {
-    final panel = ref.watch(getComponentStreamProvider(widget.component));
+    final panelComponent =
+        ref.watch(getApplicationComponentStreamProvider(arguments));
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Panels'),
+        title: const Text(
+          'Panels',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
       ),
-      body: panel.when(
+      body: panelComponent.when(
         data: (panel) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(panel.name),
-              const Text('Measures of determination'),
-              const SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.circular(10),
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Column(
+              children: [
+                // Text(panel.name),
+                const Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    'Measures of determination',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
                 ),
-                child: Column(
-                  children: [
-                    Text(panel.measurement[0]),
-                    Text(panel.measurement[1]),
-                  ],
+                const SizedBox(height: 10),
+                Container(
+                  height: 100,
+                  width: MediaQuery.of(context).size.width,
+                  padding: const EdgeInsets.all(15),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: ListView.builder(
+                    itemCount: panel.measurement.length,
+                    itemBuilder: ((context, index) {
+                      return Text(panel.measurement[index]);
+                    }),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              const Text('How many panels does the client prefer?'),
-              const SizedBox(height: 10),
-              TextField(
-                controller: panelsController,
-                onSubmitted: (value) {
-                  calculatePanelCost();
-                },
-                keyboardType: const TextInputType.numberWithOptions(),
-                decoration: const InputDecoration(
-                  hintText: 'No. of panels',
-                  border: InputBorder.none,
-                  filled: true,
+                const SizedBox(height: 10),
+                (panel.isSelected == false)
+                    ? const Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          'How many panels does the client want?',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w500),
+                        ),
+                      )
+                    : Container(),
+                const SizedBox(height: 10),
+                (panel.isSelected == false)
+                    ? TextField(
+                        controller: panelsController,
+                        onSubmitted: (value) {
+                          calculatePanelCost();
+                        },
+                        keyboardType: const TextInputType.numberWithOptions(),
+                        decoration: InputDecoration(
+                          hintText: 'No. of panels',
+                          hintStyle: TextStyle(
+                              fontSize: 14,
+                              color: Colors.black.withOpacity(0.6)),
+                          border: InputBorder.none,
+                          filled: true,
+                          fillColor: Colors.grey.withOpacity(0.2),
+                        ),
+                      )
+                    : Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          'No of panels chosen: ${panelsController.text}',
+                          style: const TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                (panel.isSelected == false)
+                    ? const Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          '*approximate price: 1 panel = KES 10,000',
+                          style: TextStyle(fontSize: 10, color: Colors.orange),
+                        ))
+                    : Container(),
+                const SizedBox(height: 20),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    'Approximate cost: KES ${panel.cost}',
+                    style: const TextStyle(
+                        fontSize: 14, fontWeight: FontWeight.w500),
+                  ),
                 ),
-              ),
-              const Text(
-                '*approximate price: 1 panel = KES 10,000',
-                style: TextStyle(fontSize: 10, color: Colors.orange),
-              ),
-              const SizedBox(height: 20),
-              Text('Approximate cost: KES $cost'),
-              const SizedBox(height: 20),
-              OutlinedButton(
-                onPressed: () {
-                  updateApplicationCost();
-                  updateSelectedStatus(true);
-                  updateApplicationComponentsList();
-                  Navigator.pop(context);
-                },
-                child: const Text('Confirm selection'),
-              ),
-            ],
+                const SizedBox(height: 20),
+                (panel.isSelected == false)
+                    ? OutlinedButton(
+                        onPressed: () {
+                          // updateApplicationComponentsList(panel);
+                          updateApplicationCost();
+                          updateSelectedStatus(true);
+                        },
+                        child: const Text('Confirm selection'),
+                      )
+                    : OutlinedButton(
+                        onPressed: () {
+                          updateSelectedStatus(false);
+                        },
+                        child: const Text('Edit selection'),
+                      ),
+              ],
+            ),
           );
         },
         error: (error, stacktrace) => Text(error.toString()),

@@ -12,7 +12,23 @@ final getComponentStreamProvider =
   return ref.watch(solarControllerProvider).getComponent(component);
 });
 
+final getAllApplicationsStreamProvider = StreamProvider((ref) {
+  return ref.watch(solarControllerProvider).getAllApplications();
+});
+
+final getApplicationStreamProvider =
+    StreamProvider.family((ref, String applicationId) {
+  return ref.watch(solarControllerProvider).getApplication(applicationId);
+});
+
 final getApplicationComponentStreamProvider =
+    StreamProvider.family<ComponentsModel, List<String>>((ref, arguments) {
+  return ref
+      .watch(solarControllerProvider)
+      .getApplicationComponent(arguments[0], arguments[1]);
+});
+
+final getApplicationComponentsStreamProvider =
     StreamProvider.family((ref, String applicationId) {
   return ref
       .watch(solarControllerProvider)
@@ -43,6 +59,11 @@ class SolarController {
     return _solarRepository.getComponent(component);
   }
 
+  Stream<ComponentsModel> getApplicationComponent(
+      String applicationId, String component) {
+    return _solarRepository.getApplicationComponent(applicationId, component);
+  }
+
   void updateApplicationSelectedStatus(
       String component, bool selected, String applicationId) async {
     _solarRepository.updateComponentSelectedStatus(
@@ -54,11 +75,9 @@ class SolarController {
     _solarRepository.updateComponentCost(applicationId, cost, component);
   }
 
-  void updateApplicationComponentsList(String applicationId) async {
-    final components =
-        await _solarRepository.getAllFutureApplicationComponents(applicationId);
-    await _solarRepository.updateApplicationComponentsList(
-        applicationId, components);
+  void updateApplicationComponentsList(String applicationId, ComponentsModel component) async {
+      await _solarRepository.updateApplicationComponentsList(
+          applicationId, component);
   }
 
   void updateApplicationQuotation(
@@ -73,10 +92,10 @@ class SolarController {
     _solarRepository.updateApplicationQuotation(applicationId, quotation);
   }
 
-  void createApplication({required applicationId}) async {
+  void createApplication({required applicationId, required clientName}) async {
     ApplicationModel applicationModel = ApplicationModel(
       applicationId: applicationId,
-      clientName: 'clientName',
+      clientName: clientName,
       expertName: 'expertName',
       expertId: 'expertId',
       quotation: 0,
@@ -96,6 +115,10 @@ class SolarController {
 
   Stream<ApplicationModel> getApplication(String applicationId) {
     return _solarRepository.getApplication(applicationId);
+  }
+
+  Stream<List<ApplicationModel>> getAllApplications() {
+    return _solarRepository.getAllApplications();
   }
 
   Future<ApplicationModel> getFutureApplication(String applicationId) async {
