@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:solar_project/firebase_options.dart';
-import 'package:solar_project/home_screen.dart';
+import 'package:solar_project/src/home_screen.dart';
 
 void main() async {
   await Firebase.initializeApp(
