@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:solar_project/models/components_model.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
 
 class PanelScreen extends ConsumerStatefulWidget {
@@ -21,7 +20,8 @@ class _PanelScreenState extends ConsumerState<PanelScreen> {
   final TextEditingController panelsController = TextEditingController();
 
   late List<String> arguments;
-  
+
+  bool validate = false;
 
   @override
   void initState() {
@@ -43,19 +43,39 @@ class _PanelScreenState extends ConsumerState<PanelScreen> {
         );
   }
 
-  void updateApplicationCost() {
-    cost = int.parse(panelsController.text) * 10000;
-    ref.watch(solarControllerProvider).updateApplicationCost(
+  void updateComponentCost() {
+    int cost = int.parse(panelsController.text) * 10000;
+    ref.watch(solarControllerProvider).updateComponentCost(
           widget.component,
           cost,
           widget.applicationId,
         );
   }
 
-  void updateApplicationComponentsList(ComponentsModel component) {
+  void updateApplicationQuotation() {
+    ref.watch(solarControllerProvider).updateApplicationQuotation(
+          widget.applicationId,
+        );
+  }
+
+  void updateComponentQuantity() {
+    ref.watch(solarControllerProvider).updateComponentQuantity(
+          widget.component,
+          int.parse(panelsController.text),
+          widget.applicationId,
+        );
+  }
+
+  void updateApplicationComponentsCostListRemove(int componentCost) {
     ref
         .watch(solarControllerProvider)
-        .updateApplicationComponentsList(widget.applicationId, component);
+        .updateApplicationComponentsCostListRemove(
+            widget.applicationId, componentCost);
+  }
+
+  void updateApplicationComponentsCostListAdd(int componentCost) {
+    ref.watch(solarControllerProvider).updateApplicationComponentsCostListAdd(
+        widget.applicationId, componentCost);
   }
 
   int cost = 0;
@@ -64,8 +84,6 @@ class _PanelScreenState extends ConsumerState<PanelScreen> {
     cost = int.parse(panelsController.text) * 10000;
     return cost;
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -83,17 +101,19 @@ class _PanelScreenState extends ConsumerState<PanelScreen> {
         data: (panel) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Column(
+            child: 
+            Column(
               children: [
-                // Text(panel.name),
+                (panel.isSelected == false)?
                 const Align(
                   alignment: Alignment.topLeft,
                   child: Text(
                     'Measures of determination',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                   ),
-                ),
+                ): Container(),
                 const SizedBox(height: 10),
+                (panel.isSelected == false)?
                 Container(
                   height: 100,
                   width: MediaQuery.of(context).size.width,
@@ -108,7 +128,7 @@ class _PanelScreenState extends ConsumerState<PanelScreen> {
                       return Text(panel.measurement[index]);
                     }),
                   ),
-                ),
+                ): Container(),
                 const SizedBox(height: 10),
                 (panel.isSelected == false)
                     ? const Align(
@@ -136,12 +156,13 @@ class _PanelScreenState extends ConsumerState<PanelScreen> {
                           border: InputBorder.none,
                           filled: true,
                           fillColor: Colors.grey.withOpacity(0.2),
+                          errorText: validate ? "Value Can't Be Empty" : null,
                         ),
                       )
                     : Align(
                         alignment: Alignment.topLeft,
                         child: Text(
-                          'No of panels chosen: ${panelsController.text}',
+                          'No of panels chosen: ${panel.quantity}',
                           style: const TextStyle(
                               fontSize: 14, fontWeight: FontWeight.w500),
                         ),
@@ -167,18 +188,32 @@ class _PanelScreenState extends ConsumerState<PanelScreen> {
                 (panel.isSelected == false)
                     ? OutlinedButton(
                         onPressed: () {
-                          // updateApplicationComponentsList(panel);
-                          updateApplicationCost();
-                          updateSelectedStatus(true);
+                          setState(() {
+                            validate = panelsController.text.isEmpty;
+                          });
+                          (validate == true) ? null : updateComponentCost();
+                          (validate == true) ? null : updateComponentQuantity();
+                          (validate == true)
+                              ? null
+                              : updateSelectedStatus(true);
+                          (validate == true)
+                              ? null
+                              : updateApplicationQuotation();
                         },
                         child: const Text('Confirm selection'),
                       )
-                    : OutlinedButton(
-                        onPressed: () {
-                          updateSelectedStatus(false);
-                        },
-                        child: const Text('Edit selection'),
-                      ),
+                    : Column(
+                      children: [
+                        OutlinedButton(
+                            onPressed: () {
+                              updateSelectedStatus(false);
+                            },
+                            child: const Text('Edit selection'),
+                          ),
+                          const SizedBox(height: 10),
+                           const Text('* Any changes made here must also be made for the MC4 connecctors', style: TextStyle(fontSize: 10, color: Colors.red,),)
+                      ],
+                    ),
               ],
             ),
           );

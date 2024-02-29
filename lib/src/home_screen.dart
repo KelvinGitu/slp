@@ -14,6 +14,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   late bool newApplication = false;
+  late bool validate = false;
   final TextEditingController clientNameController = TextEditingController();
 
   @override
@@ -56,49 +57,71 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       body: (newApplication == false)
           ? Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Column(
                 children: [
-                  SizedBox(
-                    height: 30,
-                    width: 120,
-                    child: OutlinedButton(
-                      onPressed: () {
-                        setState(() {
-                          newApplication = true;
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(horizontal: 10)),
-                      child: const Text(
-                        'Start new application',
-                        style: TextStyle(
-                          fontSize: 12,
-                        ),
-                      ),
+                  const SizedBox(height: 40),
+                  const Text(
+                    'Welcome @expertname',
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 30),
+                  const Text(
+                    'Start new application or continue with an existing application?',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
-                  SizedBox(
-                    height: 30,
-                    width: 120,
-                    child: OutlinedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: ((context) => const ApplicationsScreen()),
+                  const SizedBox(height: 40),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        height: 30,
+                        width: 120,
+                        child: OutlinedButton(
+                          onPressed: () {
+                            setState(() {
+                              newApplication = true;
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10)),
+                          child: const Text(
+                            'Start new application',
+                            style: TextStyle(
+                              fontSize: 12,
+                            ),
                           ),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(horizontal: 10)),
-                      child: const Text(
-                        'Existing application?',
-                        style: TextStyle(
-                          fontSize: 12,
                         ),
                       ),
-                    ),
+                      SizedBox(
+                        height: 30,
+                        width: 120,
+                        child: OutlinedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: ((context) =>
+                                    const ApplicationsScreen()),
+                              ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10)),
+                          child: const Text(
+                            'Existing application?',
+                            style: TextStyle(
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -117,52 +140,100 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   const SizedBox(height: 20),
                   TextField(
                     controller: clientNameController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       hintText: 'Client name',
                       border: InputBorder.none,
                       filled: true,
+                      errorText: validate ? "Name Can't Be Empty" : null,
                     ),
                   ),
                   const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      createNewApplication(applicationId);
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text("New Application"),
-                            content:
-                                const Text("Proceed with new application?"),
-                            actions: [
-                              TextButton(
-                                child: const Text("Cancel"),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          height: 30,
+                          width: 120,
+                          child: OutlinedButton(
+                            onPressed: () {
+                              setState(() {
+                                validate = clientNameController.text.isEmpty;
+                              });
+                              createNewApplication(applicationId);
+                              saveComponentsToApplication(applicationId);
+                              (validate == true)
+                                  ? null
+                                  : showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: const Text("New Application"),
+                                          content: const Text(
+                                              "Proceed with new application?"),
+                                          actions: [
+                                            TextButton(
+                                              child: const Text("Cancel"),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                            TextButton(
+                                              child: const Text("Continue"),
+                                              onPressed: () {
+                                                Navigator.pushAndRemoveUntil(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: ((context) =>
+                                                        ComponentsScreen(
+                                                          applicationId:
+                                                              applicationId,
+                                                        )),
+                                                  ),
+                                                  (route) => false,
+                                                );
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                            },
+                            style: ElevatedButton.styleFrom(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10)),
+                            child: const Text(
+                              'Start Application',
+                              style: TextStyle(
+                                fontSize: 12,
                               ),
-                              TextButton(
-                                child: const Text("Continue"),
-                                onPressed: () {
-                                  saveComponentsToApplication(applicationId);
-                                  Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: ((context) => ComponentsScreen(
-                                            applicationId: applicationId,
-                                          )),
-                                    ),
-                                    (route) => false,
-                                  );
-                                },
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 30,
+                          width: 120,
+                          child: OutlinedButton(
+                            onPressed: () {
+                              setState(() {
+                                newApplication = false;
+                              });
+                            },
+                            style: ElevatedButton.styleFrom(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10)),
+                            child: const Text(
+                              'Cancel',
+                              style: TextStyle(
+                                fontSize: 12,
                               ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    child: const Text('Start Application'),
-                  ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
                 ],
               ),
             ),

@@ -1,5 +1,3 @@
-import 'package:solar_project/models/components_model.dart';
-
 class ApplicationModel {
   final String applicationId;
   final String clientName;
@@ -7,7 +5,6 @@ class ApplicationModel {
   final String expertId;
   final int quotation;
   final bool isDone;
-  final List<ComponentsModel> components;
   ApplicationModel({
     required this.applicationId,
     required this.clientName,
@@ -15,9 +12,7 @@ class ApplicationModel {
     required this.expertId,
     required this.quotation,
     required this.isDone,
-    required this.components,
   });
-  
 
   ApplicationModel copyWith({
     String? applicationId,
@@ -26,7 +21,6 @@ class ApplicationModel {
     String? expertId,
     int? quotation,
     bool? isDone,
-    List<ComponentsModel>? components,
   }) {
     return ApplicationModel(
       applicationId: applicationId ?? this.applicationId,
@@ -35,7 +29,6 @@ class ApplicationModel {
       expertId: expertId ?? this.expertId,
       quotation: quotation ?? this.quotation,
       isDone: isDone ?? this.isDone,
-      components: components ?? this.components,
     );
   }
 
@@ -47,7 +40,6 @@ class ApplicationModel {
       'expertId': expertId,
       'quotation': quotation,
       'isDone': isDone,
-      'components': components.map((x) => x.toMap()).toList(),
     };
   }
 
@@ -59,7 +51,6 @@ class ApplicationModel {
       expertId: map['expertId'] as String,
       quotation: map['quotation'] as int,
       isDone: map['isDone'] as bool,
-      components: List<ComponentsModel>.from((map['components'] as List<dynamic>).map<ComponentsModel>((x) => ComponentsModel.fromMap(x as Map<String,dynamic>),),),
     );
   }
 

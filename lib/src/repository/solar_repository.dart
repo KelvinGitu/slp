@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:solar_project/core/firestore_provider.dart';
 import 'package:solar_project/models/application_model.dart';
+import 'package:solar_project/models/battery_capacity_model.dart';
 import 'package:solar_project/models/components_model.dart';
 
 final solarRepositoryProvider = Provider(
@@ -15,6 +16,11 @@ class SolarRepository {
 
   SolarRepository({required FirebaseFirestore firestore})
       : _firestore = firestore;
+
+  Future saveComponent(
+      ComponentsModel componentsModel) async {
+    return _components.doc(componentsModel.name).set(componentsModel.toMap());
+  }
 
   Stream<List<ComponentsModel>> getAllComponents() {
     return _components.orderBy('number').snapshots().map((event) {
@@ -98,6 +104,18 @@ class SolarRepository {
             ComponentsModel.fromMap(event.data() as Map<String, dynamic>));
   }
 
+  Future<ComponentsModel> getFutureApplicationComponent(
+      String applicationId, String component) async {
+    var event = await _applications
+        .doc(applicationId)
+        .collection('components')
+        .doc(component)
+        .get();
+    final result =
+        ComponentsModel.fromMap(event.data() as Map<String, dynamic>);
+    return result;
+  }
+
   Stream<List<ComponentsModel>> getApplicationComponents(String applicationId) {
     return _applications
         .doc(applicationId)
@@ -123,8 +141,7 @@ class SolarRepository {
 
     List<ComponentsModel> components = [];
     for (var doc in event.docs) {
-      // ignore: unnecessary_cast
-      components.add(ComponentsModel.fromMap(doc.data() as Map<String, dynamic>));
+      components.add(ComponentsModel.fromMap(doc.data()));
     }
     return components;
   }
@@ -147,15 +164,79 @@ class SolarRepository {
         .update({'cost': cost});
   }
 
-  Future updateApplicationComponentsList(
-      String applicationId, ComponentsModel component) async {
+  Future updateComponentQuantity(
+      String applicationId, int quantity, String component) async {
+    return _applications
+        .doc(applicationId)
+        .collection('components')
+        .doc(component)
+        .update({'quantity': quantity});
+  }
+
+  Future updateComponentCapacity(
+      String applicationId, int capacity, String component) async {
+    return _applications
+        .doc(applicationId)
+        .collection('components')
+        .doc(component)
+        .update({'capacity': capacity});
+  }
+
+  Future updateApplicationComponentsCostListAdd(
+      String applicationId, int componentCost) async {
     return _applications.doc(applicationId).update({
-      'components': FieldValue.arrayUnion([component])
+      'components': FieldValue.arrayUnion([componentCost])
+    });
+  }
+
+  Future updateApplicationComponentsCostListRemove(
+      String applicationId, int componentCost) async {
+    return _applications.doc(applicationId).update({
+      'components': FieldValue.arrayRemove([componentCost])
     });
   }
 
   Future updateApplicationQuotation(String applicationId, int quotation) async {
     return _applications.doc(applicationId).update({'quotation': quotation});
+  }
+
+  Future saveBatteryCapacityToApplication(String applicationId,
+      BatteryCapacityModel batteryCapacityModel, String component) async {
+    return _applications
+        .doc(applicationId)
+        .collection('components')
+        .doc(component)
+        .collection('capacities')
+        .doc('${batteryCapacityModel.capacity}Ah')
+        .set(batteryCapacityModel.toMap());
+  }
+
+  Future<List<BatteryCapacityModel>> getBatteryCapacity(
+      String component) async {
+    var event = await _components.doc(component).collection('capacities').get();
+
+    List<BatteryCapacityModel> capacities = [];
+    for (var doc in event.docs) {
+      capacities.add(BatteryCapacityModel.fromMap(doc.data()));
+    }
+    return capacities;
+  }
+
+  Stream<List<BatteryCapacityModel>> getBatteryCapacityFromApplication(
+      String applicationId, String component) {
+    return _applications
+        .doc(applicationId)
+        .collection('components')
+        .doc(component)
+        .collection('capacities')
+        .snapshots()
+        .map((event) {
+      List<BatteryCapacityModel> capacities = [];
+      for (var doc in event.docs) {
+        capacities.add(BatteryCapacityModel.fromMap(doc.data()));
+      }
+      return capacities;
+    });
   }
 
   CollectionReference get _components => _firestore.collection('components');

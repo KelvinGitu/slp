@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:solar_project/models/application_model.dart';
+import 'package:solar_project/models/battery_capacity_model.dart';
 import 'package:solar_project/models/components_model.dart';
 import 'package:solar_project/src/repository/solar_repository.dart';
 
@@ -21,11 +22,26 @@ final getApplicationStreamProvider =
   return ref.watch(solarControllerProvider).getApplication(applicationId);
 });
 
+final getBatteryCapacityStreamProvider =
+    StreamProvider.family<List<BatteryCapacityModel>, List<String>>(
+        (ref, arguments) {
+  return ref
+      .watch(solarControllerProvider)
+      .getBatteryCapacity(arguments[0], arguments[1]);
+});
+
 final getApplicationComponentStreamProvider =
     StreamProvider.family<ComponentsModel, List<String>>((ref, arguments) {
   return ref
       .watch(solarControllerProvider)
       .getApplicationComponent(arguments[0], arguments[1]);
+});
+
+final getApplcationComponentFutureProvider =
+    FutureProvider.family<ComponentsModel, List<String>>((ref, arguments) {
+  return ref
+      .watch(solarControllerProvider)
+      .getFutureApplicationComponent(arguments[0], arguments[1]);
 });
 
 final getApplicationComponentsStreamProvider =
@@ -47,6 +63,22 @@ class SolarController {
   SolarController({required SolarRepository solarRepository})
       : _solarRepository = solarRepository;
 
+  void saveComponent() async {
+    ComponentsModel componentsModel = ComponentsModel(
+      name: 'Battery cable 16mm²',
+      cost: 0,
+      dependents: false,
+      isSelected: false,
+      measurement: [],
+      number: 14,
+      quantity: 0,
+      length: 0,
+      weight: 0,
+      capacity: 0,
+    );
+    await _solarRepository.saveComponent(componentsModel);
+  }
+
   Stream<List<ComponentsModel>> getAllComponents() {
     return _solarRepository.getAllComponents();
   }
@@ -64,32 +96,56 @@ class SolarController {
     return _solarRepository.getApplicationComponent(applicationId, component);
   }
 
+  Future<ComponentsModel> getFutureApplicationComponent(
+      String applicationId, String component) async {
+    return _solarRepository.getFutureApplicationComponent(
+        applicationId, component);
+  }
+
   void updateApplicationSelectedStatus(
       String component, bool selected, String applicationId) async {
     _solarRepository.updateComponentSelectedStatus(
         applicationId, selected, component);
   }
 
-  void updateApplicationCost(
+  void updateComponentCost(
       String component, int cost, String applicationId) async {
     _solarRepository.updateComponentCost(applicationId, cost, component);
   }
 
-  void updateApplicationComponentsList(String applicationId, ComponentsModel component) async {
-      await _solarRepository.updateApplicationComponentsList(
-          applicationId, component);
+  void updateComponentQuantity(
+      String component, int quantity, String applicationId) async {
+    _solarRepository.updateComponentQuantity(
+        applicationId, quantity, component);
   }
 
-  void updateApplicationQuotation(
-      String component, String applicationId) async {
+  void updateComponentCapacity(
+      String component, int capacity, String applicationId) async {
+    _solarRepository.updateComponentCapacity(
+        applicationId, capacity, component);
+  }
+
+  void updateApplicationComponentsCostListAdd(
+      String applicationId, int componentCost) async {
+    await _solarRepository.updateApplicationComponentsCostListAdd(
+        applicationId, componentCost);
+  }
+
+  void updateApplicationComponentsCostListRemove(
+      String applicationId, int componentCost) async {
+    await _solarRepository.updateApplicationComponentsCostListRemove(
+        applicationId, componentCost);
+  }
+
+  void updateApplicationQuotation(String applicationId) async {
     int quotation = 0;
     final application =
-        await _solarRepository.getFutureApplication(applicationId);
-    List<ComponentsModel> components = application.components;
-    for (ComponentsModel component in components) {
+        await _solarRepository.getAllFutureApplicationComponents(applicationId);
+
+    for (ComponentsModel component in application) {
       quotation = quotation + component.cost;
+      _solarRepository.updateApplicationQuotation(applicationId, quotation);
     }
-    _solarRepository.updateApplicationQuotation(applicationId, quotation);
   }
 
   void createApplication({required applicationId, required clientName}) async {
@@ -100,7 +156,6 @@ class SolarController {
       expertId: 'expertId',
       quotation: 0,
       isDone: false,
-      components: [],
     );
     await _solarRepository.createApplication(applicationId, applicationModel);
   }
@@ -113,6 +168,15 @@ class SolarController {
     await _solarRepository.updateClientName(applicationId, clientName);
   }
 
+  void saveBatteryCapacityToApplication(
+      {required String applicationId, required String component}) async {
+    final capacities = await _solarRepository.getBatteryCapacity(component);
+    for (BatteryCapacityModel capacity in capacities) {
+      await _solarRepository.saveBatteryCapacityToApplication(
+          applicationId, capacity, component);
+    }
+  }
+
   Stream<ApplicationModel> getApplication(String applicationId) {
     return _solarRepository.getApplication(applicationId);
   }
@@ -123,6 +187,12 @@ class SolarController {
 
   Future<ApplicationModel> getFutureApplication(String applicationId) async {
     return _solarRepository.getFutureApplication(applicationId);
+  }
+
+  Stream<List<BatteryCapacityModel>> getBatteryCapacity(
+      String applicationId, String component) {
+    return _solarRepository.getBatteryCapacityFromApplication(
+        applicationId, component);
   }
 
   void saveComponentsToApplication({required applicationId}) async {

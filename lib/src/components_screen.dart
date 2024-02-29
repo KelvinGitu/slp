@@ -4,8 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:solar_project/src/controller/solar_controller.dart';
 import 'package:solar_project/src/home_screen.dart';
-import 'package:solar_project/src/pages/panel_screen.dart';
-import 'package:solar_project/src/widgets/component_widget.dart';
+
 import 'package:solar_project/src/widgets/expandable_widget.dart';
 
 class ComponentsScreen extends ConsumerStatefulWidget {
@@ -31,8 +30,6 @@ class _ComponentsScreenState extends ConsumerState<ComponentsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final applicationComponents =
-        ref.watch(getApplicationComponentsStreamProvider(widget.applicationId));
     final application =
         ref.watch(getApplicationStreamProvider(widget.applicationId));
 
@@ -43,6 +40,7 @@ class _ComponentsScreenState extends ConsumerState<ComponentsScreen> {
           width: 120,
           child: OutlinedButton(
             onPressed: () {
+              // ref.watch(solarControllerProvider).saveComponent();
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
@@ -71,7 +69,7 @@ class _ComponentsScreenState extends ConsumerState<ComponentsScreen> {
                       style: const TextStyle(
                           fontSize: 16, fontWeight: FontWeight.w500),
                     ),
-                    const SizedBox(height: 15),
+                    const SizedBox(height: 20),
                     Text(
                       'Quotation: KES ${application.quotation.toString()}',
                       style: const TextStyle(
@@ -86,50 +84,10 @@ class _ComponentsScreenState extends ConsumerState<ComponentsScreen> {
               child: CircularProgressIndicator(),
             ),
           ),
-          const SizedBox(height: 15),
+          const SizedBox(height: 20),
           ExpandableWidget(
-            expandableWidget: applicationComponents.when(
-              data: (applicationComponents) {
-                return SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.8,
-                  child: ListView(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    children: [
-                      ComponentWidget(
-                          component: applicationComponents[0],
-                          navigate: PanelScreen(
-                              component: applicationComponents[0].name,
-                              applicationId: widget.applicationId)),
-                      ComponentWidget(
-                          component: applicationComponents[1],
-                          navigate: PanelScreen(
-                              component: applicationComponents[1].name,
-                              applicationId: widget.applicationId)),
-                      ComponentWidget(
-                          component: applicationComponents[2],
-                          navigate: PanelScreen(
-                              component: applicationComponents[2].name,
-                              applicationId: widget.applicationId)),
-                      ComponentWidget(
-                          component: applicationComponents[3],
-                          navigate: PanelScreen(
-                              component: applicationComponents[3].name,
-                              applicationId: widget.applicationId)),
-                      ComponentWidget(
-                          component: applicationComponents[4],
-                          navigate: PanelScreen(
-                              component: applicationComponents[4].name,
-                              applicationId: widget.applicationId)),
-                    ],
-                  ),
-                );
-              },
-              error: (error, stacktrace) => Text(error.toString()),
-              loading: () => const Center(
-                child: CircularProgressIndicator(),
-              ),
-            ),
-          )
+            applicationId: widget.applicationId,
+          ),
         ],
       ),
     );
