@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:solar_project/models/application_model.dart';
 import 'package:solar_project/models/battery_capacity_model.dart';
 import 'package:solar_project/models/components_model.dart';
+import 'package:solar_project/models/isolator_switch_model.dart';
 import 'package:solar_project/src/repository/solar_repository.dart';
 
 final getAllComponentsStreamProvider = StreamProvider((ref) {
@@ -28,6 +29,14 @@ final getBatteryCapacityStreamProvider =
   return ref
       .watch(solarControllerProvider)
       .getBatteryCapacity(arguments[0], arguments[1]);
+});
+
+final getIsolatorSwitchStreamProvider =
+    StreamProvider.family<List<IsolatorSwitchModel>, List<String>>(
+        (ref, arguments) {
+  return ref
+      .watch(solarControllerProvider)
+      .getIsolatorSwitch(arguments[0], arguments[1]);
 });
 
 final getApplicationComponentStreamProvider =
@@ -65,12 +74,12 @@ class SolarController {
 
   void saveComponent() async {
     ComponentsModel componentsModel = ComponentsModel(
-      name: 'Battery cable 16mm²',
+      name: 'Inverter Manual Isolator',
       cost: 0,
       dependents: false,
       isSelected: false,
-      measurement: [],
-      number: 14,
+      measurement: ['depends on the KVA rating of the panels'],
+      number: 6,
       quantity: 0,
       length: 0,
       weight: 0,
@@ -125,6 +134,13 @@ class SolarController {
         applicationId, capacity, component);
   }
 
+
+   void updateComponentLength(
+      String component, int length, String applicationId) async {
+    _solarRepository.updateComponentLength(
+        applicationId, length, component);
+  }
+
   void updateApplicationComponentsCostListAdd(
       String applicationId, int componentCost) async {
     await _solarRepository.updateApplicationComponentsCostListAdd(
@@ -160,20 +176,21 @@ class SolarController {
     await _solarRepository.createApplication(applicationId, applicationModel);
   }
 
-  void updateClientName({
-    required String clientName,
-    required String applicationId,
-    // required ApplicationModel applicationModel,
-  }) async {
-    await _solarRepository.updateClientName(applicationId, clientName);
-  }
-
   void saveBatteryCapacityToApplication(
       {required String applicationId, required String component}) async {
     final capacities = await _solarRepository.getBatteryCapacity(component);
     for (BatteryCapacityModel capacity in capacities) {
       await _solarRepository.saveBatteryCapacityToApplication(
           applicationId, capacity, component);
+    }
+  }
+
+  void saveIsolatorSwitchToApplication(
+      {required String applicationId, required String component}) async {
+    final isolators = await _solarRepository.getIsolatorSwitch(component);
+    for (IsolatorSwitchModel isolator in isolators) {
+      await _solarRepository.saveManualIsolatorsToApplication(
+          applicationId, isolator, component);
     }
   }
 
@@ -192,6 +209,12 @@ class SolarController {
   Stream<List<BatteryCapacityModel>> getBatteryCapacity(
       String applicationId, String component) {
     return _solarRepository.getBatteryCapacityFromApplication(
+        applicationId, component);
+  }
+
+  Stream<List<IsolatorSwitchModel>> getIsolatorSwitch(
+      String applicationId, String component) {
+    return _solarRepository.getIsolatorSwitchFromApplication(
         applicationId, component);
   }
 

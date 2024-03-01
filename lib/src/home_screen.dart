@@ -30,13 +30,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         );
   }
 
-  void updateClientName(String applicationId) async {
-    ref.watch(solarControllerProvider).updateClientName(
-          clientName: clientNameController.text,
-          applicationId: applicationId,
-        );
-  }
-
   void saveComponentsToApplication(String applicationId) async {
     ref
         .watch(solarControllerProvider)

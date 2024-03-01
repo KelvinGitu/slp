@@ -4,11 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:solar_project/src/controller/solar_controller.dart';
+import 'package:solar_project/src/pages/six_mm_core_cable.dart';
+import 'package:solar_project/src/pages/ten_mm_core_cable.dart';
 import 'package:solar_project/src/pages/automatic_changeover_switch.dart';
 import 'package:solar_project/src/pages/batteries_screen.dart';
+import 'package:solar_project/src/pages/earth_rod.dart';
+import 'package:solar_project/src/pages/inverter_manual_isolator.dart';
 import 'package:solar_project/src/pages/inverter_module_screen.dart';
 import 'package:solar_project/src/pages/mc4_connectors.dart';
+import 'package:solar_project/src/pages/nine_way_combiner_enclosure.dart';
 import 'package:solar_project/src/pages/panel_screen.dart';
+import 'package:solar_project/src/pages/pv_cable_10mm.dart';
+import 'package:solar_project/src/pages/pv_cable_6mm.dart';
+import 'package:solar_project/src/pages/pv_combiner_box.dart';
 import 'package:solar_project/src/widgets/component_widget.dart';
 
 class ExpandableWidget extends ConsumerWidget {
@@ -67,42 +75,42 @@ class ExpandableWidget extends ConsumerWidget {
                           applicationId: applicationId)),
                   ComponentWidget(
                       component: applicationComponents[5],
-                      navigate: AutomaticChangeOverSwitch(
+                      navigate: InverterManualIsolator(
                           component: applicationComponents[5].name,
                           applicationId: applicationId)),
                   ComponentWidget(
                       component: applicationComponents[6],
-                      navigate: AutomaticChangeOverSwitch(
+                      navigate: TenMMCoreCable(
                           component: applicationComponents[6].name,
                           applicationId: applicationId)),
                   ComponentWidget(
                       component: applicationComponents[7],
-                      navigate: AutomaticChangeOverSwitch(
+                      navigate: SixMMCoreCable(
                           component: applicationComponents[7].name,
                           applicationId: applicationId)),
                   ComponentWidget(
                       component: applicationComponents[8],
-                      navigate: AutomaticChangeOverSwitch(
+                      navigate: PVCombinerBox(
                           component: applicationComponents[8].name,
                           applicationId: applicationId)),
                   ComponentWidget(
                       component: applicationComponents[9],
-                      navigate: AutomaticChangeOverSwitch(
+                      navigate: NineWayCombinerEnclosure(
                           component: applicationComponents[9].name,
                           applicationId: applicationId)),
                   ComponentWidget(
                       component: applicationComponents[10],
-                      navigate: AutomaticChangeOverSwitch(
+                      navigate: PVCableSixMM(
                           component: applicationComponents[10].name,
                           applicationId: applicationId)),
                   ComponentWidget(
                       component: applicationComponents[11],
-                      navigate: AutomaticChangeOverSwitch(
+                      navigate: PVCableTenMM(
                           component: applicationComponents[11].name,
                           applicationId: applicationId)),
                   ComponentWidget(
                       component: applicationComponents[12],
-                      navigate: AutomaticChangeOverSwitch(
+                      navigate: EarthRod (
                           component: applicationComponents[12].name,
                           applicationId: applicationId)),
                   ComponentWidget(
@@ -110,16 +118,16 @@ class ExpandableWidget extends ConsumerWidget {
                       navigate: AutomaticChangeOverSwitch(
                           component: applicationComponents[13].name,
                           applicationId: applicationId)),
-                  ComponentWidget(
-                      component: applicationComponents[14],
-                      navigate: AutomaticChangeOverSwitch(
-                          component: applicationComponents[14].name,
-                          applicationId: applicationId)),
-                  ComponentWidget(
-                      component: applicationComponents[15],
-                      navigate: AutomaticChangeOverSwitch(
-                          component: applicationComponents[15].name,
-                          applicationId: applicationId)),
+                  // ComponentWidget(
+                  //     component: applicationComponents[14],
+                  //     navigate: AutomaticChangeOverSwitch(
+                  //         component: applicationComponents[14].name,
+                  //         applicationId: applicationId)),
+                  // ComponentWidget(
+                  //     component: applicationComponents[15],
+                  //     navigate: AutomaticChangeOverSwitch(
+                  //         component: applicationComponents[15].name,
+                  //         applicationId: applicationId)),
                 ],
               ),
             );

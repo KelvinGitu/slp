@@ -4,6 +4,7 @@ import 'package:solar_project/core/firestore_provider.dart';
 import 'package:solar_project/models/application_model.dart';
 import 'package:solar_project/models/battery_capacity_model.dart';
 import 'package:solar_project/models/components_model.dart';
+import 'package:solar_project/models/isolator_switch_model.dart';
 
 final solarRepositoryProvider = Provider(
   (ref) => SolarRepository(
@@ -17,8 +18,7 @@ class SolarRepository {
   SolarRepository({required FirebaseFirestore firestore})
       : _firestore = firestore;
 
-  Future saveComponent(
-      ComponentsModel componentsModel) async {
+  Future saveComponent(ComponentsModel componentsModel) async {
     return _components.doc(componentsModel.name).set(componentsModel.toMap());
   }
 
@@ -182,6 +182,15 @@ class SolarRepository {
         .update({'capacity': capacity});
   }
 
+  Future updateComponentLength(
+      String applicationId, int length, String component) async {
+    return _applications
+        .doc(applicationId)
+        .collection('components')
+        .doc(component)
+        .update({'length': length});
+  }
+
   Future updateApplicationComponentsCostListAdd(
       String applicationId, int componentCost) async {
     return _applications.doc(applicationId).update({
@@ -236,6 +245,44 @@ class SolarRepository {
         capacities.add(BatteryCapacityModel.fromMap(doc.data()));
       }
       return capacities;
+    });
+  }
+
+  Future<List<IsolatorSwitchModel>> getIsolatorSwitch(String component) async {
+    var event = await _components.doc(component).collection('isolators').get();
+
+    List<IsolatorSwitchModel> isolators = [];
+    for (var doc in event.docs) {
+      isolators.add(IsolatorSwitchModel.fromMap(doc.data()));
+    }
+    return isolators;
+  }
+
+  Future saveManualIsolatorsToApplication(String applicationId,
+      IsolatorSwitchModel isolatorSwitchModel, String component) async {
+    return _applications
+        .doc(applicationId)
+        .collection('components')
+        .doc(component)
+        .collection('isolators')
+        .doc('${isolatorSwitchModel.rating}A')
+        .set(isolatorSwitchModel.toMap());
+  }
+
+  Stream<List<IsolatorSwitchModel>> getIsolatorSwitchFromApplication(
+      String applicationId, String component) {
+    return _applications
+        .doc(applicationId)
+        .collection('components')
+        .doc(component)
+        .collection('isolators').orderBy('rating')
+        .snapshots()
+        .map((event) {
+      List<IsolatorSwitchModel> isolators = [];
+      for (var doc in event.docs) {
+        isolators.add(IsolatorSwitchModel.fromMap(doc.data()));
+      }
+      return isolators;
     });
   }
 
