@@ -38,6 +38,12 @@ class _TenMMCoreCableState extends ConsumerState<CoreCable> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    cableLengthController.dispose();
+    super.dispose();
+  }
+
   void saveCoreCablesToApplication() {
     ref.watch(solarControllerProvider).saveCoreCablesToApplication(
           applicationId: widget.applicationId,

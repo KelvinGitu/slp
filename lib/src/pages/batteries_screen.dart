@@ -34,6 +34,9 @@ class _BatteriesScreenState extends ConsumerState<BatteriesScreen> {
   @override
   void initState() {
     arguments = [widget.applicationId, widget.component];
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      saveBatteryCapacitiesToApplication();
+    });
     super.initState();
   }
 
@@ -334,8 +337,9 @@ class _BatteriesScreenState extends ConsumerState<BatteriesScreen> {
                       const SizedBox(height: 10),
                       (storageDevice == true)
                           ? Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 40),
-                            child: ConfirmSelectionButton(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 40),
+                              child: ConfirmSelectionButton(
                                 onPressed: () {
                                   setState(() {
                                     validate = capacityController.text.isEmpty;
@@ -343,17 +347,18 @@ class _BatteriesScreenState extends ConsumerState<BatteriesScreen> {
                                   (validate == true)
                                       ? null
                                       : updateSelectedStatus(true);
-                            
+
                                   (validate == true)
                                       ? null
                                       : updateApplicationQuotation();
                                 },
                                 message: 'Confirm Selection',
                               ),
-                          )
+                            )
                           : Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 40),
-                            child: ConfirmSelectionButton(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 40),
+                              child: ConfirmSelectionButton(
                                 onPressed: () {
                                   updateApplicationQuotation();
                                   updateSelectedStatus(true);
@@ -361,7 +366,7 @@ class _BatteriesScreenState extends ConsumerState<BatteriesScreen> {
                                 },
                                 message: 'Exit',
                               ),
-                          )
+                            )
                     ],
                   )
                 : Padding(

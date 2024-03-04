@@ -26,6 +26,14 @@ class ExpandableWidget extends ConsumerWidget {
     required this.applicationId,
   });
 
+  void savePVCablesToApplication(
+      String applicationId, String component, WidgetRef ref) {
+    ref.read(solarControllerProvider).savePVCablesToApplication(
+          applicationId: applicationId,
+          component: component,
+        );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final applicationComponents =
@@ -43,7 +51,7 @@ class ExpandableWidget extends ConsumerWidget {
         expanded: applicationComponents.when(
           data: (applicationComponents) {
             return SizedBox(
-              height: MediaQuery.of(context).size.height * 0.75,
+              height: MediaQuery.of(context).size.height * 0.72,
               child: ListView(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 10),

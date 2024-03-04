@@ -23,9 +23,15 @@ class _ComponentsScreenState extends ConsumerState<ComponentsScreen> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // updateApplicationComponentsList();
+      updateApplicationQuotation();
     });
     super.initState();
+  }
+
+  void updateApplicationQuotation() {
+    ref.watch(solarControllerProvider).updateApplicationQuotation(
+          widget.applicationId,
+        );
   }
 
   @override

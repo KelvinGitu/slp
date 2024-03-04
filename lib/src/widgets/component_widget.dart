@@ -29,14 +29,24 @@ class ComponentWidget extends StatelessWidget {
         height: 40,
         margin: const EdgeInsets.only(bottom: 8),
         padding: const EdgeInsets.symmetric(horizontal: 8),
-        decoration: BoxDecoration(color: Colors.grey.withOpacity(0.2), borderRadius: BorderRadius.circular(8)),
+        decoration: BoxDecoration(
+            color: Colors.grey.withOpacity(0.2),
+            borderRadius: BorderRadius.circular(8)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             SizedBox(
-              width: MediaQuery.of(context).size.width*0.6,
-              child: Text(component.name, textAlign: (component.name.length >= 20)? TextAlign.left: TextAlign.start)),
-            (component.isSelected == true) ? const Text('Done', style: TextStyle(color: Colors.orange),) : Container(),
+                width: MediaQuery.of(context).size.width * 0.6,
+                child: Text(component.name,
+                    textAlign: (component.name.length >= 20)
+                        ? TextAlign.left
+                        : TextAlign.start)),
+            (component.isSelected == true)
+                ? const Text(
+                    'Done',
+                    style: TextStyle(color: Colors.orange),
+                  )
+                : Container(),
           ],
         ),
       ),

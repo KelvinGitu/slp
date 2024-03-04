@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:solar_project/models/application_model.dart';
+import 'package:solar_project/models/battery_cable_model.dart';
 import 'package:solar_project/models/battery_capacity_model.dart';
 import 'package:solar_project/models/components_model.dart';
 import 'package:solar_project/models/core_cable_model.dart';
@@ -52,6 +53,22 @@ final getPVCablesStreamProvider =
   return ref
       .watch(solarControllerProvider)
       .getPVCables(arguments[0], arguments[1]);
+});
+
+final getBatteryCablesStreamProvider =
+    StreamProvider.family<List<BatteryCableModel>, List<String>>(
+        (ref, arguments) {
+  return ref
+      .watch(solarControllerProvider)
+      .getBatteryCables(arguments[0], arguments[1]);
+});
+
+final getSelectedBatteryCablesStreamProvider =
+    StreamProvider.family<List<BatteryCableModel>, List<String>>(
+        (ref, arguments) {
+  return ref
+      .watch(solarControllerProvider)
+      .getStreamSelectedBatteryCables(arguments[0], arguments[1]);
 });
 
 final getApplicationComponentStreamProvider =
@@ -155,9 +172,10 @@ class SolarController {
     _solarRepository.updateComponentLength(applicationId, length, component);
   }
 
-   void updateComponentCrossSection(
+  void updateComponentCrossSection(
       String component, String crossSection, String applicationId) async {
-    _solarRepository.updateComponentCrossSection(applicationId, crossSection, component);
+    _solarRepository.updateComponentCrossSection(
+        applicationId, crossSection, component);
   }
 
   void updateApplicationComponentsCostListAdd(
@@ -231,6 +249,57 @@ class SolarController {
     }
   }
 
+  void saveBatteryCablesToApplication(
+      {required String applicationId, required String component}) async {
+    final cables = await _solarRepository.getBatteryCables(component);
+    for (BatteryCableModel cable in cables) {
+      await _solarRepository.saveBatteryCablesToApplication(
+          applicationId, cable, component);
+    }
+  }
+
+  void updateBatteryCableSelectedStatus({
+    required String applicationId,
+    required String component,
+    required String cable,
+    required bool selected,
+  }) async {
+    await _solarRepository.updateBatteryCableSelectedStatus(
+        applicationId, selected, component, cable);
+  }
+
+  void updateBatteryCableLength({
+    required String applicationId,
+    required String component,
+    required String cable,
+    required int length,
+  }) async {
+    await _solarRepository.updateBatteryCableLength(
+        applicationId, length, component, cable);
+  }
+
+  void updateBatteryCableCost({
+    required String applicationId,
+    required String component,
+    required String cable,
+    required int cost,
+  }) async {
+    await _solarRepository.updateBatteryCableCost(
+        applicationId, cost, component, cable);
+  }
+
+  Future<List<BatteryCableModel>> getFutureSelectedBatteryCables(
+      String applicationId, String component) async {
+    return await _solarRepository.getFutureSelectedBatteryCables(
+        applicationId, component);
+  }
+
+  Stream<List<BatteryCableModel>> getStreamSelectedBatteryCables(
+      String applicationId, String component) {
+    return _solarRepository.getStreamSelectedBatteryCables(
+        applicationId, component);
+  }
+
   Stream<ApplicationModel> getApplication(String applicationId) {
     return _solarRepository.getApplication(applicationId);
   }
@@ -264,6 +333,12 @@ class SolarController {
   Stream<List<CoreCableModel>> getPVCables(
       String applicationId, String component) {
     return _solarRepository.getPVCablesFromApplication(
+        applicationId, component);
+  }
+
+  Stream<List<BatteryCableModel>> getBatteryCables(
+      String applicationId, String component) {
+    return _solarRepository.getBatteryCablesFromApplication(
         applicationId, component);
   }
 

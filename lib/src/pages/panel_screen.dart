@@ -43,8 +43,7 @@ class _PanelScreenState extends ConsumerState<PanelScreen> {
         );
   }
 
-  void updateComponentCost() {
-    int cost = int.parse(panelsController.text) * 10000;
+  void updateComponentCost(int cost) {
     ref.watch(solarControllerProvider).updateComponentCost(
           widget.component,
           cost,
@@ -58,10 +57,10 @@ class _PanelScreenState extends ConsumerState<PanelScreen> {
         );
   }
 
-  void updateComponentQuantity() {
+  void updateComponentQuantity(int quantity) {
     ref.watch(solarControllerProvider).updateComponentQuantity(
           widget.component,
-          int.parse(panelsController.text),
+          quantity,
           widget.applicationId,
         );
   }
@@ -101,34 +100,36 @@ class _PanelScreenState extends ConsumerState<PanelScreen> {
         data: (panel) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: 
-            Column(
+            child: Column(
               children: [
-                (panel.isSelected == false)?
-                const Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    'Measures of determination',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                  ),
-                ): Container(),
+                (panel.isSelected == false)
+                    ? const Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          'Measures of determination',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w500),
+                        ),
+                      )
+                    : Container(),
                 const SizedBox(height: 10),
-                (panel.isSelected == false)?
-                Container(
-                  height: 100,
-                  width: MediaQuery.of(context).size.width,
-                  padding: const EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.3),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: ListView.builder(
-                    itemCount: panel.measurement.length,
-                    itemBuilder: ((context, index) {
-                      return Text(panel.measurement[index]);
-                    }),
-                  ),
-                ): Container(),
+                (panel.isSelected == false)
+                    ? Container(
+                        height: 100,
+                        width: MediaQuery.of(context).size.width,
+                        padding: const EdgeInsets.all(15),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.withOpacity(0.3),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: ListView.builder(
+                          itemCount: panel.measurement.length,
+                          itemBuilder: ((context, index) {
+                            return Text(panel.measurement[index]);
+                          }),
+                        ),
+                      )
+                    : Container(),
                 const SizedBox(height: 10),
                 (panel.isSelected == false)
                     ? const Align(
@@ -191,8 +192,14 @@ class _PanelScreenState extends ConsumerState<PanelScreen> {
                           setState(() {
                             validate = panelsController.text.isEmpty;
                           });
-                          (validate == true) ? null : updateComponentCost();
-                          (validate == true) ? null : updateComponentQuantity();
+                          (validate == true)
+                              ? null
+                              : updateComponentCost(
+                                  int.parse(panelsController.text) * 10000);
+                          (validate == true)
+                              ? null
+                              : updateComponentQuantity(
+                                  int.parse(panelsController.text));
                           (validate == true)
                               ? null
                               : updateSelectedStatus(true);
@@ -203,17 +210,26 @@ class _PanelScreenState extends ConsumerState<PanelScreen> {
                         child: const Text('Confirm selection'),
                       )
                     : Column(
-                      children: [
-                        OutlinedButton(
+                        children: [
+                          OutlinedButton(
                             onPressed: () {
                               updateSelectedStatus(false);
+                              updateComponentCost(0);
+                              updateComponentQuantity(0);
+                              updateApplicationQuotation();
                             },
                             child: const Text('Edit selection'),
                           ),
                           const SizedBox(height: 10),
-                           const Text('* Any changes made here must also be made for the MC4 connecctors', style: TextStyle(fontSize: 10, color: Colors.red,),)
-                      ],
-                    ),
+                          const Text(
+                            '*Any changes made here must also be made for the MC4 connecctors',
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: Colors.red,
+                            ),
+                          )
+                        ],
+                      ),
               ],
             ),
           );

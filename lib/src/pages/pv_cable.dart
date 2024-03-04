@@ -40,6 +40,14 @@ class _PVCableSixMMState extends ConsumerState<PVCable> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    cableLengthController.dispose();
+    cable2LengthController.dispose();
+    cable3LengthController.dispose();
+    super.dispose();
+  }
+
   void savePVCablesToApplication() {
     ref.watch(solarControllerProvider).savePVCablesToApplication(
           applicationId: widget.applicationId,
