@@ -4,6 +4,7 @@ import 'package:solar_project/core/firestore_provider.dart';
 import 'package:solar_project/models/application_model.dart';
 import 'package:solar_project/models/battery_capacity_model.dart';
 import 'package:solar_project/models/components_model.dart';
+import 'package:solar_project/models/core_cable_model.dart';
 import 'package:solar_project/models/isolator_switch_model.dart';
 
 final solarRepositoryProvider = Provider(
@@ -191,6 +192,15 @@ class SolarRepository {
         .update({'length': length});
   }
 
+  Future updateComponentCrossSection(
+      String applicationId, String crossSection, String component) async {
+    return _applications
+        .doc(applicationId)
+        .collection('components')
+        .doc(component)
+        .update({'crossSection': crossSection});
+  }
+
   Future updateApplicationComponentsCostListAdd(
       String applicationId, int componentCost) async {
     return _applications.doc(applicationId).update({
@@ -275,7 +285,8 @@ class SolarRepository {
         .doc(applicationId)
         .collection('components')
         .doc(component)
-        .collection('isolators').orderBy('rating')
+        .collection('isolators')
+        .orderBy('rating')
         .snapshots()
         .map((event) {
       List<IsolatorSwitchModel> isolators = [];
@@ -283,6 +294,82 @@ class SolarRepository {
         isolators.add(IsolatorSwitchModel.fromMap(doc.data()));
       }
       return isolators;
+    });
+  }
+
+  Future<List<CoreCableModel>> getCoreCables(String component) async {
+    var event = await _components.doc(component).collection('cables').get();
+
+    List<CoreCableModel> cables = [];
+    for (var doc in event.docs) {
+      cables.add(CoreCableModel.fromMap(doc.data()));
+    }
+    return cables;
+  }
+
+  Future saveCoreCablesToApplication(String applicationId,
+      CoreCableModel coreCableModel, String component) async {
+    return _applications
+        .doc(applicationId)
+        .collection('components')
+        .doc(component)
+        .collection('cables')
+        .doc(coreCableModel.crossSection)
+        .set(coreCableModel.toMap());
+  }
+
+  Stream<List<CoreCableModel>> getCoreCablesFromApplication(
+      String applicationId, String component) {
+    return _applications
+        .doc(applicationId)
+        .collection('components')
+        .doc(component)
+        .collection('cables')
+        .snapshots()
+        .map((event) {
+      List<CoreCableModel> cables = [];
+      for (var doc in event.docs) {
+        cables.add(CoreCableModel.fromMap(doc.data()));
+      }
+      return cables;
+    });
+  }
+
+  Future<List<CoreCableModel>> getPVCables(String component) async {
+    var event = await _components.doc(component).collection('cables').get();
+
+    List<CoreCableModel> cables = [];
+    for (var doc in event.docs) {
+      cables.add(CoreCableModel.fromMap(doc.data()));
+    }
+    return cables;
+  }
+
+  Future savePVCablesToApplication(String applicationId,
+      CoreCableModel coreCableModel, String component) async {
+    return _applications
+        .doc(applicationId)
+        .collection('components')
+        .doc(component)
+        .collection('cables')
+        .doc(coreCableModel.crossSection)
+        .set(coreCableModel.toMap());
+  }
+
+  Stream<List<CoreCableModel>> getPVCablesFromApplication(
+      String applicationId, String component) {
+    return _applications
+        .doc(applicationId)
+        .collection('components')
+        .doc(component)
+        .collection('cables')
+        .snapshots()
+        .map((event) {
+      List<CoreCableModel> cables = [];
+      for (var doc in event.docs) {
+        cables.add(CoreCableModel.fromMap(doc.data()));
+      }
+      return cables;
     });
   }
 

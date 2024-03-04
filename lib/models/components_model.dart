@@ -9,6 +9,7 @@ class ComponentsModel {
   final int length;
   final int weight;
   final int capacity;
+  final String crossSection;
   ComponentsModel({
     required this.name,
     required this.cost,
@@ -20,6 +21,7 @@ class ComponentsModel {
     required this.length,
     required this.weight,
     required this.capacity,
+    required this.crossSection,
   });
 
   Map<String, dynamic> toMap() {
@@ -34,6 +36,7 @@ class ComponentsModel {
       'length': length,
       'weight': weight,
       'capacity': capacity,
+      'crossSection': crossSection,
     };
   }
 
@@ -49,33 +52,7 @@ class ComponentsModel {
       length: map['length'] as int,
       weight: map['weight'] as int,
       capacity: map['capacity'] as int,
+      crossSection: map['crossSection'] as String,
     );
   }
-
-  ComponentsModel copyWith({
-    String? name,
-    int? cost,
-    bool? dependents,
-    bool? isSelected,
-    List<dynamic>? measurement,
-    int? number,
-    int? quantity,
-    int? length,
-    int? weight,
-    int? capacity,
-  }) {
-    return ComponentsModel(
-      name: name ?? this.name,
-      cost: cost ?? this.cost,
-      dependents: dependents ?? this.dependents,
-      isSelected: isSelected ?? this.isSelected,
-      measurement: measurement ?? this.measurement,
-      number: number ?? this.number,
-      quantity: quantity ?? this.quantity,
-      length: length ?? this.length,
-      weight: weight ?? this.weight,
-      capacity: capacity ?? this.capacity,
-    );
-  }
-
-  }
+}

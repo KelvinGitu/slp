@@ -3,20 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
 
-class NineWayCombinerEnclosure extends ConsumerStatefulWidget {
-    final String component;
+class EarthingCable extends ConsumerStatefulWidget {
+  final String component;
   final String applicationId;
-  const NineWayCombinerEnclosure({super.key, 
+  const EarthingCable({
+    super.key,
     required this.component,
     required this.applicationId,
   });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _NineWayCombinerEnclosureState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _EarthingCableState();
 }
 
-class _NineWayCombinerEnclosureState extends ConsumerState<NineWayCombinerEnclosure> {
-
+class _EarthingCableState extends ConsumerState<EarthingCable> {
   late List<String> arguments;
 
   bool validate = false;
@@ -57,10 +57,9 @@ class _NineWayCombinerEnclosureState extends ConsumerState<NineWayCombinerEnclos
         );
   }
 
-
   @override
   Widget build(BuildContext context) {
-   final component =
+    final component =
         ref.watch(getApplicationComponentStreamProvider(arguments));
     return component.when(
       data: (component) {

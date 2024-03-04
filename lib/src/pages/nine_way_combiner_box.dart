@@ -4,10 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
 import 'package:solar_project/src/widgets/confirm_selection_button.dart';
 
-class AutomaticChangeOverSwitch extends ConsumerStatefulWidget {
+class NineWayCombinerBox extends ConsumerStatefulWidget {
   final String component;
   final String applicationId;
-  const AutomaticChangeOverSwitch({
+  const NineWayCombinerBox({
     super.key,
     required this.component,
     required this.applicationId,
@@ -15,14 +15,15 @@ class AutomaticChangeOverSwitch extends ConsumerStatefulWidget {
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
-      _AutomaticChangeOverSwitchState();
+      _NineWayCombinerEnclosureState();
 }
 
-class _AutomaticChangeOverSwitchState
-    extends ConsumerState<AutomaticChangeOverSwitch> {
+class _NineWayCombinerEnclosureState extends ConsumerState<NineWayCombinerBox> {
   late List<String> arguments;
 
-  int cost = 600;
+  bool validate = false;
+
+  int cost = 3000;
 
   @override
   void initState() {
@@ -52,6 +53,22 @@ class _AutomaticChangeOverSwitchState
         );
   }
 
+  void updateComponentLength(int length) {
+    ref.watch(solarControllerProvider).updateComponentLength(
+          widget.component,
+          length * 2,
+          widget.applicationId,
+        );
+  }
+
+  void updateComponentQuanity() {
+    ref.watch(solarControllerProvider).updateComponentQuantity(
+          widget.component,
+          1,
+          widget.applicationId,
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     final component =
@@ -62,7 +79,7 @@ class _AutomaticChangeOverSwitchState
           appBar: AppBar(
             title: Text(
               component.name,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
             centerTitle: true,
           ),
@@ -72,7 +89,7 @@ class _AutomaticChangeOverSwitchState
                 ? Column(
                     children: [
                       const Text(
-                        'One automatic changeover switch will be added automatically as part of the installation',
+                        'One 9 way combiner box will be added automatically as part of the installation',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -90,6 +107,7 @@ class _AutomaticChangeOverSwitchState
                       OutlinedButton(
                         onPressed: () {
                           updateComponentCost();
+                          updateComponentQuanity();
                           updateSelectedStatus(true);
                           updateApplicationQuotation();
                         },
@@ -100,7 +118,7 @@ class _AutomaticChangeOverSwitchState
                 : Column(
                     children: [
                       const Text(
-                        'The switch has already been included in the installation',
+                        'The box has already been included in the installation',
                         style: TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 16,
@@ -117,6 +135,8 @@ class _AutomaticChangeOverSwitchState
                         padding: const EdgeInsets.symmetric(horizontal: 40),
                         child: ConfirmSelectionButton(
                           onPressed: () {
+                            // updateApplicationQuotation();
+                            // updateSelectedStatus(true);
                             Navigator.pop(context);
                           },
                           message: 'Exit',

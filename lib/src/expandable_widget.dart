@@ -4,18 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:solar_project/src/controller/solar_controller.dart';
-import 'package:solar_project/src/pages/six_mm_core_cable.dart';
-import 'package:solar_project/src/pages/ten_mm_core_cable.dart';
+import 'package:solar_project/src/pages/battery_cable.dart';
+import 'package:solar_project/src/pages/core_cable.dart';
 import 'package:solar_project/src/pages/automatic_changeover_switch.dart';
 import 'package:solar_project/src/pages/batteries_screen.dart';
 import 'package:solar_project/src/pages/earth_rod.dart';
+import 'package:solar_project/src/pages/earthing_cable.dart';
 import 'package:solar_project/src/pages/inverter_manual_isolator.dart';
 import 'package:solar_project/src/pages/inverter_module_screen.dart';
 import 'package:solar_project/src/pages/mc4_connectors.dart';
-import 'package:solar_project/src/pages/nine_way_combiner_enclosure.dart';
+import 'package:solar_project/src/pages/nine_way_combiner_box.dart';
 import 'package:solar_project/src/pages/panel_screen.dart';
-import 'package:solar_project/src/pages/pv_cable_10mm.dart';
-import 'package:solar_project/src/pages/pv_cable_6mm.dart';
+import 'package:solar_project/src/pages/pv_cable.dart';
 import 'package:solar_project/src/pages/pv_combiner_box.dart';
 import 'package:solar_project/src/widgets/component_widget.dart';
 
@@ -43,7 +43,7 @@ class ExpandableWidget extends ConsumerWidget {
         expanded: applicationComponents.when(
           data: (applicationComponents) {
             return SizedBox(
-              height: MediaQuery.of(context).size.height * 0.8,
+              height: MediaQuery.of(context).size.height * 0.75,
               child: ListView(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -80,53 +80,44 @@ class ExpandableWidget extends ConsumerWidget {
                           applicationId: applicationId)),
                   ComponentWidget(
                       component: applicationComponents[6],
-                      navigate: TenMMCoreCable(
+                      navigate: CoreCable(
                           component: applicationComponents[6].name,
                           applicationId: applicationId)),
+
                   ComponentWidget(
                       component: applicationComponents[7],
-                      navigate: SixMMCoreCable(
+                      navigate: PVCombinerBox(
                           component: applicationComponents[7].name,
                           applicationId: applicationId)),
                   ComponentWidget(
                       component: applicationComponents[8],
-                      navigate: PVCombinerBox(
+                      navigate: NineWayCombinerBox(
                           component: applicationComponents[8].name,
                           applicationId: applicationId)),
                   ComponentWidget(
                       component: applicationComponents[9],
-                      navigate: NineWayCombinerEnclosure(
+                      navigate: PVCable(
                           component: applicationComponents[9].name,
                           applicationId: applicationId)),
                   ComponentWidget(
                       component: applicationComponents[10],
-                      navigate: PVCableSixMM(
+                      navigate: EarthRod(
                           component: applicationComponents[10].name,
                           applicationId: applicationId)),
                   ComponentWidget(
                       component: applicationComponents[11],
-                      navigate: PVCableTenMM(
+                      navigate: EarthingCable(
                           component: applicationComponents[11].name,
                           applicationId: applicationId)),
                   ComponentWidget(
                       component: applicationComponents[12],
-                      navigate: EarthRod (
+                      navigate: BatteryCable(
                           component: applicationComponents[12].name,
                           applicationId: applicationId)),
-                  ComponentWidget(
-                      component: applicationComponents[13],
-                      navigate: AutomaticChangeOverSwitch(
-                          component: applicationComponents[13].name,
-                          applicationId: applicationId)),
                   // ComponentWidget(
-                  //     component: applicationComponents[14],
+                  //     component: applicationComponents[13],
                   //     navigate: AutomaticChangeOverSwitch(
-                  //         component: applicationComponents[14].name,
-                  //         applicationId: applicationId)),
-                  // ComponentWidget(
-                  //     component: applicationComponents[15],
-                  //     navigate: AutomaticChangeOverSwitch(
-                  //         component: applicationComponents[15].name,
+                  //         component: applicationComponents[13].name,
                   //         applicationId: applicationId)),
                 ],
               ),

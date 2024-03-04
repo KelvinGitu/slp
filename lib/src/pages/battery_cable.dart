@@ -3,22 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
 
-class PVCableTenMM extends ConsumerStatefulWidget {
+class BatteryCable extends ConsumerStatefulWidget {
   final String component;
   final String applicationId;
-  const PVCableTenMM({
+  const BatteryCable({
     super.key,
     required this.component,
     required this.applicationId,
   });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _PVCableTenMMState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _BatteryCableState();
 }
 
-class _PVCableTenMMState extends ConsumerState<PVCableTenMM> {
-  final TextEditingController cableLengthController = TextEditingController();
-
+class _BatteryCableState extends ConsumerState<BatteryCable> {
   late List<String> arguments;
 
   bool validate = false;
@@ -37,8 +35,7 @@ class _PVCableTenMMState extends ConsumerState<PVCableTenMM> {
         );
   }
 
-  void updateComponentCost() {
-    int cost = int.parse(cableLengthController.text) * 2 * 40;
+  void updateComponentCost(int cost) {
     ref.watch(solarControllerProvider).updateComponentCost(
           widget.component,
           cost,

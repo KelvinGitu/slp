@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
 import 'package:solar_project/src/home_screen.dart';
 
-import 'package:solar_project/src/widgets/expandable_widget.dart';
+import 'package:solar_project/src/expandable_widget.dart';
 
 class ComponentsScreen extends ConsumerStatefulWidget {
   final String applicationId;

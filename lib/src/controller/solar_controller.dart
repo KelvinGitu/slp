@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:solar_project/models/application_model.dart';
 import 'package:solar_project/models/battery_capacity_model.dart';
 import 'package:solar_project/models/components_model.dart';
+import 'package:solar_project/models/core_cable_model.dart';
 import 'package:solar_project/models/isolator_switch_model.dart';
 import 'package:solar_project/src/repository/solar_repository.dart';
 
@@ -39,6 +40,20 @@ final getIsolatorSwitchStreamProvider =
       .getIsolatorSwitch(arguments[0], arguments[1]);
 });
 
+final getCoreCablesStreamProvider =
+    StreamProvider.family<List<CoreCableModel>, List<String>>((ref, arguments) {
+  return ref
+      .watch(solarControllerProvider)
+      .getCoreCables(arguments[0], arguments[1]);
+});
+
+final getPVCablesStreamProvider =
+    StreamProvider.family<List<CoreCableModel>, List<String>>((ref, arguments) {
+  return ref
+      .watch(solarControllerProvider)
+      .getPVCables(arguments[0], arguments[1]);
+});
+
 final getApplicationComponentStreamProvider =
     StreamProvider.family<ComponentsModel, List<String>>((ref, arguments) {
   return ref
@@ -74,16 +89,17 @@ class SolarController {
 
   void saveComponent() async {
     ComponentsModel componentsModel = ComponentsModel(
-      name: 'Inverter Manual Isolator',
+      name: 'Earthing Cable',
       cost: 0,
       dependents: false,
       isSelected: false,
-      measurement: ['depends on the KVA rating of the panels'],
-      number: 6,
+      measurement: [],
+      number: 12,
       quantity: 0,
       length: 0,
       weight: 0,
       capacity: 0,
+      crossSection: '',
     );
     await _solarRepository.saveComponent(componentsModel);
   }
@@ -134,11 +150,14 @@ class SolarController {
         applicationId, capacity, component);
   }
 
-
-   void updateComponentLength(
+  void updateComponentLength(
       String component, int length, String applicationId) async {
-    _solarRepository.updateComponentLength(
-        applicationId, length, component);
+    _solarRepository.updateComponentLength(applicationId, length, component);
+  }
+
+   void updateComponentCrossSection(
+      String component, String crossSection, String applicationId) async {
+    _solarRepository.updateComponentCrossSection(applicationId, crossSection, component);
   }
 
   void updateApplicationComponentsCostListAdd(
@@ -194,6 +213,24 @@ class SolarController {
     }
   }
 
+  void saveCoreCablesToApplication(
+      {required String applicationId, required String component}) async {
+    final cables = await _solarRepository.getCoreCables(component);
+    for (CoreCableModel cable in cables) {
+      await _solarRepository.saveCoreCablesToApplication(
+          applicationId, cable, component);
+    }
+  }
+
+  void savePVCablesToApplication(
+      {required String applicationId, required String component}) async {
+    final cables = await _solarRepository.getPVCables(component);
+    for (CoreCableModel cable in cables) {
+      await _solarRepository.savePVCablesToApplication(
+          applicationId, cable, component);
+    }
+  }
+
   Stream<ApplicationModel> getApplication(String applicationId) {
     return _solarRepository.getApplication(applicationId);
   }
@@ -215,6 +252,18 @@ class SolarController {
   Stream<List<IsolatorSwitchModel>> getIsolatorSwitch(
       String applicationId, String component) {
     return _solarRepository.getIsolatorSwitchFromApplication(
+        applicationId, component);
+  }
+
+  Stream<List<CoreCableModel>> getCoreCables(
+      String applicationId, String component) {
+    return _solarRepository.getCoreCablesFromApplication(
+        applicationId, component);
+  }
+
+  Stream<List<CoreCableModel>> getPVCables(
+      String applicationId, String component) {
+    return _solarRepository.getPVCablesFromApplication(
         applicationId, component);
   }
 
