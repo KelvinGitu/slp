@@ -89,7 +89,8 @@ class _BatteryCableState extends ConsumerState<BatteryCable> {
         ref.watch(getApplicationComponentStreamProvider(arguments));
     final batteryCables = ref.watch(getBatteryCablesStreamProvider(arguments));
 
-    final selectedCables = ref.watch(getSelectedBatteryCablesStreamProvider(arguments));
+    final selectedCables =
+        ref.watch(getSelectedBatteryCablesStreamProvider(arguments));
 
     return component.when(
       data: (component) {
@@ -351,7 +352,7 @@ class _BatteryCableState extends ConsumerState<BatteryCable> {
                               child: ConfirmSelectionButton(
                                 onPressed: () {
                                   updateApplicationQuotation();
-                                  updateSelectedStatus(true);
+                                  updateSelectedStatus(false);
                                   Navigator.pop(context);
                                 },
                                 message: 'Exit',
