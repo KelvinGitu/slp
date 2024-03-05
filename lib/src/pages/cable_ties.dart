@@ -4,24 +4,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
 import 'package:solar_project/src/widgets/confirm_selection_button.dart';
 
-class AutomaticChangeOverSwitch extends ConsumerStatefulWidget {
+class CableTies extends ConsumerStatefulWidget {
   final String component;
   final String applicationId;
-  const AutomaticChangeOverSwitch({
+  const CableTies({
     super.key,
     required this.component,
     required this.applicationId,
   });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      _AutomaticChangeOverSwitchState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _CableTiesState();
 }
 
-class _AutomaticChangeOverSwitchState
-    extends ConsumerState<AutomaticChangeOverSwitch> {
+class _CableTiesState extends ConsumerState<CableTies> {
   late List<String> arguments;
-
 
   @override
   void initState() {
@@ -71,7 +68,7 @@ class _AutomaticChangeOverSwitchState
                 ? Column(
                     children: [
                       const Text(
-                        'One automatic changeover switch will be added automatically as part of the installation',
+                        'Cable ties will be added automatically as part of the installation',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -99,7 +96,7 @@ class _AutomaticChangeOverSwitchState
                 : Column(
                     children: [
                       const Text(
-                        'The switch has already been included in the installation',
+                        'The cable ties have already been included in the installation',
                         style: TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 16,
@@ -116,6 +113,8 @@ class _AutomaticChangeOverSwitchState
                         padding: const EdgeInsets.symmetric(horizontal: 40),
                         child: ConfirmSelectionButton(
                           onPressed: () {
+                            // updateSelectedStatus(false);
+                            
                             Navigator.pop(context);
                           },
                           message: 'Exit',

@@ -23,8 +23,6 @@ class _NineWayCombinerEnclosureState extends ConsumerState<NineWayCombinerBox> {
 
   bool validate = false;
 
-  int cost = 3000;
-
   @override
   void initState() {
     arguments = [widget.applicationId, widget.component];
@@ -39,7 +37,7 @@ class _NineWayCombinerEnclosureState extends ConsumerState<NineWayCombinerBox> {
         );
   }
 
-  void updateComponentCost() {
+  void updateComponentCost(int cost) {
     ref.watch(solarControllerProvider).updateComponentCost(
           widget.component,
           cost,
@@ -97,7 +95,7 @@ class _NineWayCombinerEnclosureState extends ConsumerState<NineWayCombinerBox> {
                       ),
                       const SizedBox(height: 25),
                       Text(
-                        'Approximate cost: KES $cost',
+                        'Approximate cost: KES ${component.cost}',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -106,7 +104,7 @@ class _NineWayCombinerEnclosureState extends ConsumerState<NineWayCombinerBox> {
                       const SizedBox(height: 25),
                       OutlinedButton(
                         onPressed: () {
-                          updateComponentCost();
+                          // updateComponentCost();
                           updateComponentQuanity();
                           updateSelectedStatus(true);
                           updateApplicationQuotation();

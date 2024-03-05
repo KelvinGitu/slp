@@ -5,6 +5,7 @@ import 'package:solar_project/models/battery_capacity_model.dart';
 import 'package:solar_project/models/components_model.dart';
 import 'package:solar_project/models/core_cable_model.dart';
 import 'package:solar_project/models/isolator_switch_model.dart';
+import 'package:solar_project/models/piping_components_model.dart';
 import 'package:solar_project/src/repository/solar_repository.dart';
 
 final getAllComponentsStreamProvider = StreamProvider((ref) {
@@ -71,6 +72,22 @@ final getSelectedBatteryCablesStreamProvider =
       .getStreamSelectedBatteryCables(arguments[0], arguments[1]);
 });
 
+final getPipingComponentsStreamProvider =
+    StreamProvider.family<List<PipingComponentsModel>, List<String>>(
+        (ref, arguments) {
+  return ref
+      .watch(solarControllerProvider)
+      .getPipingComponents(arguments[0], arguments[1]);
+});
+
+final getSelectedPipingComponentsStreamProvider =
+    StreamProvider.family<List<PipingComponentsModel>, List<String>>(
+        (ref, arguments) {
+  return ref
+      .watch(solarControllerProvider)
+      .getStreamSelectedPipingComponents(arguments[0], arguments[1]);
+});
+
 final getApplicationComponentStreamProvider =
     StreamProvider.family<ComponentsModel, List<String>>((ref, arguments) {
   return ref
@@ -106,12 +123,12 @@ class SolarController {
 
   void saveComponent() async {
     ComponentsModel componentsModel = ComponentsModel(
-      name: 'Earthing Cable',
+      name: 'Piping',
       cost: 0,
       dependents: false,
       isSelected: false,
       measurement: [],
-      number: 12,
+      number: 15,
       quantity: 0,
       length: 0,
       weight: 0,
@@ -288,6 +305,12 @@ class SolarController {
         applicationId, cost, component, cable);
   }
 
+  Future<bool> checkBatteryCableExists(
+      String applicationId, String component, String name) {
+    return _solarRepository.checkBatteryCableExists(
+        applicationId, component, name);
+  }
+
   Future<List<BatteryCableModel>> getFutureSelectedBatteryCables(
       String applicationId, String component) async {
     return await _solarRepository.getFutureSelectedBatteryCables(
@@ -297,6 +320,73 @@ class SolarController {
   Stream<List<BatteryCableModel>> getStreamSelectedBatteryCables(
       String applicationId, String component) {
     return _solarRepository.getStreamSelectedBatteryCables(
+        applicationId, component);
+  }
+
+  void savePipingComponentsToApplication(
+      {required String applicationId, required String component}) async {
+    final pipings = await _solarRepository.getPipingComponents(component);
+    for (PipingComponentsModel piping in pipings) {
+      await _solarRepository.savePipingComponetsToApplication(
+          applicationId, piping, component);
+    }
+  }
+
+  void updatePipingComponentSelectedStatus({
+    required String applicationId,
+    required String component,
+    required String piping,
+    required bool selected,
+  }) async {
+    await _solarRepository.updatePipingComponentSelectedStatus(
+        applicationId, selected, component, piping);
+  }
+
+  void updatePipingComponentLength({
+    required String applicationId,
+    required String component,
+    required String piping,
+    required int length,
+  }) async {
+    await _solarRepository.updatePipingComponentLength(
+        applicationId, length, component, piping);
+  }
+
+  void updatePipingComponentQuantity({
+    required String applicationId,
+    required String component,
+    required String piping,
+    required int quantity,
+  }) async {
+    await _solarRepository.updatePipingComponentQuantity(
+        applicationId, quantity, component, piping);
+  }
+
+  void updatePipingComponentCost({
+    required String applicationId,
+    required String component,
+    required String piping,
+    required int cost,
+  }) async {
+    await _solarRepository.updatePipingComponentCost(
+        applicationId, cost, component, piping);
+  }
+
+  Future<bool> checkPipingComponentExists(
+      String applicationId, String component, String name) {
+    return _solarRepository.checkPipingComponentExists(
+        applicationId, component, name);
+  }
+
+  Future<List<PipingComponentsModel>> getFutureSelectedPipingComponents(
+      String applicationId, String component) async {
+    return await _solarRepository.getFutureSelectedPipingComponents(
+        applicationId, component);
+  }
+
+  Stream<List<PipingComponentsModel>> getStreamSelectedPipingComponents(
+      String applicationId, String component) {
+    return _solarRepository.getStreamSelectedPipingComponents(
         applicationId, component);
   }
 
@@ -339,6 +429,12 @@ class SolarController {
   Stream<List<BatteryCableModel>> getBatteryCables(
       String applicationId, String component) {
     return _solarRepository.getBatteryCablesFromApplication(
+        applicationId, component);
+  }
+
+  Stream<List<PipingComponentsModel>> getPipingComponents(
+      String applicationId, String component) {
+    return _solarRepository.getPipingComponentsFromApplication(
         applicationId, component);
   }
 

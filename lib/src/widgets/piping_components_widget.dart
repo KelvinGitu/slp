@@ -2,68 +2,70 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:solar_project/models/battery_cable_model.dart';
+import 'package:solar_project/models/piping_components_model.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
 import 'package:solar_project/src/widgets/confirm_selection_button.dart';
 
-class BatteryCableWidget extends ConsumerStatefulWidget {
+class PipingComponentsWidget extends ConsumerStatefulWidget {
   final String component;
   final String applicationId;
-  final BatteryCableModel cable;
-  const BatteryCableWidget({
-    Key? key,
+  final PipingComponentsModel piping;
+  const PipingComponentsWidget({
+    super.key,
     required this.component,
     required this.applicationId,
-    required this.cable,
-  }) : super(key: key);
+    required this.piping,
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
-      _BatteryCableWidgetState();
+      _PipingComponentsWidgetState();
 }
 
-class _BatteryCableWidgetState extends ConsumerState<BatteryCableWidget> {
-  final TextEditingController cableLengthController = TextEditingController();
+class _PipingComponentsWidgetState
+    extends ConsumerState<PipingComponentsWidget> {
+  final TextEditingController pipingQuantityController =
+      TextEditingController();
 
   bool validate = false;
 
   @override
   void dispose() {
-    cableLengthController.dispose();
+    pipingQuantityController.dispose();
     super.dispose();
   }
 
-  void updateSelectedStatus(bool selected, String cable) {
-    ref.watch(solarControllerProvider).updateBatteryCableSelectedStatus(
+  void updateSelectedStatus(bool selected, String piping) {
+    ref.watch(solarControllerProvider).updatePipingComponentSelectedStatus(
           applicationId: widget.applicationId,
           component: widget.component,
-          cable: cable,
+          piping: piping,
           selected: selected,
         );
   }
 
-  void updateSelectedCableCost(int cost, String cable) {
-    ref.watch(solarControllerProvider).updateBatteryCableCost(
+  void updateSelectedPipingCost(int cost, String piping) {
+    ref.watch(solarControllerProvider).updatePipingComponentCost(
           applicationId: widget.applicationId,
           component: widget.component,
-          cable: cable,
+          piping: piping,
           cost: cost,
         );
   }
 
-  void updateSelectedCableLength(int length, String cable) {
-    ref.watch(solarControllerProvider).updateBatteryCableLength(
+  void updateSelectedPipingQuantity(int quantity, String piping) {
+    ref.watch(solarControllerProvider).updatePipingComponentQuantity(
           applicationId: widget.applicationId,
           component: widget.component,
-          cable: cable,
-          length: length,
+          piping: piping,
+          quantity: quantity,
         );
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,22 +86,24 @@ class _BatteryCableWidgetState extends ConsumerState<BatteryCableWidget> {
             Align(
               alignment: Alignment.topCenter,
               child: Text(
-                '${widget.cable.crossSection}\u00b2 battery cable',
-                style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                widget.piping.name,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             const SizedBox(height: 15),
-            Text(
-              widget.cable.purpose,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            const Text(
+              'How many units do you need?',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
             const SizedBox(height: 20),
             TextField(
-              controller: cableLengthController,
+              controller: pipingQuantityController,
               keyboardType: const TextInputType.numberWithOptions(),
               decoration: InputDecoration(
-                hintText: 'Length in metres',
+                hintText: 'Number of units',
                 hintStyle: TextStyle(
                     fontSize: 14, color: Colors.black.withOpacity(0.6)),
                 border: InputBorder.none,
@@ -109,32 +113,31 @@ class _BatteryCableWidgetState extends ConsumerState<BatteryCableWidget> {
               ),
             ),
             const SizedBox(height: 20),
-            (widget.cable.isSelected == false)
+            (widget.piping.isSelected == false)
                 ? Align(
                     alignment: Alignment.topCenter,
                     child: ConfirmSelectionButton(
                         onPressed: () {
                           setState(() {
                             setState(() {
-                              validate = cableLengthController.text.isEmpty;
+                              validate = pipingQuantityController.text.isEmpty;
                             });
                           });
                           (validate == true)
                               ? null
-                              : updateSelectedStatus(
-                                  true, widget.cable.crossSection);
+                              : updateSelectedStatus(true, widget.piping.name);
                           (validate == true)
                               ? null
-                              : updateSelectedCableLength(
-                                  int.parse(cableLengthController.text),
-                                  widget.cable.crossSection,
+                              : updateSelectedPipingQuantity(
+                                  int.parse(pipingQuantityController.text),
+                                  widget.piping.name,
                                 );
                           (validate == true)
                               ? null
-                              : updateSelectedCableCost(
-                                  int.parse(cableLengthController.text) *
-                                      widget.cable.price,
-                                  widget.cable.crossSection,
+                              : updateSelectedPipingCost(
+                                  int.parse(pipingQuantityController.text) *
+                                      widget.piping.price,
+                                  widget.piping.name,
                                 );
                           (validate == true) ? null : Navigator.pop(context);
                         },
@@ -144,11 +147,9 @@ class _BatteryCableWidgetState extends ConsumerState<BatteryCableWidget> {
                     alignment: Alignment.topCenter,
                     child: ConfirmSelectionButton(
                         onPressed: () {
-                          updateSelectedStatus(
-                              false, widget.cable.crossSection);
-                          updateSelectedCableLength(
-                              0, widget.cable.crossSection);
-                          updateSelectedCableCost(0, widget.cable.crossSection);
+                          updateSelectedStatus(false, widget.piping.name);
+                          updateSelectedPipingQuantity(0, widget.piping.name);
+                          updateSelectedPipingCost(0, widget.piping.name);
                           Navigator.pop(context);
                         },
                         message: 'Remove'),

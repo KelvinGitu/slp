@@ -5,16 +5,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:solar_project/src/controller/solar_controller.dart';
 import 'package:solar_project/src/pages/battery_cable.dart';
+import 'package:solar_project/src/pages/cable_lugs.dart';
+import 'package:solar_project/src/pages/cable_ties.dart';
 import 'package:solar_project/src/pages/core_cable.dart';
 import 'package:solar_project/src/pages/automatic_changeover_switch.dart';
 import 'package:solar_project/src/pages/batteries_screen.dart';
-import 'package:solar_project/src/pages/earth_rod.dart';
-import 'package:solar_project/src/pages/earthing_cable.dart';
+import 'package:solar_project/src/pages/earth_rod_and_cable.dart';
 import 'package:solar_project/src/pages/inverter_manual_isolator.dart';
 import 'package:solar_project/src/pages/inverter_module_screen.dart';
 import 'package:solar_project/src/pages/mc4_connectors.dart';
 import 'package:solar_project/src/pages/nine_way_combiner_box.dart';
 import 'package:solar_project/src/pages/panel_screen.dart';
+import 'package:solar_project/src/pages/piping.dart';
 import 'package:solar_project/src/pages/pv_cable.dart';
 import 'package:solar_project/src/pages/pv_combiner_box.dart';
 import 'package:solar_project/src/widgets/component_widget.dart';
@@ -109,24 +111,29 @@ class ExpandableWidget extends ConsumerWidget {
                           applicationId: applicationId)),
                   ComponentWidget(
                       component: applicationComponents[10],
-                      navigate: EarthRod(
+                      navigate: EarthRodAndCable(
                           component: applicationComponents[10].name,
                           applicationId: applicationId)),
                   ComponentWidget(
                       component: applicationComponents[11],
-                      navigate: EarthingCable(
+                      navigate: BatteryCable(
                           component: applicationComponents[11].name,
                           applicationId: applicationId)),
                   ComponentWidget(
                       component: applicationComponents[12],
-                      navigate: BatteryCable(
+                      navigate: CableLugs(
                           component: applicationComponents[12].name,
                           applicationId: applicationId)),
-                  // ComponentWidget(
-                  //     component: applicationComponents[13],
-                  //     navigate: AutomaticChangeOverSwitch(
-                  //         component: applicationComponents[13].name,
-                  //         applicationId: applicationId)),
+                  ComponentWidget(
+                      component: applicationComponents[13],
+                      navigate: CableTies(
+                          component: applicationComponents[13].name,
+                          applicationId: applicationId)),
+                          ComponentWidget(
+                      component: applicationComponents[14],
+                      navigate: PipingScreen(
+                          component: applicationComponents[14].name,
+                          applicationId: applicationId)),
                 ],
               ),
             );

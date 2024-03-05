@@ -20,10 +20,13 @@ class BatteriesScreen extends ConsumerStatefulWidget {
 
 class _BatteriesScreenState extends ConsumerState<BatteriesScreen> {
   final TextEditingController capacityController = TextEditingController();
+  final TextEditingController batteriesController = TextEditingController();
 
   bool storageDevice = false;
 
   bool validate = false;
+
+  bool validate2 = false;
 
   late List<String> arguments;
 
@@ -54,7 +57,7 @@ class _BatteriesScreenState extends ConsumerState<BatteriesScreen> {
   void updateComponentCost(int cost) {
     ref.watch(solarControllerProvider).updateComponentCost(
           widget.component,
-          cost,
+          cost * int.parse(batteriesController.text),
           widget.applicationId,
         );
   }
@@ -77,6 +80,14 @@ class _BatteriesScreenState extends ConsumerState<BatteriesScreen> {
     ref.watch(solarControllerProvider).saveBatteryCapacityToApplication(
           applicationId: widget.applicationId,
           component: widget.component,
+        );
+  }
+
+  void updateComponentQuanity(int quantity) {
+    ref.watch(solarControllerProvider).updateComponentQuantity(
+          widget.component,
+          quantity,
+          widget.applicationId,
         );
   }
 
@@ -194,7 +205,39 @@ class _BatteriesScreenState extends ConsumerState<BatteriesScreen> {
                               ),
                             )
                           : Container(),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 15),
+                      (storageDevice == true)
+                          ? Column(
+                              children: [
+                                const SizedBox(height: 15),
+                                const Text(
+                                  'How many batteries does the installation require?',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                const SizedBox(height: 15),
+                                TextField(
+                                  controller: batteriesController,
+                                  keyboardType:
+                                      const TextInputType.numberWithOptions(),
+                                  decoration: InputDecoration(
+                                    hintText: 'No. of batteries',
+                                    hintStyle: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.black.withOpacity(0.6)),
+                                    border: InputBorder.none,
+                                    filled: true,
+                                    fillColor: Colors.grey.withOpacity(0.2),
+                                    errorText: validate2
+                                        ? "Value Can't Be Empty"
+                                        : null,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Container(),
+                      const SizedBox(height: 20),
                       (storageDevice == true)
                           ? const Align(
                               alignment: Alignment.topLeft,
@@ -283,13 +326,21 @@ class _BatteriesScreenState extends ConsumerState<BatteriesScreen> {
                                             return (battery.capacity >= num)
                                                 ? InkWell(
                                                     onTap: () {
+                                                      setState(() {
+                                                        validate2 =
+                                                            batteriesController
+                                                                .text.isEmpty;
+                                                        (validate2 == true)
+                                                            ? null
+                                                            : capacitySelected =
+                                                                true;
+                                                      });
+                                                      (validate2 == true)
+                                                          ? null
+                                                          : updateComponentCost(
+                                                              battery.cost);
                                                       updateComponentCapacity(
                                                           battery.capacity);
-                                                      updateComponentCost(
-                                                          battery.cost);
-                                                      setState(() {
-                                                        capacitySelected = true;
-                                                      });
                                                     },
                                                     child: SizedBox(
                                                       height: 30,
@@ -334,7 +385,6 @@ class _BatteriesScreenState extends ConsumerState<BatteriesScreen> {
                                       fontSize: 16),
                                 )
                               : Container(),
-                      const SizedBox(height: 10),
                       (storageDevice == true)
                           ? Padding(
                               padding:
@@ -343,12 +393,19 @@ class _BatteriesScreenState extends ConsumerState<BatteriesScreen> {
                                 onPressed: () {
                                   setState(() {
                                     validate = capacityController.text.isEmpty;
+                                    validate2 =
+                                        batteriesController.text.isEmpty;
                                   });
-                                  (validate == true)
+
+                                  (validate == true || validate2 == true)
+                                      ? null
+                                      : updateComponentQuanity(
+                                          int.parse(batteriesController.text));
+                                  (validate == true || validate2 == true)
                                       ? null
                                       : updateSelectedStatus(true);
 
-                                  (validate == true)
+                                  (validate == true || validate2 == true)
                                       ? null
                                       : updateApplicationQuotation();
                                 },
@@ -373,17 +430,23 @@ class _BatteriesScreenState extends ConsumerState<BatteriesScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Column(
                       children: [
-                        Align(
-                          alignment: Alignment.topCenter,
-                          child: Text(
-                            'Preferred battery capacity: ${component.capacity}Ah',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
+                        Container(),
+                         Text(
+                          'Number of batteries: ${component.quantity}',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 15),
+                        Text(
+                          'Preferred battery capacity: ${component.capacity}Ah',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const SizedBox(height: 15),
                         Text(
                           'Total cost: KES ${component.cost}',
                           style: const TextStyle(
@@ -394,6 +457,8 @@ class _BatteriesScreenState extends ConsumerState<BatteriesScreen> {
                         const SizedBox(height: 20),
                         ConfirmSelectionButton(
                           onPressed: () {
+                            updateComponentCost(0);
+                            // updateComponentCapacity(0);
                             updateSelectedStatus(false);
                           },
                           message: 'Edit selection',
