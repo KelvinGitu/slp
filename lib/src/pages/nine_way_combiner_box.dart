@@ -21,8 +21,6 @@ class NineWayCombinerBox extends ConsumerStatefulWidget {
 class _NineWayCombinerEnclosureState extends ConsumerState<NineWayCombinerBox> {
   late List<String> arguments;
 
-  bool validate = false;
-
   @override
   void initState() {
     arguments = [widget.applicationId, widget.component];

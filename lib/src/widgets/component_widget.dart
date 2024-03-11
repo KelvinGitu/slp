@@ -41,12 +41,17 @@ class ComponentWidget extends StatelessWidget {
                     textAlign: (component.name.length >= 20)
                         ? TextAlign.left
                         : TextAlign.start)),
-            (component.isSelected == true)
+            (component.isSelected == true && component.isRequired == true)
                 ? const Text(
                     'Done',
                     style: TextStyle(color: Colors.orange),
                   )
-                : Container(),
+                : (component.isRequired == false)
+                    ? const Text(
+                        'NR',
+                        style: TextStyle(color: Colors.purple),
+                      )
+                    : Container(),
           ],
         ),
       ),

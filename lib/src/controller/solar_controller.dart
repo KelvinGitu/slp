@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:solar_project/models/adapter_box_model.dart';
 import 'package:solar_project/models/application_model.dart';
 import 'package:solar_project/models/battery_cable_model.dart';
 import 'package:solar_project/models/battery_capacity_model.dart';
@@ -88,6 +89,22 @@ final getSelectedPipingComponentsStreamProvider =
       .getStreamSelectedPipingComponents(arguments[0], arguments[1]);
 });
 
+final getBoxesStreamProvider =
+    StreamProvider.family<List<AdapterBoxModel>, List<String>>(
+        (ref, arguments) {
+  return ref
+      .watch(solarControllerProvider)
+      .getBoxesFromApplication(arguments[0], arguments[1]);
+});
+
+final getSelectedBoxesStreamProvider =
+    StreamProvider.family<List<AdapterBoxModel>, List<String>>(
+        (ref, arguments) {
+  return ref
+      .watch(solarControllerProvider)
+      .getStreamSelectedBoxes(arguments[0], arguments[1]);
+});
+
 final getApplicationComponentStreamProvider =
     StreamProvider.family<ComponentsModel, List<String>>((ref, arguments) {
   return ref
@@ -123,12 +140,12 @@ class SolarController {
 
   void saveComponent() async {
     ComponentsModel componentsModel = ComponentsModel(
-      name: 'Piping',
+      name: 'Adapter Box Enclosure',
       cost: 0,
-      dependents: false,
+      isRequired: true,
       isSelected: false,
-      measurement: [],
-      number: 15,
+      measurement: ['client preference'],
+      number: 23,
       quantity: 0,
       length: 0,
       weight: 0,
@@ -165,6 +182,12 @@ class SolarController {
       String component, bool selected, String applicationId) async {
     _solarRepository.updateComponentSelectedStatus(
         applicationId, selected, component);
+  }
+
+  void updateApplicationRequiredStatus(
+      String component, bool required, String applicationId) async {
+    _solarRepository.updateComponentRequiredStatus(
+        applicationId, required, component);
   }
 
   void updateComponentCost(
@@ -378,6 +401,30 @@ class SolarController {
         applicationId, component, name);
   }
 
+  void saveBoxesToApplication(
+      {required String applicationId, required String component}) async {
+    final boxes = await _solarRepository.getBoxes(component);
+    for (AdapterBoxModel box in boxes) {
+      await _solarRepository.saveBoxesToApplication(
+          applicationId, box, component);
+    }
+  }
+
+  void updateBoxSelectedStatus({
+    required String applicationId,
+    required String component,
+    required String box,
+    required bool selected,
+  }) async {
+    await _solarRepository.updateBoxesSelectedStatus(
+        applicationId, selected, component, box);
+  }
+
+  Future<bool> checkBoxExists(
+      String applicationId, String component, String name) {
+    return _solarRepository.checkBoxExists(applicationId, component, name);
+  }
+
   Future<List<PipingComponentsModel>> getFutureSelectedPipingComponents(
       String applicationId, String component) async {
     return await _solarRepository.getFutureSelectedPipingComponents(
@@ -388,6 +435,17 @@ class SolarController {
       String applicationId, String component) {
     return _solarRepository.getStreamSelectedPipingComponents(
         applicationId, component);
+  }
+
+  Future<List<AdapterBoxModel>> getFutureSelectedBoxes(
+      String applicationId, String component) async {
+    return await _solarRepository.getFutureSelectedBoxes(
+        applicationId, component);
+  }
+
+  Stream<List<AdapterBoxModel>> getStreamSelectedBoxes(
+      String applicationId, String component) {
+    return _solarRepository.getStreamSelectedBoxes(applicationId, component);
   }
 
   Stream<ApplicationModel> getApplication(String applicationId) {
@@ -436,6 +494,11 @@ class SolarController {
       String applicationId, String component) {
     return _solarRepository.getPipingComponentsFromApplication(
         applicationId, component);
+  }
+
+  Stream<List<AdapterBoxModel>> getBoxesFromApplication(
+      String applicationId, String component) {
+    return _solarRepository.getBoxesFromApplication(applicationId, component);
   }
 
   void saveComponentsToApplication({required applicationId}) async {

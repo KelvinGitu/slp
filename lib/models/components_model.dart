@@ -1,7 +1,7 @@
 class ComponentsModel {
   final String name;
   final int cost;
-  final bool dependents;
+  final bool isRequired;
   final bool isSelected;
   final List<dynamic> measurement;
   final int number;
@@ -13,7 +13,7 @@ class ComponentsModel {
   ComponentsModel({
     required this.name,
     required this.cost,
-    required this.dependents,
+    required this.isRequired,
     required this.isSelected,
     required this.measurement,
     required this.number,
@@ -28,7 +28,7 @@ class ComponentsModel {
     return <String, dynamic>{
       'name': name,
       'cost': cost,
-      'dependents': dependents,
+      'isRequired': isRequired,
       'isSelected': isSelected,
       'measurement': measurement,
       'number': number,
@@ -44,7 +44,7 @@ class ComponentsModel {
     return ComponentsModel(
       name: map['name'] as String,
       cost: map['cost'] as int,
-      dependents: map['dependents'] as bool,
+      isRequired: map['isRequired'] as bool,
       isSelected: map['isSelected'] as bool,
       measurement: List<dynamic>.from(map['measurement'] as List<dynamic>),
       number: map['number'] as int,

@@ -4,13 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:solar_project/src/controller/solar_controller.dart';
+import 'package:solar_project/src/pages/ac_breaker_enclosure.dart';
+import 'package:solar_project/src/pages/ac_contactor_single_phase.dart';
+import 'package:solar_project/src/pages/ac_contactor_triple_phase.dart';
 import 'package:solar_project/src/pages/battery_cable.dart';
 import 'package:solar_project/src/pages/cable_lugs.dart';
 import 'package:solar_project/src/pages/cable_ties.dart';
 import 'package:solar_project/src/pages/core_cable.dart';
 import 'package:solar_project/src/pages/automatic_changeover_switch.dart';
 import 'package:solar_project/src/pages/batteries_screen.dart';
+import 'package:solar_project/src/pages/din_rail.dart';
+import 'package:solar_project/src/pages/double_pole_mcb.dart';
 import 'package:solar_project/src/pages/earth_rod_and_cable.dart';
+import 'package:solar_project/src/pages/four_pole_mccb.dart';
 import 'package:solar_project/src/pages/inverter_manual_isolator.dart';
 import 'package:solar_project/src/pages/inverter_module_screen.dart';
 import 'package:solar_project/src/pages/mc4_connectors.dart';
@@ -19,6 +25,9 @@ import 'package:solar_project/src/pages/panel_screen.dart';
 import 'package:solar_project/src/pages/piping.dart';
 import 'package:solar_project/src/pages/pv_cable.dart';
 import 'package:solar_project/src/pages/pv_combiner_box.dart';
+import 'package:solar_project/src/pages/pvc_trunking.dart';
+import 'package:solar_project/src/pages/adapter_box.dart';
+import 'package:solar_project/src/pages/triple_pole_mccb.dart';
 import 'package:solar_project/src/widgets/component_widget.dart';
 
 class ExpandableWidget extends ConsumerWidget {
@@ -93,7 +102,6 @@ class ExpandableWidget extends ConsumerWidget {
                       navigate: CoreCable(
                           component: applicationComponents[6].name,
                           applicationId: applicationId)),
-
                   ComponentWidget(
                       component: applicationComponents[7],
                       navigate: PVCombinerBox(
@@ -129,10 +137,55 @@ class ExpandableWidget extends ConsumerWidget {
                       navigate: CableTies(
                           component: applicationComponents[13].name,
                           applicationId: applicationId)),
-                          ComponentWidget(
+                  ComponentWidget(
                       component: applicationComponents[14],
                       navigate: PipingScreen(
                           component: applicationComponents[14].name,
+                          applicationId: applicationId)),
+                  ComponentWidget(
+                      component: applicationComponents[15],
+                      navigate: PVCTrunking(
+                          component: applicationComponents[15].name,
+                          applicationId: applicationId)),
+                  ComponentWidget(
+                      component: applicationComponents[16],
+                      navigate: TriplePoleMCCB(
+                          component: applicationComponents[16].name,
+                          applicationId: applicationId)),
+                  ComponentWidget(
+                      component: applicationComponents[17],
+                      navigate: DoublePoleMCB(
+                          component: applicationComponents[17].name,
+                          applicationId: applicationId)),
+                  ComponentWidget(
+                      component: applicationComponents[18],
+                      navigate: FourPoleMCCB(
+                          component: applicationComponents[18].name,
+                          applicationId: applicationId)),
+                  ComponentWidget(
+                      component: applicationComponents[19],
+                      navigate: ACBreakerEnclosure(
+                          component: applicationComponents[19].name,
+                          applicationId: applicationId)),
+                  ComponentWidget(
+                      component: applicationComponents[20],
+                      navigate: ACContactorSingle(
+                          component: applicationComponents[20].name,
+                          applicationId: applicationId)),
+                  ComponentWidget(
+                      component: applicationComponents[21],
+                      navigate: ACContactorTriple(
+                          component: applicationComponents[21].name,
+                          applicationId: applicationId)),
+                  ComponentWidget(
+                      component: applicationComponents[22],
+                      navigate: AdapterBox(
+                          component: applicationComponents[22].name,
+                          applicationId: applicationId)),
+                  ComponentWidget(
+                      component: applicationComponents[23],
+                      navigate: DINRail(
+                          component: applicationComponents[23].name,
                           applicationId: applicationId)),
                 ],
               ),
