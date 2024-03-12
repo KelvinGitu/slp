@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:solar_project/models/battery_cable_model.dart';
 import 'package:solar_project/models/components_model.dart';
+import 'package:solar_project/src/controller/battery_cables_conrtroller.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
 import 'package:solar_project/src/widgets/battery_cable_widget.dart';
 import 'package:solar_project/src/widgets/confirm_selection_button.dart';
@@ -42,13 +43,13 @@ class _BatteryCableState extends ConsumerState<BatteryCable> {
 
   void saveBatteryCablesToApplication() async {
     bool cableExists =
-        await ref.read(solarControllerProvider).checkBatteryCableExists(
+        await ref.read(batteryCablesControllerProvider).checkBatteryCableExists(
               widget.applicationId,
               widget.component,
               '4mm',
             );
     if (cableExists == false) {
-      ref.read(solarControllerProvider).saveBatteryCablesToApplication(
+      ref.read(batteryCablesControllerProvider).saveBatteryCablesToApplication(
             applicationId: widget.applicationId,
             component: widget.component,
           );
@@ -56,7 +57,7 @@ class _BatteryCableState extends ConsumerState<BatteryCable> {
   }
 
   void updateSelectedStatus(bool selected) {
-    ref.watch(solarControllerProvider).updateApplicationSelectedStatus(
+    ref.watch(solarControllerProvider).updateApplicationComponentSelectedStatus(
           widget.component,
           selected,
           widget.applicationId,
@@ -66,11 +67,11 @@ class _BatteryCableState extends ConsumerState<BatteryCable> {
   void updateComponentCost() async {
     int cost = 0;
     final cables = await ref
-        .read(solarControllerProvider)
+        .read(batteryCablesControllerProvider)
         .getFutureSelectedBatteryCables(widget.applicationId, widget.component);
     for (BatteryCableModel cable in cables) {
       cost = cost + cable.cost;
-      ref.watch(solarControllerProvider).updateComponentCost(
+      ref.watch(solarControllerProvider).updateApplicationComponentCost(
             widget.component,
             cost,
             widget.applicationId,
@@ -85,7 +86,7 @@ class _BatteryCableState extends ConsumerState<BatteryCable> {
   }
 
   void updateComponentLength(int length) {
-    ref.watch(solarControllerProvider).updateComponentLength(
+    ref.watch(solarControllerProvider).updateApplicationComponentLength(
           widget.component,
           length * 2,
           widget.applicationId,
@@ -361,7 +362,7 @@ Widget selectedTrue({
   required String applicationId,
 }) {
   void updateSelectedStatus(bool selected) {
-    ref.watch(solarControllerProvider).updateApplicationSelectedStatus(
+    ref.watch(solarControllerProvider).updateApplicationComponentSelectedStatus(
           component,
           selected,
           applicationId,

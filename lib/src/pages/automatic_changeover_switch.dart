@@ -22,7 +22,6 @@ class _AutomaticChangeOverSwitchState
     extends ConsumerState<AutomaticChangeOverSwitch> {
   late List<String> arguments;
 
-
   @override
   void initState() {
     arguments = [widget.applicationId, widget.component];
@@ -30,7 +29,7 @@ class _AutomaticChangeOverSwitchState
   }
 
   void updateSelectedStatus(bool selected) {
-    ref.watch(solarControllerProvider).updateApplicationSelectedStatus(
+    ref.watch(solarControllerProvider).updateApplicationComponentSelectedStatus(
           widget.component,
           selected,
           widget.applicationId,
@@ -38,7 +37,7 @@ class _AutomaticChangeOverSwitchState
   }
 
   void updateComponentCost(int cost) {
-    ref.watch(solarControllerProvider).updateComponentCost(
+    ref.watch(solarControllerProvider).updateApplicationComponentCost(
           widget.component,
           cost,
           widget.applicationId,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:solar_project/models/adapter_box_model.dart';
 import 'package:solar_project/models/components_model.dart';
+import 'package:solar_project/src/controller/adapter_boxes_controller.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
 import 'package:solar_project/src/widgets/confirm_selection_button.dart';
 
@@ -36,13 +37,13 @@ class _AdapterBoxState extends ConsumerState<AdapterBox> {
 
   void saveBoxesToApplication() async {
     bool componentExist =
-        await ref.read(solarControllerProvider).checkBoxExists(
+        await ref.read(adapterBoxesControllerProvider).checkBoxExists(
               widget.applicationId,
               widget.component,
               'Plastic',
             );
     if (componentExist == false) {
-      ref.read(solarControllerProvider).saveBoxesToApplication(
+      ref.read(adapterBoxesControllerProvider).saveBoxesToApplication(
             applicationId: widget.applicationId,
             component: widget.component,
           );
@@ -50,7 +51,7 @@ class _AdapterBoxState extends ConsumerState<AdapterBox> {
   }
 
   void updateSelectedStatus(bool selected) {
-    ref.watch(solarControllerProvider).updateApplicationSelectedStatus(
+    ref.watch(solarControllerProvider).updateApplicationComponentSelectedStatus(
           widget.component,
           selected,
           widget.applicationId,
@@ -60,13 +61,13 @@ class _AdapterBoxState extends ConsumerState<AdapterBox> {
   void updateComponentCost() async {
     int cost = 0;
     final boxes =
-        await ref.read(solarControllerProvider).getFutureSelectedBoxes(
+        await ref.read(adapterBoxesControllerProvider).getFutureSelectedBoxes(
               widget.applicationId,
               widget.component,
             );
     for (AdapterBoxModel box in boxes) {
       cost = cost + box.cost;
-      ref.read(solarControllerProvider).updateComponentCost(
+      ref.read(solarControllerProvider).updateApplicationComponentCost(
             widget.component,
             cost,
             widget.applicationId,
@@ -81,7 +82,7 @@ class _AdapterBoxState extends ConsumerState<AdapterBox> {
   }
 
   void updateComponentQuanity(int quantity) {
-    ref.watch(solarControllerProvider).updateComponentQuantity(
+    ref.watch(solarControllerProvider).updateApplicationComponentQuantity(
           widget.component,
           quantity,
           widget.applicationId,
@@ -175,7 +176,7 @@ Widget chooseBoxes({
   required WidgetRef ref,
 }) {
   void updateSelectedBoxStatus(bool selected, String box) {
-    ref.watch(solarControllerProvider).updateBoxSelectedStatus(
+    ref.watch(adapterBoxesControllerProvider).updateBoxSelectedStatus(
           applicationId: applicationId,
           component: component,
           box: box,
@@ -184,7 +185,7 @@ Widget chooseBoxes({
   }
 
   void updateDINRailSelectedStatus(bool selected) {
-    ref.watch(solarControllerProvider).updateApplicationSelectedStatus(
+    ref.watch(solarControllerProvider).updateApplicationComponentSelectedStatus(
           'DIN Rail',
           selected,
           applicationId,
@@ -192,7 +193,7 @@ Widget chooseBoxes({
   }
 
   void updateDINRailRequiredStatus(bool required) {
-    ref.watch(solarControllerProvider).updateApplicationRequiredStatus(
+    ref.watch(solarControllerProvider).updateApplicationComponentRequiredStatus(
           'DIN Rail',
           required,
           applicationId,
@@ -358,7 +359,7 @@ Widget selectedTrue({
   required List<AdapterBoxModel> boxes,
 }) {
   void updateSelectedStatus(bool selected) {
-    ref.watch(solarControllerProvider).updateApplicationSelectedStatus(
+    ref.watch(solarControllerProvider).updateApplicationComponentSelectedStatus(
           component,
           selected,
           applicationId,
@@ -366,7 +367,7 @@ Widget selectedTrue({
   }
 
   void updateComponentCost(int cost) async {
-    ref.watch(solarControllerProvider).updateComponentCost(
+    ref.watch(solarControllerProvider).updateApplicationComponentCost(
           component,
           cost,
           applicationId,

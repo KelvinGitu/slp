@@ -31,7 +31,7 @@ class _PVCTrunkingState extends ConsumerState<PVCTrunking> {
   }
 
   void updateSelectedStatus(bool selected) {
-    ref.watch(solarControllerProvider).updateApplicationSelectedStatus(
+    ref.watch(solarControllerProvider).updateApplicationComponentSelectedStatus(
           widget.component,
           selected,
           widget.applicationId,
@@ -39,7 +39,7 @@ class _PVCTrunkingState extends ConsumerState<PVCTrunking> {
   }
 
   void updateComponentCost(int cost) {
-    ref.watch(solarControllerProvider).updateComponentCost(
+    ref.watch(solarControllerProvider).updateApplicationComponentCost(
           widget.component,
           cost,
           widget.applicationId,
@@ -53,7 +53,7 @@ class _PVCTrunkingState extends ConsumerState<PVCTrunking> {
   }
 
   void updateComponentLength(int length) {
-    ref.watch(solarControllerProvider).updateComponentLength(
+    ref.watch(solarControllerProvider).updateApplicationComponentLength(
           widget.component,
           length,
           widget.applicationId,
@@ -88,64 +88,61 @@ class _PVCTrunkingState extends ConsumerState<PVCTrunking> {
                         ),
                       ),
                       const SizedBox(height: 15),
-                        Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'Input the length of PVC required.',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                const SizedBox(height: 20),
-                                TextField(
-                                  controller: lengthController,
-                                  keyboardType:
-                                      const TextInputType.numberWithOptions(),
-                                  decoration: InputDecoration(
-                                    hintText: 'Length in metres',
-                                    hintStyle: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.black.withOpacity(0.6)),
-                                    border: InputBorder.none,
-                                    filled: true,
-                                    fillColor: Colors.grey.withOpacity(0.2),
-                                    errorText: validate
-                                        ? "Value Can't Be Empty"
-                                        : null,
-                                  ),
-                                ),
-                                const SizedBox(height: 40),
-                                Align(
-                                  alignment: Alignment.topCenter,
-                                  child: ConfirmSelectionButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        validate =
-                                            lengthController.text.isEmpty;
-                                      });
-                                      (validate == true)
-                                          ? null
-                                          : updateComponentLength(
-                                              int.parse(lengthController.text));
-                                      (validate == true)
-                                          ? null
-                                          : updateSelectedStatus(true);
-                                      (validate == true)
-                                          ? null
-                                          : updateComponentCost(
-                                              int.parse(lengthController.text) *
-                                                  40);
-                                      (validate == true)
-                                          ? null
-                                          : updateApplicationQuotation();
-                                    },
-                                    message: 'Confirm Selection',
-                                  ),
-                                ),
-                              ],
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Input the length of PVC required.',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
                             ),
+                          ),
+                          const SizedBox(height: 20),
+                          TextField(
+                            controller: lengthController,
+                            keyboardType:
+                                const TextInputType.numberWithOptions(),
+                            decoration: InputDecoration(
+                              hintText: 'Length in metres',
+                              hintStyle: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black.withOpacity(0.6)),
+                              border: InputBorder.none,
+                              filled: true,
+                              fillColor: Colors.grey.withOpacity(0.2),
+                              errorText:
+                                  validate ? "Value Can't Be Empty" : null,
+                            ),
+                          ),
+                          const SizedBox(height: 40),
+                          Align(
+                            alignment: Alignment.topCenter,
+                            child: ConfirmSelectionButton(
+                              onPressed: () {
+                                setState(() {
+                                  validate = lengthController.text.isEmpty;
+                                });
+                                (validate == true)
+                                    ? null
+                                    : updateComponentLength(
+                                        int.parse(lengthController.text));
+                                (validate == true)
+                                    ? null
+                                    : updateSelectedStatus(true);
+                                (validate == true)
+                                    ? null
+                                    : updateComponentCost(
+                                        int.parse(lengthController.text) * 40);
+                                (validate == true)
+                                    ? null
+                                    : updateApplicationQuotation();
+                              },
+                              message: 'Confirm Selection',
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   )
                 : Column(

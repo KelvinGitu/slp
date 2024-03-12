@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:solar_project/models/battery_cable_model.dart';
-import 'package:solar_project/src/controller/solar_controller.dart';
+import 'package:solar_project/src/controller/battery_cables_conrtroller.dart';
 import 'package:solar_project/src/widgets/confirm_selection_button.dart';
 
 class BatteryCableWidget extends ConsumerStatefulWidget {
@@ -34,7 +34,7 @@ class _BatteryCableWidgetState extends ConsumerState<BatteryCableWidget> {
   }
 
   void updateSelectedStatus(bool selected, String cable) {
-    ref.watch(solarControllerProvider).updateBatteryCableSelectedStatus(
+    ref.watch(batteryCablesControllerProvider).updateBatteryCableSelectedStatus(
           applicationId: widget.applicationId,
           component: widget.component,
           cable: cable,
@@ -43,7 +43,7 @@ class _BatteryCableWidgetState extends ConsumerState<BatteryCableWidget> {
   }
 
   void updateSelectedCableCost(int cost, String cable) {
-    ref.watch(solarControllerProvider).updateBatteryCableCost(
+    ref.watch(batteryCablesControllerProvider).updateBatteryCableCost(
           applicationId: widget.applicationId,
           component: widget.component,
           cable: cable,
@@ -52,7 +52,7 @@ class _BatteryCableWidgetState extends ConsumerState<BatteryCableWidget> {
   }
 
   void updateSelectedCableLength(int length, String cable) {
-    ref.watch(solarControllerProvider).updateBatteryCableLength(
+    ref.watch(batteryCablesControllerProvider).updateBatteryCableLength(
           applicationId: widget.applicationId,
           component: widget.component,
           cable: cable,

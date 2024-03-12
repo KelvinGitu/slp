@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:solar_project/models/piping_components_model.dart';
-import 'package:solar_project/src/controller/solar_controller.dart';
+import 'package:solar_project/src/controller/piping_components_controller.dart';
 import 'package:solar_project/src/widgets/confirm_selection_button.dart';
 
 class PipingComponentsWidget extends ConsumerStatefulWidget {
@@ -36,7 +36,7 @@ class _PipingComponentsWidgetState
   }
 
   void updateSelectedStatus(bool selected, String piping) {
-    ref.watch(solarControllerProvider).updatePipingComponentSelectedStatus(
+    ref.watch(pipingComponentsControllerProvider).updatePipingComponentSelectedStatus(
           applicationId: widget.applicationId,
           component: widget.component,
           piping: piping,
@@ -45,7 +45,7 @@ class _PipingComponentsWidgetState
   }
 
   void updateSelectedPipingCost(int cost, String piping) {
-    ref.watch(solarControllerProvider).updatePipingComponentCost(
+    ref.watch(pipingComponentsControllerProvider).updatePipingComponentCost(
           applicationId: widget.applicationId,
           component: widget.component,
           piping: piping,
@@ -54,7 +54,7 @@ class _PipingComponentsWidgetState
   }
 
   void updateSelectedPipingQuantity(int quantity, String piping) {
-    ref.watch(solarControllerProvider).updatePipingComponentQuantity(
+    ref.watch(pipingComponentsControllerProvider).updatePipingComponentQuantity(
           applicationId: widget.applicationId,
           component: widget.component,
           piping: piping,

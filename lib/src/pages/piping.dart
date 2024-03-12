@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:solar_project/models/components_model.dart';
 import 'package:solar_project/models/piping_components_model.dart';
+import 'package:solar_project/src/controller/piping_components_controller.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
 import 'package:solar_project/src/widgets/confirm_selection_button.dart';
 import 'package:solar_project/src/widgets/piping_components_widget.dart';
@@ -38,13 +39,13 @@ class _PipingScreenState extends ConsumerState<PipingScreen> {
 
   void savePipingComponentsToApplication() async {
     bool componentExist =
-        await ref.read(solarControllerProvider).checkPipingComponentExists(
+        await ref.read(pipingComponentsControllerProvider).checkPipingComponentExists(
               widget.applicationId,
               widget.component,
               'conduit',
             );
     if (componentExist == false) {
-      ref.read(solarControllerProvider).savePipingComponentsToApplication(
+      ref.read(pipingComponentsControllerProvider).savePipingComponentsToApplication(
             applicationId: widget.applicationId,
             component: widget.component,
           );
@@ -52,7 +53,7 @@ class _PipingScreenState extends ConsumerState<PipingScreen> {
   }
 
   void updateSelectedStatus(bool selected) {
-    ref.read(solarControllerProvider).updateApplicationSelectedStatus(
+    ref.read(solarControllerProvider).updateApplicationComponentSelectedStatus(
           widget.component,
           selected,
           widget.applicationId,
@@ -62,14 +63,14 @@ class _PipingScreenState extends ConsumerState<PipingScreen> {
   void updateComponentCost() async {
     int cost = 0;
     final pipings = await ref
-        .read(solarControllerProvider)
+        .read(pipingComponentsControllerProvider)
         .getFutureSelectedPipingComponents(
           widget.applicationId,
           widget.component,
         );
     for (PipingComponentsModel piping in pipings) {
       cost = cost + piping.cost;
-      ref.read(solarControllerProvider).updateComponentCost(
+      ref.read(solarControllerProvider).updateApplicationComponentCost(
             widget.component,
             cost,
             widget.applicationId,
@@ -84,7 +85,7 @@ class _PipingScreenState extends ConsumerState<PipingScreen> {
   }
 
   void updateComponentLength(int length) {
-    ref.watch(solarControllerProvider).updateComponentLength(
+    ref.watch(solarControllerProvider).updateApplicationComponentLength(
           widget.component,
           length * 2,
           widget.applicationId,
@@ -279,7 +280,7 @@ Widget selectedTrue({
   required List<PipingComponentsModel> pipings,
 }) {
   void updateSelectedStatus(bool selected) {
-    ref.watch(solarControllerProvider).updateApplicationSelectedStatus(
+    ref.watch(solarControllerProvider).updateApplicationComponentSelectedStatus(
           component,
           selected,
           applicationId,
@@ -287,7 +288,7 @@ Widget selectedTrue({
   }
 
   void updateComponentCost(int cost) async {
-    ref.watch(solarControllerProvider).updateComponentCost(
+    ref.watch(solarControllerProvider).updateApplicationComponentCost(
           component,
           cost,
           applicationId,

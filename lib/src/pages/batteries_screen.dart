@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:solar_project/src/controller/battery_capacities_controller.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
 import 'package:solar_project/src/widgets/confirm_selection_button.dart';
 
@@ -47,7 +48,7 @@ class _BatteriesScreenState extends ConsumerState<BatteriesScreen> {
   Color nobackgroundColor = Colors.white;
 
   void updateSelectedStatus(bool selected) {
-    ref.watch(solarControllerProvider).updateApplicationSelectedStatus(
+    ref.watch(solarControllerProvider).updateApplicationComponentSelectedStatus(
           widget.component,
           selected,
           widget.applicationId,
@@ -55,7 +56,7 @@ class _BatteriesScreenState extends ConsumerState<BatteriesScreen> {
   }
 
   void updateComponentCost(int cost) {
-    ref.watch(solarControllerProvider).updateComponentCost(
+    ref.watch(solarControllerProvider).updateApplicationComponentCost(
           widget.component,
           cost * int.parse(batteriesController.text),
           widget.applicationId,
@@ -69,7 +70,7 @@ class _BatteriesScreenState extends ConsumerState<BatteriesScreen> {
   }
 
   void updateComponentCapacity(int capacity) {
-    ref.watch(solarControllerProvider).updateComponentCapacity(
+    ref.watch(solarControllerProvider).updateApplicationComponentCapacity(
           widget.component,
           capacity,
           widget.applicationId,
@@ -77,14 +78,14 @@ class _BatteriesScreenState extends ConsumerState<BatteriesScreen> {
   }
 
   void saveBatteryCapacitiesToApplication() {
-    ref.watch(solarControllerProvider).saveBatteryCapacityToApplication(
+    ref.watch(batteryCapacitiesControllerProvider).saveBatteryCapacityToApplication(
           applicationId: widget.applicationId,
           component: widget.component,
         );
   }
 
   void updateComponentQuanity(int quantity) {
-    ref.watch(solarControllerProvider).updateComponentQuantity(
+    ref.watch(solarControllerProvider).updateApplicationComponentQuantity(
           widget.component,
           quantity,
           widget.applicationId,
@@ -431,7 +432,7 @@ class _BatteriesScreenState extends ConsumerState<BatteriesScreen> {
                     child: Column(
                       children: [
                         Container(),
-                         Text(
+                        Text(
                           'Number of batteries: ${component.quantity}',
                           style: const TextStyle(
                             fontSize: 16,

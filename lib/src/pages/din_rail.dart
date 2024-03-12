@@ -30,7 +30,7 @@ class _DINRailState extends ConsumerState<DINRail> {
   }
 
   void updateSelectedStatus(bool selected) {
-    ref.watch(solarControllerProvider).updateApplicationSelectedStatus(
+    ref.watch(solarControllerProvider).updateApplicationComponentSelectedStatus(
           widget.component,
           selected,
           widget.applicationId,
@@ -38,7 +38,7 @@ class _DINRailState extends ConsumerState<DINRail> {
   }
 
   void updateComponentCost(int cost) {
-    ref.watch(solarControllerProvider).updateComponentCost(
+    ref.watch(solarControllerProvider).updateApplicationComponentCost(
           widget.component,
           cost,
           widget.applicationId,
@@ -52,7 +52,7 @@ class _DINRailState extends ConsumerState<DINRail> {
   }
 
   void updateComponentLength(int length) {
-    ref.watch(solarControllerProvider).updateComponentLength(
+    ref.watch(solarControllerProvider).updateApplicationComponentLength(
           widget.component,
           length * 2,
           widget.applicationId,
@@ -60,7 +60,7 @@ class _DINRailState extends ConsumerState<DINRail> {
   }
 
   void updateComponentQuanity() {
-    ref.watch(solarControllerProvider).updateComponentQuantity(
+    ref.watch(solarControllerProvider).updateApplicationComponentQuantity(
           widget.component,
           1,
           widget.applicationId,
@@ -83,72 +83,73 @@ class _DINRailState extends ConsumerState<DINRail> {
           ),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: (component.isSelected == false && component.isRequired == true)
-                ? Column(
-                    children: [
-                      Text(
-                        'A ${component.name} is determined by the choice of adapter box.',
-                        style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w600),
-                      ),
-                      const SizedBox(height: 40),
-                      ConfirmSelectionButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: ((context) {
-                                return AdapterBox(
-                                    component: 'Adapter Box Enclosure',
-                                    applicationId: widget.applicationId);
-                              }),
-                            ),
-                          );
-                        },
-                        message: 'Select Adapter Box',
-                      ),
-                    ],
-                  )
-                : (component.isSelected == false &&
-                        component.isRequired == false)
+            child:
+                (component.isSelected == false && component.isRequired == true)
                     ? Column(
                         children: [
-                           Text(
-                            'A ${component.name} is not required as the client has chosen to use a plastic adapter box',
+                          Text(
+                            'A ${component.name} is determined by the choice of adapter box.',
                             style: const TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.w600),
                           ),
                           const SizedBox(height: 40),
                           ConfirmSelectionButton(
                             onPressed: () {
-                              Navigator.pop(context);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: ((context) {
+                                    return AdapterBox(
+                                        component: 'Adapter Box Enclosure',
+                                        applicationId: widget.applicationId);
+                                  }),
+                                ),
+                              );
                             },
-                            message: 'Exit',
+                            message: 'Select Adapter Box',
                           ),
                         ],
                       )
-                    : Column(
-                        children: [
-                          const Text(
-                            'The client has selected to use a steel adapter box. A DIN Rail was added automatically to the installation requirements',
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w600),
+                    : (component.isSelected == false &&
+                            component.isRequired == false)
+                        ? Column(
+                            children: [
+                              Text(
+                                'A ${component.name} is not required as the client has chosen to use a plastic adapter box',
+                                style: const TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w600),
+                              ),
+                              const SizedBox(height: 40),
+                              ConfirmSelectionButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                message: 'Exit',
+                              ),
+                            ],
+                          )
+                        : Column(
+                            children: [
+                              const Text(
+                                'The client has selected to use a steel adapter box. A DIN Rail was added automatically to the installation requirements',
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w600),
+                              ),
+                              const SizedBox(height: 15),
+                              Text(
+                                'Total cost: ${component.cost} KES',
+                                style: const TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w600),
+                              ),
+                              const SizedBox(height: 40),
+                              ConfirmSelectionButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                message: 'Exit',
+                              ),
+                            ],
                           ),
-                          const SizedBox(height: 15),
-                          Text(
-                            'Total cost: ${component.cost} KES',
-                            style: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w600),
-                          ),
-                          const SizedBox(height: 40),
-                          ConfirmSelectionButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            message: 'Exit',
-                          ),
-                        ],
-                      ),
           ),
         );
       },

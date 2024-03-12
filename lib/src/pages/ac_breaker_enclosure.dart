@@ -35,7 +35,7 @@ class _ACBreakerConsumerState extends ConsumerState<ACBreakerEnclosure> {
   }
 
   void updateSelectedStatus(bool selected) {
-    ref.watch(solarControllerProvider).updateApplicationSelectedStatus(
+    ref.watch(solarControllerProvider).updateApplicationComponentSelectedStatus(
           widget.component,
           selected,
           widget.applicationId,
@@ -43,7 +43,7 @@ class _ACBreakerConsumerState extends ConsumerState<ACBreakerEnclosure> {
   }
 
   void updateRequiredStatus(bool required) {
-    ref.watch(solarControllerProvider).updateApplicationRequiredStatus(
+    ref.watch(solarControllerProvider).updateApplicationComponentRequiredStatus(
           widget.component,
           required,
           widget.applicationId,
@@ -51,7 +51,7 @@ class _ACBreakerConsumerState extends ConsumerState<ACBreakerEnclosure> {
   }
 
   void updateComponentCost(int cost) {
-    ref.watch(solarControllerProvider).updateComponentCost(
+    ref.watch(solarControllerProvider).updateApplicationComponentCost(
           widget.component,
           cost,
           widget.applicationId,
@@ -65,7 +65,7 @@ class _ACBreakerConsumerState extends ConsumerState<ACBreakerEnclosure> {
   }
 
   void updateComponentLength(int length) {
-    ref.watch(solarControllerProvider).updateComponentLength(
+    ref.watch(solarControllerProvider).updateApplicationComponentLength(
           widget.component,
           length * 2,
           widget.applicationId,
@@ -73,7 +73,7 @@ class _ACBreakerConsumerState extends ConsumerState<ACBreakerEnclosure> {
   }
 
   void updateComponentQuanity() {
-    ref.watch(solarControllerProvider).updateComponentQuantity(
+    ref.watch(solarControllerProvider).updateApplicationComponentQuantity(
           widget.component,
           1,
           widget.applicationId,

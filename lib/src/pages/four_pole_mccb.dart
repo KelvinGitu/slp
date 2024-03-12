@@ -32,7 +32,7 @@ class _FourPoleMCBState extends ConsumerState<FourPoleMCCB> {
   }
 
   void updateSelectedStatus(bool selected) {
-    ref.watch(solarControllerProvider).updateApplicationSelectedStatus(
+    ref.watch(solarControllerProvider).updateApplicationComponentSelectedStatus(
           widget.component,
           selected,
           widget.applicationId,
@@ -40,7 +40,7 @@ class _FourPoleMCBState extends ConsumerState<FourPoleMCCB> {
   }
 
   void updateRequiredStatus(bool required) {
-    ref.watch(solarControllerProvider).updateApplicationRequiredStatus(
+    ref.watch(solarControllerProvider).updateApplicationComponentRequiredStatus(
           widget.component,
           required,
           widget.applicationId,
@@ -48,7 +48,7 @@ class _FourPoleMCBState extends ConsumerState<FourPoleMCCB> {
   }
 
   void updateTriplePoleRequiredStatus(bool required) {
-    ref.watch(solarControllerProvider).updateApplicationRequiredStatus(
+    ref.watch(solarControllerProvider).updateApplicationComponentRequiredStatus(
           'Triple Pole MCCB 100A',
           required,
           widget.applicationId,
@@ -56,7 +56,7 @@ class _FourPoleMCBState extends ConsumerState<FourPoleMCCB> {
   }
 
   void updateTriplePoleSelectedStatus(bool selected) {
-    ref.watch(solarControllerProvider).updateApplicationSelectedStatus(
+    ref.watch(solarControllerProvider).updateApplicationComponentSelectedStatus(
           'Triple Pole MCCB 100A',
           selected,
           widget.applicationId,
@@ -64,7 +64,7 @@ class _FourPoleMCBState extends ConsumerState<FourPoleMCCB> {
   }
 
   void updateDoublePoleRequiredStatus(bool required) {
-    ref.watch(solarControllerProvider).updateApplicationRequiredStatus(
+    ref.watch(solarControllerProvider).updateApplicationComponentRequiredStatus(
           'Double Pole MCB 63A',
           required,
           widget.applicationId,
@@ -72,7 +72,7 @@ class _FourPoleMCBState extends ConsumerState<FourPoleMCCB> {
   }
 
   void updateDoublePoleSelectedStatus(bool selected) {
-    ref.watch(solarControllerProvider).updateApplicationSelectedStatus(
+    ref.watch(solarControllerProvider).updateApplicationComponentSelectedStatus(
           'Double Pole MCB 63A',
           selected,
           widget.applicationId,
@@ -80,7 +80,7 @@ class _FourPoleMCBState extends ConsumerState<FourPoleMCCB> {
   }
 
   void updateComponentCost(int cost) {
-    ref.watch(solarControllerProvider).updateComponentCost(
+    ref.watch(solarControllerProvider).updateApplicationComponentCost(
           widget.component,
           cost,
           widget.applicationId,
@@ -94,7 +94,7 @@ class _FourPoleMCBState extends ConsumerState<FourPoleMCCB> {
   }
 
   void updateComponentQuanity(int quantity) {
-    ref.watch(solarControllerProvider).updateComponentQuantity(
+    ref.watch(solarControllerProvider).updateApplicationComponentQuantity(
           widget.component,
           quantity,
           widget.applicationId,

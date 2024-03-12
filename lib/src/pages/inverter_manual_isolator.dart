@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:solar_project/src/controller/isolator_switches_controller.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
 
 class InverterManualIsolator extends ConsumerStatefulWidget {
@@ -39,14 +40,14 @@ class _InverterManualIsolatorState
   }
 
   void saveIsolatorsToApplication() {
-    ref.watch(solarControllerProvider).saveIsolatorSwitchToApplication(
+    ref.watch(isolatorSwitchesControllerProvider).saveIsolatorSwitchToApplication(
           applicationId: widget.applicationId,
           component: widget.component,
         );
   }
 
   void updateSelectedStatus(bool selected) {
-    ref.watch(solarControllerProvider).updateApplicationSelectedStatus(
+    ref.watch(solarControllerProvider).updateApplicationComponentSelectedStatus(
           widget.component,
           selected,
           widget.applicationId,
@@ -54,7 +55,7 @@ class _InverterManualIsolatorState
   }
 
   void updateComponentCost(int cost) {
-    ref.watch(solarControllerProvider).updateComponentCost(
+    ref.watch(solarControllerProvider).updateApplicationComponentCost(
           widget.component,
           cost,
           widget.applicationId,
@@ -68,7 +69,7 @@ class _InverterManualIsolatorState
   }
 
   void updateComponentCapacity(int capacity) {
-    ref.watch(solarControllerProvider).updateComponentCapacity(
+    ref.watch(solarControllerProvider).updateApplicationComponentCapacity(
           widget.component,
           capacity,
           widget.applicationId,
@@ -256,8 +257,10 @@ class _InverterManualIsolatorState
                           setState(() {
                             validate = ratingController.text.isEmpty;
                           });
-                          (validate == true) ? null : updateSelectedStatus(true);
-                      
+                          (validate == true)
+                              ? null
+                              : updateSelectedStatus(true);
+
                           (validate == true)
                               ? null
                               : updateApplicationQuotation();

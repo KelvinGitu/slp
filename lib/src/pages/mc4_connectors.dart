@@ -30,7 +30,7 @@ class _MC4ConnectorsScreenState extends ConsumerState<MC4ConnectorsScreen> {
   }
 
   void updateSelectedStatus(bool selected) {
-    ref.watch(solarControllerProvider).updateApplicationSelectedStatus(
+    ref.watch(solarControllerProvider).updateApplicationComponentSelectedStatus(
           widget.component,
           selected,
           widget.applicationId,
@@ -38,7 +38,7 @@ class _MC4ConnectorsScreenState extends ConsumerState<MC4ConnectorsScreen> {
   }
 
   void updateComponentCost(int cost) {
-    ref.watch(solarControllerProvider).updateComponentCost(
+    ref.watch(solarControllerProvider).updateApplicationComponentCost(
           widget.component,
           cost,
           widget.applicationId,
@@ -52,7 +52,7 @@ class _MC4ConnectorsScreenState extends ConsumerState<MC4ConnectorsScreen> {
   }
 
   void updateComponentQuantity(int quantity) {
-    ref.watch(solarControllerProvider).updateComponentQuantity(
+    ref.watch(solarControllerProvider).updateApplicationComponentQuantity(
           widget.component,
           quantity,
           widget.applicationId,

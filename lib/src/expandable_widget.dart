@@ -2,6 +2,7 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:solar_project/src/controller/pv_cables_controller.dart';
 
 import 'package:solar_project/src/controller/solar_controller.dart';
 import 'package:solar_project/src/pages/ac_breaker_enclosure.dart';
@@ -39,7 +40,7 @@ class ExpandableWidget extends ConsumerWidget {
 
   void savePVCablesToApplication(
       String applicationId, String component, WidgetRef ref) {
-    ref.read(solarControllerProvider).savePVCablesToApplication(
+    ref.read(pvCablesControllerProvider).savePVCablesToApplication(
           applicationId: applicationId,
           component: component,
         );

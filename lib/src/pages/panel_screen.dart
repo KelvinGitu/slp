@@ -36,7 +36,7 @@ class _PanelScreenState extends ConsumerState<PanelScreen> {
   }
 
   void updateSelectedStatus(bool selected) {
-    ref.watch(solarControllerProvider).updateApplicationSelectedStatus(
+    ref.watch(solarControllerProvider).updateApplicationComponentSelectedStatus(
           widget.component,
           selected,
           widget.applicationId,
@@ -44,7 +44,7 @@ class _PanelScreenState extends ConsumerState<PanelScreen> {
   }
 
   void updateComponentCost(int cost) {
-    ref.watch(solarControllerProvider).updateComponentCost(
+    ref.watch(solarControllerProvider).updateApplicationComponentCost(
           widget.component,
           cost,
           widget.applicationId,
@@ -58,23 +58,11 @@ class _PanelScreenState extends ConsumerState<PanelScreen> {
   }
 
   void updateComponentQuantity(int quantity) {
-    ref.watch(solarControllerProvider).updateComponentQuantity(
+    ref.watch(solarControllerProvider).updateApplicationComponentQuantity(
           widget.component,
           quantity,
           widget.applicationId,
         );
-  }
-
-  void updateApplicationComponentsCostListRemove(int componentCost) {
-    ref
-        .watch(solarControllerProvider)
-        .updateApplicationComponentsCostListRemove(
-            widget.applicationId, componentCost);
-  }
-
-  void updateApplicationComponentsCostListAdd(int componentCost) {
-    ref.watch(solarControllerProvider).updateApplicationComponentsCostListAdd(
-        widget.applicationId, componentCost);
   }
 
   int cost = 0;

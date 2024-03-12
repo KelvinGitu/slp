@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:solar_project/src/controller/core_cables_controller.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
 import 'package:solar_project/src/widgets/confirm_selection_button.dart';
 
@@ -45,14 +46,14 @@ class _TenMMCoreCableState extends ConsumerState<CoreCable> {
   }
 
   void saveCoreCablesToApplication() {
-    ref.watch(solarControllerProvider).saveCoreCablesToApplication(
+    ref.watch(coreCablesControllerProvider).saveCoreCablesToApplication(
           applicationId: widget.applicationId,
           component: widget.component,
         );
   }
 
   void updateSelectedStatus(bool selected) {
-    ref.watch(solarControllerProvider).updateApplicationSelectedStatus(
+    ref.watch(solarControllerProvider).updateApplicationComponentSelectedStatus(
           widget.component,
           selected,
           widget.applicationId,
@@ -61,7 +62,7 @@ class _TenMMCoreCableState extends ConsumerState<CoreCable> {
 
   void updateComponentCost() {
     int cost = int.parse(cableLengthController.text) * 2 * 40;
-    ref.watch(solarControllerProvider).updateComponentCost(
+    ref.watch(solarControllerProvider).updateApplicationComponentCost(
           widget.component,
           cost,
           widget.applicationId,
@@ -76,7 +77,7 @@ class _TenMMCoreCableState extends ConsumerState<CoreCable> {
 
   void updateComponentLength() {
     int length = int.parse(cableLengthController.text) * 2;
-    ref.watch(solarControllerProvider).updateComponentLength(
+    ref.watch(solarControllerProvider).updateApplicationComponentLength(
           widget.component,
           length,
           widget.applicationId,
@@ -84,7 +85,7 @@ class _TenMMCoreCableState extends ConsumerState<CoreCable> {
   }
 
   void updateCompoenentCrossSection(String crossSection) {
-    ref.watch(solarControllerProvider).updateComponentCrossSection(
+    ref.watch(solarControllerProvider).updateApplicationComponentCrossSection(
           widget.component,
           crossSection,
           widget.applicationId,

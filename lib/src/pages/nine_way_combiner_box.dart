@@ -28,7 +28,7 @@ class _NineWayCombinerEnclosureState extends ConsumerState<NineWayCombinerBox> {
   }
 
   void updateSelectedStatus(bool selected) {
-    ref.watch(solarControllerProvider).updateApplicationSelectedStatus(
+    ref.watch(solarControllerProvider).updateApplicationComponentSelectedStatus(
           widget.component,
           selected,
           widget.applicationId,
@@ -36,7 +36,7 @@ class _NineWayCombinerEnclosureState extends ConsumerState<NineWayCombinerBox> {
   }
 
   void updateComponentCost(int cost) {
-    ref.watch(solarControllerProvider).updateComponentCost(
+    ref.watch(solarControllerProvider).updateApplicationComponentCost(
           widget.component,
           cost,
           widget.applicationId,
@@ -50,7 +50,7 @@ class _NineWayCombinerEnclosureState extends ConsumerState<NineWayCombinerBox> {
   }
 
   void updateComponentLength(int length) {
-    ref.watch(solarControllerProvider).updateComponentLength(
+    ref.watch(solarControllerProvider).updateApplicationComponentLength(
           widget.component,
           length * 2,
           widget.applicationId,
@@ -58,7 +58,7 @@ class _NineWayCombinerEnclosureState extends ConsumerState<NineWayCombinerBox> {
   }
 
   void updateComponentQuanity() {
-    ref.watch(solarControllerProvider).updateComponentQuantity(
+    ref.watch(solarControllerProvider).updateApplicationComponentQuantity(
           widget.component,
           1,
           widget.applicationId,

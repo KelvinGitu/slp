@@ -27,7 +27,7 @@ class _CableTiesState extends ConsumerState<CableTies> {
   }
 
   void updateSelectedStatus(bool selected) {
-    ref.watch(solarControllerProvider).updateApplicationSelectedStatus(
+    ref.watch(solarControllerProvider).updateApplicationComponentSelectedStatus(
           widget.component,
           selected,
           widget.applicationId,
@@ -35,7 +35,7 @@ class _CableTiesState extends ConsumerState<CableTies> {
   }
 
   void updateComponentCost(int cost) {
-    ref.watch(solarControllerProvider).updateComponentCost(
+    ref.watch(solarControllerProvider).updateApplicationComponentCost(
           widget.component,
           cost,
           widget.applicationId,
@@ -114,7 +114,7 @@ class _CableTiesState extends ConsumerState<CableTies> {
                         child: ConfirmSelectionButton(
                           onPressed: () {
                             // updateSelectedStatus(false);
-                            
+
                             Navigator.pop(context);
                           },
                           message: 'Exit',
