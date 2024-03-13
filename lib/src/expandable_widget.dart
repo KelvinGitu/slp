@@ -2,7 +2,6 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:solar_project/src/controller/pv_cables_controller.dart';
 
 import 'package:solar_project/src/controller/solar_controller.dart';
 import 'package:solar_project/src/pages/ac_breaker_enclosure.dart';
@@ -14,6 +13,8 @@ import 'package:solar_project/src/pages/cable_ties.dart';
 import 'package:solar_project/src/pages/core_cable.dart';
 import 'package:solar_project/src/pages/automatic_changeover_switch.dart';
 import 'package:solar_project/src/pages/batteries_screen.dart';
+import 'package:solar_project/src/pages/dc_breaker.dart';
+import 'package:solar_project/src/pages/dc_breaker_enlosure.dart';
 import 'package:solar_project/src/pages/din_rail.dart';
 import 'package:solar_project/src/pages/double_pole_mcb.dart';
 import 'package:solar_project/src/pages/earth_rod_and_cable.dart';
@@ -28,7 +29,9 @@ import 'package:solar_project/src/pages/pv_cable.dart';
 import 'package:solar_project/src/pages/pv_combiner_box.dart';
 import 'package:solar_project/src/pages/pvc_trunking.dart';
 import 'package:solar_project/src/pages/adapter_box.dart';
+import 'package:solar_project/src/pages/single_core_cable.dart';
 import 'package:solar_project/src/pages/triple_pole_mccb.dart';
+import 'package:solar_project/src/pages/voltage_guard.dart';
 import 'package:solar_project/src/widgets/component_widget.dart';
 
 class ExpandableWidget extends ConsumerWidget {
@@ -37,14 +40,6 @@ class ExpandableWidget extends ConsumerWidget {
     super.key,
     required this.applicationId,
   });
-
-  void savePVCablesToApplication(
-      String applicationId, String component, WidgetRef ref) {
-    ref.read(pvCablesControllerProvider).savePVCablesToApplication(
-          applicationId: applicationId,
-          component: component,
-        );
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -187,6 +182,26 @@ class ExpandableWidget extends ConsumerWidget {
                       component: applicationComponents[23],
                       navigate: DINRail(
                           component: applicationComponents[23].name,
+                          applicationId: applicationId)),
+                  ComponentWidget(
+                      component: applicationComponents[24],
+                      navigate: SingleCoreCable(
+                          component: applicationComponents[24].name,
+                          applicationId: applicationId)),
+                  ComponentWidget(
+                      component: applicationComponents[25],
+                      navigate: VoltageGuard(
+                          component: applicationComponents[25].name,
+                          applicationId: applicationId)),
+                  ComponentWidget(
+                      component: applicationComponents[26],
+                      navigate: DCBreaker(
+                          component: applicationComponents[26].name,
+                          applicationId: applicationId)),
+                          ComponentWidget(
+                      component: applicationComponents[27],
+                      navigate: DCBreakerEnclosure(
+                          component: applicationComponents[27].name,
                           applicationId: applicationId)),
                 ],
               ),

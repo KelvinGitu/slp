@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:solar_project/src/controller/core_cables_controller.dart';
 import 'package:solar_project/src/controller/pv_cables_controller.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
 import 'package:solar_project/src/widgets/confirm_selection_button.dart';
@@ -121,7 +120,7 @@ class _PVCableSixMMState extends ConsumerState<PVCable> {
         ref.watch(getApplicationComponentStreamProvider(arguments));
     final inverterComponent =
         ref.watch(getApplicationComponentStreamProvider(inverterArguments));
-    final pvCables = ref.watch(getCoreCablesStreamProvider(arguments)); //TODO: Check out this import
+    final pvCables = ref.watch(getPVCablesStreamProvider(arguments));
 
     return component.when(
       data: (component) {

@@ -15,12 +15,12 @@ class SingleCoreCablesRepository {
   SingleCoreCablesRepository({required FirebaseFirestore firestore})
       : _firestore = firestore;
 
- // these functions retrieve single core cables from the single core cable component
+  // these functions retrieve single core cables from the single core cable component
   // saves them in the application, and retrieves all cables
   // updates selected status, and retrieves selected cables
 
-  
-  Future<List<SingleCoreCableModel>> getSingleCoreCables(String component) async {
+  Future<List<SingleCoreCableModel>> getSingleCoreCables(
+      String component) async {
     var event = await _components.doc(component).collection('cables').get();
 
     List<SingleCoreCableModel> cables = [];
@@ -32,12 +32,15 @@ class SingleCoreCablesRepository {
 
   Future saveSingleCoreCablesToApplication(String applicationId,
       SingleCoreCableModel singleCoreCableModel, String component) async {
+    String name = singleCoreCableModel.name;
+    final splitName = name.split(' ');
+    final docName = splitName.last;
     return _applications
         .doc(applicationId)
         .collection('components')
         .doc(component)
         .collection('cables')
-        .doc(singleCoreCableModel.name)
+        .doc(docName)
         .set(singleCoreCableModel.toMap());
   }
 
@@ -58,15 +61,30 @@ class SingleCoreCablesRepository {
     });
   }
 
-  Future updateSingleCoreCableSelectedStatus(String applicationId, bool selected,
-      String component, String cable) async {
+  Future updateSingleCoreCableSelectedStatus(String applicationId,
+      bool selected, String component, String cable) async {
+    final splitName = cable.split(' ');
+    final docName = splitName.last;
     return _applications
         .doc(applicationId)
         .collection('components')
         .doc(component)
         .collection('cables')
-        .doc(cable)
+        .doc(docName)
         .update({'isSelected': selected});
+  }
+
+  Future updateSingleCoreCableCost(
+      String applicationId, int cost, String component, String cable) async {
+    final splitName = cable.split(' ');
+    final docName = splitName.last;
+    return _applications
+        .doc(applicationId)
+        .collection('components')
+        .doc(component)
+        .collection('cables')
+        .doc(docName)
+        .update({'cost': cost});
   }
 
   Future<List<SingleCoreCableModel>> getFutureSelectedSingleCoreCables(
@@ -115,8 +133,6 @@ class SingleCoreCablesRepository {
         .get();
     return event.exists;
   }
-
- 
 
   CollectionReference get _components => _firestore.collection('components');
   CollectionReference get _applications =>
