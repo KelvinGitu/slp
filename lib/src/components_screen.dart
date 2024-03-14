@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:solar_project/src/controller/battery_breaker_controller.dart';
+import 'package:solar_project/src/controller/battery_capacities_controller.dart';
 import 'package:solar_project/src/controller/dc_breaker_controller.dart';
 import 'package:solar_project/src/controller/dc_breaker_enclosures_controller.dart';
 import 'package:solar_project/src/controller/line_fuse_controller.dart';
@@ -31,6 +32,7 @@ class _ComponentsScreenState extends ConsumerState<ComponentsScreen> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       updateApplicationQuotation();
+      saveBatteryCapacitiesToApplication();
       saveSingleCoreCablesToApplication();
       saveVoltageGuardsToApplication();
       saveDCBreakersToApplication();
@@ -46,6 +48,24 @@ class _ComponentsScreenState extends ConsumerState<ComponentsScreen> {
     ref.watch(solarControllerProvider).updateApplicationQuotation(
           widget.applicationId,
         );
+  }
+
+  void saveBatteryCapacitiesToApplication() async {
+    bool componentExist = await ref
+        .read(batteryCapacitiesControllerProvider)
+        .checkBatteryCapacityExists(
+          widget.applicationId,
+          'Batteries',
+          '100Ah',
+        );
+    if (componentExist == false) {
+      ref
+          .watch(batteryCapacitiesControllerProvider)
+          .saveBatteryCapacityToApplication(
+            applicationId: widget.applicationId,
+            component: 'Batteries',
+          );
+    }
   }
 
   void saveSingleCoreCablesToApplication() async {

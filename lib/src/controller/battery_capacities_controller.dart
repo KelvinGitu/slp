@@ -33,6 +33,22 @@ class BatteryCapacitiesController {
     }
   }
 
+  void updateBatteryCapacitySelectedStatus({
+    required String applicationId,
+    required String component,
+    required int capacity,
+    required bool selected,
+  }) async {
+    await _batteryCapacitiesRepository.updateBatteryCapacitySelectedStatus(
+        applicationId, selected, component, capacity);
+  }
+
+  Future<bool> checkBatteryCapacityExists(
+      String applicationId, String component, String name) {
+    return _batteryCapacitiesRepository.checkBatteryCapcityExists(
+        applicationId, component, name);
+  }
+
   Stream<List<BatteryCapacityModel>> getBatteryCapacity(
       String applicationId, String component) {
     return _batteryCapacitiesRepository.getBatteryCapacityFromApplication(

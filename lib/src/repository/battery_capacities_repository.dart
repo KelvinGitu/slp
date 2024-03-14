@@ -58,6 +58,29 @@ class BatteryCapacitiesRepository {
     });
   }
 
+  Future updateBatteryCapacitySelectedStatus(String applicationId,
+      bool selected, String component, int capacity) async {
+    return _applications
+        .doc(applicationId)
+        .collection('components')
+        .doc(component)
+        .collection('capacities')
+        .doc('${capacity}Ah')
+        .update({'isSelected': selected});
+  }
+
+  Future<bool> checkBatteryCapcityExists(
+      String applicationId, String component, String name) async {
+    final event = await _applications
+        .doc(applicationId)
+        .collection('components')
+        .doc(component)
+        .collection('capacities')
+        .doc(name)
+        .get();
+    return event.exists;
+  }
+
   CollectionReference get _components => _firestore.collection('components');
   CollectionReference get _applications =>
       _firestore.collection('applications');

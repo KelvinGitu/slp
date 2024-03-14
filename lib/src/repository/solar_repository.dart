@@ -147,6 +147,7 @@ class SolarRepository {
     for (var doc in event.docs) {
       components.add(ComponentsModel.fromMap(doc.data()));
     }
+    // print(components);
     return components;
   }
 
@@ -213,12 +214,11 @@ class SolarRepository {
         .update({'crossSection': crossSection});
   }
 
-  Future updateApplicationQuotation(String applicationId, int quotation) async { // updates the quotation based on individual components in the application
+  Future updateApplicationQuotation(String applicationId, int quotation) async {
+    // updates the quotation based on individual components in the application
     return _applications.doc(applicationId).update({'quotation': quotation});
   }
-  
- 
-  
+
   CollectionReference get _components => _firestore.collection('components');
   CollectionReference get _applications =>
       _firestore.collection('applications');
