@@ -59,12 +59,14 @@ class DCBreakerEnclosureRepository {
 
   Future updateBreakerEnclosuresSelectedStatus(String applicationId,
       bool selected, String component, String enclosure) async {
+    final splitName = enclosure.split(' ');
+    final docName = splitName[3] + splitName[4];
     return _applications
         .doc(applicationId)
         .collection('components')
         .doc(component)
         .collection('enclosures')
-        .doc(enclosure)
+        .doc(docName)
         .update({'isSelected': selected});
   }
 

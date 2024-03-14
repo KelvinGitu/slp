@@ -1,27 +1,27 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:solar_project/models/battery_breaker_model.dart';
 import 'package:solar_project/models/components_model.dart';
-import 'package:solar_project/models/surge_protector_model.dart';
+import 'package:solar_project/src/controller/battery_breaker_controller.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
-import 'package:solar_project/src/controller/surge_protector_controller.dart';
 import 'package:solar_project/src/widgets/confirm_selection_button.dart';
 
-class SurgeProtector extends ConsumerStatefulWidget {
-  final String component;
+class BatteryBreaker extends ConsumerStatefulWidget {
+    final String component;
   final String applicationId;
-  const SurgeProtector({
-    super.key,
+  const BatteryBreaker({super.key, 
     required this.component,
     required this.applicationId,
   });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _SurgeProtectorState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _BatteryBreakerState();
 }
 
-class _SurgeProtectorState extends ConsumerState<SurgeProtector> {
-  late List<String> arguments;
+class _BatteryBreakerState extends ConsumerState<BatteryBreaker> {
+
+   late List<String> arguments;
 
   @override
   void initState() {
@@ -40,14 +40,13 @@ class _SurgeProtectorState extends ConsumerState<SurgeProtector> {
 
   void updateComponentCost() async {
     int cost = 0;
-    final protectors = await ref
-        .read(surgeProtectorControllerProvider)
-        .getFutureSelectedSurgeProtectors(
-          widget.applicationId,
-          widget.component,
-        );
-    for (SurgeProtectorModel protector in protectors) {
-      cost = cost + protector.cost;
+    final breakers =
+        await ref.read(batteryBreakerControllerProvider).getFutureSelectedBatteryBreakers(
+              widget.applicationId,
+              widget.component,
+            );
+    for (DCBatteryBreakerModel breaker in breakers) {
+      cost = cost + breaker.cost;
       ref.read(solarControllerProvider).updateApplicationComponentCost(
             widget.component,
             cost,
@@ -70,15 +69,16 @@ class _SurgeProtectorState extends ConsumerState<SurgeProtector> {
         );
   }
 
+
   @override
   Widget build(BuildContext context) {
     final component =
         ref.watch(getApplicationComponentStreamProvider(arguments));
-    final protectors = ref.watch(getSurgeProtectorsStreamProvider(arguments));
-    final selectedProtectors =
-        ref.watch(getSelectedSurgeProtectorsStreamProvider(arguments));
+    final breakers = ref.watch(getBatteryBreakersStreamProvider(arguments));
+    final selectedBreakers =
+        ref.watch(getSelectedBatteryBreakersStreamProvider(arguments));
 
-    return component.when(
+   return component.when(
       data: (component) {
         return Scaffold(
           appBar: AppBar(
@@ -116,10 +116,10 @@ class _SurgeProtectorState extends ConsumerState<SurgeProtector> {
                         ),
                       ),
                       const SizedBox(height: 15),
-                      protectors.when(
-                        data: (protectors) {
-                          return selectProtectors(
-                            protectors: protectors,
+                      breakers.when(
+                        data: (breakers) {
+                          return selectBreakers(
+                            breakers: breakers,
                             applicationId: widget.applicationId,
                             component: widget.component,
                             context: context,
@@ -145,8 +145,8 @@ class _SurgeProtectorState extends ConsumerState<SurgeProtector> {
                       ),
                     ],
                   )
-                : selectedProtectors.when(
-                    data: (protectors) {
+                : selectedBreakers.when(
+                    data: (breakers) {
                       return selectedTrue(
                         applicationId: widget.applicationId,
                         component: widget.component,
@@ -154,7 +154,7 @@ class _SurgeProtectorState extends ConsumerState<SurgeProtector> {
                         arguments: arguments,
                         context: context,
                         componentsModel: component,
-                        protectors: protectors,
+                        breakers: breakers,
                       );
                     },
                     error: (error, stacktrace) => Text(error.toString()),
@@ -173,20 +173,18 @@ class _SurgeProtectorState extends ConsumerState<SurgeProtector> {
   }
 }
 
-Widget selectProtectors({
-  required List<SurgeProtectorModel> protectors,
+Widget selectBreakers({
+  required List<DCBatteryBreakerModel> breakers,
   required String applicationId,
   required String component,
   required BuildContext context,
   required WidgetRef ref,
 }) {
-  void updateSelectedSurgeProtectorsStatus(bool selected, String protector) {
-    ref
-        .watch(surgeProtectorControllerProvider)
-        .updateSurgeProtectorSelectedStatus(
+  void updateSelectedBatteryBreakersStatus(bool selected, String breaker) {
+    ref.watch(batteryBreakerControllerProvider).updateBatteryBreakersSelectedStatus(
           applicationId: applicationId,
           component: component,
-          protector: protector,
+          breaker: breaker,
           selected: selected,
         );
   }
@@ -208,7 +206,7 @@ Widget selectProtectors({
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Protector',
+              'Breaker',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
             ),
             Text(
@@ -222,29 +220,25 @@ Widget selectProtectors({
         height: size.height * 0.15,
         child: ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: protectors.length,
+            itemCount: breakers.length,
             itemBuilder: (context, index) {
-              final protector = protectors[index];
+              final breaker = breakers[index];
               return GestureDetector(
                 onTap: () {
                   if (index == 0) {
-                    updateSelectedSurgeProtectorsStatus(
-                        true, protectors[0].name);
-                    updateSelectedSurgeProtectorsStatus(
-                        false, protectors[1].name);
+                    updateSelectedBatteryBreakersStatus(true, breakers[0].name);
+                    updateSelectedBatteryBreakersStatus(false, breakers[1].name);
                   }
                   if (index == 1) {
-                    updateSelectedSurgeProtectorsStatus(
-                        false, protectors[0].name);
-                    updateSelectedSurgeProtectorsStatus(
-                        true, protectors[1].name);
+                    updateSelectedBatteryBreakersStatus(false, breakers[0].name);
+                    updateSelectedBatteryBreakersStatus(true, breakers[1].name);
                   }
                 },
                 child: Container(
                   height: 40,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: (protector.isSelected == false
+                    color: (breaker.isSelected == false
                         ? Colors.white
                         : Colors.grey.withOpacity(0.2)),
                   ),
@@ -255,13 +249,13 @@ Widget selectProtectors({
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        protector.name,
+                        breaker.name,
                         textAlign: TextAlign.start,
                         style: const TextStyle(
                             fontSize: 14, fontWeight: FontWeight.w500),
                       ),
                       Text(
-                        protector.cost.toString(),
+                        breaker.cost.toString(),
                         style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w500),
                       )
@@ -282,7 +276,7 @@ Widget selectedTrue({
   required List<String> arguments,
   required BuildContext context,
   required ComponentsModel componentsModel,
-  required List<SurgeProtectorModel> protectors,
+  required List<DCBatteryBreakerModel> breakers,
 }) {
   void updateSelectedStatus(bool selected) {
     ref.watch(solarControllerProvider).updateApplicationComponentSelectedStatus(
@@ -324,7 +318,7 @@ Widget selectedTrue({
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Protector',
+              'Breaker',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
             ),
             Text(
@@ -338,9 +332,9 @@ Widget selectedTrue({
         height: size.height * 0.1,
         child: ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: protectors.length,
+          itemCount: breakers.length,
           itemBuilder: ((context, index) {
-            final protector = protectors[index];
+            final breaker = breakers[index];
             return SizedBox(
               height: 45,
               child: Padding(
@@ -349,13 +343,13 @@ Widget selectedTrue({
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      protector.name,
+                      breaker.name,
                       textAlign: TextAlign.start,
                       style: const TextStyle(
                           fontSize: 14, fontWeight: FontWeight.w500),
                     ),
                     Text(
-                      protector.cost.toString(),
+                      breaker.cost.toString(),
                       style: const TextStyle(
                           fontSize: 16, fontWeight: FontWeight.w500),
                     )

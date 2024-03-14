@@ -2,14 +2,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:solar_project/models/line_fuse_model.dart';
 import 'package:solar_project/src/repository/line_fuse_repository.dart';
 
-final getBreakerEnclosuresStreamProvider =
+final getLineFusesStreamProvider =
     StreamProvider.family<List<LineFuseModel>, List<String>>((ref, arguments) {
   return ref
       .watch(lineFuseControllerProvider)
       .getFuses(arguments[0], arguments[1]);
 });
 
-final getSelectedBreakerEnclosuresStreamProvider =
+final getSelectedLineFusesStreamProvider =
     StreamProvider.family<List<LineFuseModel>, List<String>>((ref, arguments) {
   return ref
       .watch(lineFuseControllerProvider)

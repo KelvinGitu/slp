@@ -13,6 +13,7 @@ import 'package:solar_project/src/pages/cable_ties.dart';
 import 'package:solar_project/src/pages/core_cable.dart';
 import 'package:solar_project/src/pages/automatic_changeover_switch.dart';
 import 'package:solar_project/src/pages/batteries_screen.dart';
+import 'package:solar_project/src/pages/dc_battery_breaker.dart';
 import 'package:solar_project/src/pages/dc_breaker.dart';
 import 'package:solar_project/src/pages/dc_breaker_enlosure.dart';
 import 'package:solar_project/src/pages/din_rail.dart';
@@ -27,6 +28,8 @@ import 'package:solar_project/src/pages/panel_screen.dart';
 import 'package:solar_project/src/pages/piping.dart';
 import 'package:solar_project/src/pages/pv_cable.dart';
 import 'package:solar_project/src/pages/pv_combiner_box.dart';
+import 'package:solar_project/src/pages/pv_line_fuse.dart';
+import 'package:solar_project/src/pages/pv_surge_protector.dart';
 import 'package:solar_project/src/pages/pvc_trunking.dart';
 import 'package:solar_project/src/pages/adapter_box.dart';
 import 'package:solar_project/src/pages/single_core_cable.dart';
@@ -198,10 +201,25 @@ class ExpandableWidget extends ConsumerWidget {
                       navigate: DCBreaker(
                           component: applicationComponents[26].name,
                           applicationId: applicationId)),
-                          ComponentWidget(
+                  ComponentWidget(
                       component: applicationComponents[27],
                       navigate: DCBreakerEnclosure(
                           component: applicationComponents[27].name,
+                          applicationId: applicationId)),
+                  ComponentWidget(
+                      component: applicationComponents[28],
+                      navigate: SurgeProtector(
+                          component: applicationComponents[28].name,
+                          applicationId: applicationId)),
+                  ComponentWidget(
+                      component: applicationComponents[29],
+                      navigate: LineFuse(
+                          component: applicationComponents[29].name,
+                          applicationId: applicationId)),
+                  ComponentWidget(
+                      component: applicationComponents[30],
+                      navigate: BatteryBreaker(
+                          component: applicationComponents[30].name,
                           applicationId: applicationId)),
                 ],
               ),

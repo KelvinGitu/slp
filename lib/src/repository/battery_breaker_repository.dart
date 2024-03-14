@@ -58,13 +58,15 @@ class BatteryBreakersRepository {
   }
 
   Future updateBatteryBreakersSelectedStatus(String applicationId,
-      bool selected, String component, String fuse) async {
+      bool selected, String component, String breaker) async {
+    final splitName = breaker.split(' ');
+    final docName = splitName.first;
     return _applications
         .doc(applicationId)
         .collection('components')
         .doc(component)
         .collection('breakers')
-        .doc(fuse)
+        .doc(docName)
         .update({'isSelected': selected});
   }
 

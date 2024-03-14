@@ -343,7 +343,7 @@ Widget selectedTrue({
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '${breaker.name})',
+                      breaker.name,
                       textAlign: TextAlign.start,
                       style: const TextStyle(
                           fontSize: 14, fontWeight: FontWeight.w500),

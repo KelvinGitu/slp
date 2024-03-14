@@ -95,7 +95,7 @@ class _SingleCoreCableState extends ConsumerState<SingleCoreCable> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: (component.isSelected == false)
                 ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
                         'Measures of determination',
@@ -201,12 +201,6 @@ Widget chooseCables({
           component: component,
           cable: cable,
           cost: cost,
-        );
-  }
-
-  void updateApplicationQuotation() {
-    ref.watch(solarControllerProvider).updateApplicationQuotation(
-          applicationId,
         );
   }
 
@@ -358,16 +352,22 @@ Widget selectedTrue({
           itemBuilder: ((context, index) {
             final cable = cables[index];
             return SizedBox(
-              height: 40,
+              height: 45,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      '${cable.name})',
-                      style: const TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.w500),
+                    SizedBox(
+                      width: 200,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 12),
+                        child: Text(
+                          '${cable.name} (4m)',
+                          style: const TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.w500),
+                        ),
+                      ),
                     ),
                     Text(
                       cable.cost.toString(),

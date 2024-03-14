@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:solar_project/models/surge_protector_model.dart';
 import 'package:solar_project/src/repository/surge_protector_repository.dart';
 
-final getBreakerEnclosuresStreamProvider =
+final getSurgeProtectorsStreamProvider =
     StreamProvider.family<List<SurgeProtectorModel>, List<String>>(
         (ref, arguments) {
   return ref
@@ -10,7 +10,7 @@ final getBreakerEnclosuresStreamProvider =
       .getSurgeProtectors(arguments[0], arguments[1]);
 });
 
-final getSelectedBreakerEnclosuresStreamProvider =
+final getSelectedSurgeProtectorsStreamProvider =
     StreamProvider.family<List<SurgeProtectorModel>, List<String>>(
         (ref, arguments) {
   return ref

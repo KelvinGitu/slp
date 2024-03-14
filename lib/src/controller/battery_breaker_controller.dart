@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:solar_project/models/battery_breaker_model.dart';
 import 'package:solar_project/src/repository/battery_breaker_repository.dart';
 
-final getBreakerEnclosuresStreamProvider =
+final getBatteryBreakersStreamProvider =
     StreamProvider.family<List<DCBatteryBreakerModel>, List<String>>(
         (ref, arguments) {
   return ref
@@ -10,7 +10,7 @@ final getBreakerEnclosuresStreamProvider =
       .getBatteryBreakers(arguments[0], arguments[1]);
 });
 
-final getSelectedBreakerEnclosuresStreamProvider =
+final getSelectedBatteryBreakersStreamProvider =
     StreamProvider.family<List<DCBatteryBreakerModel>, List<String>>(
         (ref, arguments) {
   return ref

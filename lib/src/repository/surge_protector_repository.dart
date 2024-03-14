@@ -58,12 +58,14 @@ class SurgeProtectorRepository {
 
   Future updateSurgeProtectorsSelectedStatus(String applicationId,
       bool selected, String component, String protector) async {
+    final splitName = protector.split(' ');
+    final docName = splitName.last;
     return _applications
         .doc(applicationId)
         .collection('components')
         .doc(component)
         .collection('protectors')
-        .doc(protector)
+        .doc(docName)
         .update({'isSelected': selected});
   }
 
@@ -80,7 +82,7 @@ class SurgeProtectorRepository {
     List<SurgeProtectorModel> protectors = [];
     for (var doc in event.docs) {
       protectors.add(SurgeProtectorModel.fromMap(doc.data()));
-    }
+    }    
     return protectors;
   }
 
@@ -90,7 +92,7 @@ class SurgeProtectorRepository {
         .doc(applicationId)
         .collection('components')
         .doc(component)
-        .collection('breakers')
+        .collection('protectors')
         .where('isSelected', isEqualTo: true)
         .snapshots()
         .map((event) {

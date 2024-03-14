@@ -58,12 +58,14 @@ class LineFuseRepository {
 
   Future updateFusesSelectedStatus(String applicationId, bool selected,
       String component, String fuse) async {
+    final splitName = fuse.split(' ');
+    final docName = splitName[3];
     return _applications
         .doc(applicationId)
         .collection('components')
         .doc(component)
         .collection('fuses')
-        .doc(fuse)
+        .doc(docName)
         .update({'isSelected': selected});
   }
 
