@@ -85,7 +85,7 @@ class _CommunicationComponentsWidgetState
     final splitName = name.split(' ');
     final lastName = splitName.last;
     return Padding(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -112,33 +112,53 @@ class _CommunicationComponentsWidgetState
               ),
             ),
             const SizedBox(height: 15),
-            (lastName == 'cable')
-                ? TextField(
-                    controller: cableLengthController,
-                    keyboardType: const TextInputType.numberWithOptions(),
-                    decoration: InputDecoration(
-                      hintText: 'Length in metres',
-                      hintStyle: TextStyle(
-                          fontSize: 14, color: Colors.black.withOpacity(0.6)),
-                      border: InputBorder.none,
-                      filled: true,
-                      fillColor: Colors.grey.withOpacity(0.2),
-                      errorText: validate ? "Value Can't Be Empty" : null,
-                    ),
+            (widget.comp.isSelected == true)
+                ? Column(
+                    children: [
+                      Container(),
+                      (lastName == 'cable')
+                          ? Text(
+                              'Length: ${widget.comp.length}',
+                              style: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            )
+                          : Text(
+                              'Units: ${widget.comp.quantity}',
+                              style: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                      const SizedBox(height: 30),
+                    ],
                   )
-                : TextField(
-                    controller: unitsController,
-                    keyboardType: const TextInputType.numberWithOptions(),
-                    decoration: InputDecoration(
-                      hintText: 'Number of units',
-                      hintStyle: TextStyle(
-                          fontSize: 14, color: Colors.black.withOpacity(0.6)),
-                      border: InputBorder.none,
-                      filled: true,
-                      fillColor: Colors.grey.withOpacity(0.2),
-                      errorText: validate ? "Value Can't Be Empty" : null,
-                    ),
-                  ),
+                : (lastName == 'cable')
+                    ? TextField(
+                        controller: cableLengthController,
+                        keyboardType: const TextInputType.numberWithOptions(),
+                        decoration: InputDecoration(
+                          hintText: 'Length in metres',
+                          hintStyle: TextStyle(
+                              fontSize: 14,
+                              color: Colors.black.withOpacity(0.6)),
+                          border: InputBorder.none,
+                          filled: true,
+                          fillColor: Colors.grey.withOpacity(0.2),
+                          errorText: validate ? "Value Can't Be Empty" : null,
+                        ),
+                      )
+                    : TextField(
+                        controller: unitsController,
+                        keyboardType: const TextInputType.numberWithOptions(),
+                        decoration: InputDecoration(
+                          hintText: 'Number of units',
+                          hintStyle: TextStyle(
+                              fontSize: 14,
+                              color: Colors.black.withOpacity(0.6)),
+                          border: InputBorder.none,
+                          filled: true,
+                          fillColor: Colors.grey.withOpacity(0.2),
+                          errorText: validate ? "Value Can't Be Empty" : null,
+                        ),
+                      ),
             const SizedBox(height: 20),
             (widget.comp.isSelected == false)
                 ? (lastName == 'cable')
@@ -201,7 +221,7 @@ class _CommunicationComponentsWidgetState
                                   ? null
                                   : Navigator.pop(context);
                             },
-                            message: 'Select'),
+                            message: 'Confirm'),
                       )
                 : (lastName == 'cable')
                     ? Align(

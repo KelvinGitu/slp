@@ -7,9 +7,12 @@ import 'package:solar_project/src/controller/solar_controller.dart';
 import 'package:solar_project/src/pages/ac_breaker_enclosure.dart';
 import 'package:solar_project/src/pages/ac_contactor_single_phase.dart';
 import 'package:solar_project/src/pages/ac_contactor_triple_phase.dart';
+import 'package:solar_project/src/pages/adapter_box_pvc.dart';
 import 'package:solar_project/src/pages/battery_cable.dart';
+import 'package:solar_project/src/pages/battery_fuse.dart';
 import 'package:solar_project/src/pages/cable_lugs.dart';
 import 'package:solar_project/src/pages/cable_ties.dart';
+import 'package:solar_project/src/pages/communication_components.dart';
 import 'package:solar_project/src/pages/core_cable.dart';
 import 'package:solar_project/src/pages/automatic_changeover_switch.dart';
 import 'package:solar_project/src/pages/batteries_screen.dart';
@@ -22,6 +25,7 @@ import 'package:solar_project/src/pages/earth_rod_and_cable.dart';
 import 'package:solar_project/src/pages/four_pole_mccb.dart';
 import 'package:solar_project/src/pages/inverter_manual_isolator.dart';
 import 'package:solar_project/src/pages/inverter_module_screen.dart';
+import 'package:solar_project/src/pages/lightning_arrestor.dart';
 import 'package:solar_project/src/pages/mc4_connectors.dart';
 import 'package:solar_project/src/pages/nine_way_combiner_box.dart';
 import 'package:solar_project/src/pages/panel_screen.dart';
@@ -33,6 +37,7 @@ import 'package:solar_project/src/pages/pv_surge_protector.dart';
 import 'package:solar_project/src/pages/pvc_trunking.dart';
 import 'package:solar_project/src/pages/adapter_box.dart';
 import 'package:solar_project/src/pages/single_core_cable.dart';
+import 'package:solar_project/src/pages/solar_panel_frame.dart';
 import 'package:solar_project/src/pages/triple_pole_mccb.dart';
 import 'package:solar_project/src/pages/voltage_guard.dart';
 import 'package:solar_project/src/widgets/component_widget.dart';
@@ -220,6 +225,31 @@ class ExpandableWidget extends ConsumerWidget {
                       component: applicationComponents[30],
                       navigate: BatteryBreaker(
                           component: applicationComponents[30].name,
+                          applicationId: applicationId)),
+                  ComponentWidget(
+                      component: applicationComponents[31],
+                      navigate: BatteryFuse(
+                          component: applicationComponents[31].name,
+                          applicationId: applicationId)),
+                  ComponentWidget(
+                      component: applicationComponents[32],
+                      navigate: AdapterBoxPVC(
+                          component: applicationComponents[32].name,
+                          applicationId: applicationId)),
+                  ComponentWidget(
+                      component: applicationComponents[33],
+                      navigate: LightningArrestor(
+                          component: applicationComponents[33].name,
+                          applicationId: applicationId)),
+                  ComponentWidget(
+                      component: applicationComponents[34],
+                      navigate: CommunicationComponents(
+                          component: applicationComponents[34].name,
+                          applicationId: applicationId)),
+                  ComponentWidget(
+                      component: applicationComponents[35],
+                      navigate: SolarPanelFrame(
+                          component: applicationComponents[35].name,
                           applicationId: applicationId)),
                 ],
               ),

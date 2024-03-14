@@ -51,6 +51,7 @@ class _ComponentsScreenState extends ConsumerState<ComponentsScreen> {
       saveSurgeProtectorsToApplication();
       saveLineFuseToApplication();
       saveBatteryBreakerToApplication();
+      saveCommunicationComponentsToApplication();
     });
     super.initState();
   }

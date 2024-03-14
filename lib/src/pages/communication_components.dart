@@ -7,6 +7,7 @@ import 'package:solar_project/src/controller/communication_components_controller
 import 'package:solar_project/src/controller/solar_controller.dart';
 import 'package:solar_project/src/widgets/communication_components_widget.dart';
 import 'package:solar_project/src/widgets/confirm_selection_button.dart';
+import 'package:solar_project/src/widgets/yes_no_button.dart';
 
 class CommunicationComponents extends ConsumerStatefulWidget {
   final String component;
@@ -28,7 +29,7 @@ class _CommuniicationComponentsState
 
   bool validate = false;
 
-  bool storageDevice = false;
+  bool communicationDevice = false;
 
   Color yesbackgroundColor = Colors.white;
   Color nobackgroundColor = Colors.white;
@@ -47,17 +48,33 @@ class _CommuniicationComponentsState
         );
   }
 
+  void updateRequiredStatus(bool selected) {
+    ref.watch(solarControllerProvider).updateApplicationComponentRequiredStatus(
+          widget.component,
+          selected,
+          widget.applicationId,
+        );
+  }
+
   void updateComponentCost() async {
     int cost = 0;
     final components = await ref
         .read(communicationComponentsControllerProvider)
         .getFutureSelectedCommunicationComponents(
             widget.applicationId, widget.component);
-    for (CommunicationComponentsModel component in components) {
-      cost = cost + component.cost;
+    if (components.isNotEmpty) {
+      for (CommunicationComponentsModel component in components) {
+        cost = cost + component.cost;
+        ref.watch(solarControllerProvider).updateApplicationComponentCost(
+              widget.component,
+              cost,
+              widget.applicationId,
+            );
+      }
+    } else {
       ref.watch(solarControllerProvider).updateApplicationComponentCost(
             widget.component,
-            cost,
+            0,
             widget.applicationId,
           );
     }
@@ -95,88 +112,105 @@ class _CommuniicationComponentsState
           ),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: (component.isSelected == false)
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          'Is your client interested in a power storage device?',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                      const SizedBox(height: 15),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(
-                              height: 25,
-                              width: 120,
-                              child: OutlinedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    storageDevice = true;
-                                    yesbackgroundColor =
-                                        Colors.purple.withOpacity(0.4);
-                                    nobackgroundColor = Colors.white;
-                                  });
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(6),
-                                  ),
-                                  backgroundColor: yesbackgroundColor,
-                                ),
-                                child: const Text('Yes'),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 25,
-                              width: 120,
-                              child: OutlinedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    storageDevice = false;
-                                    nobackgroundColor =
-                                        Colors.purple.withOpacity(0.4);
-                                    yesbackgroundColor = Colors.white;
-                                  });
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(6),
-                                  ),
-                                  backgroundColor: nobackgroundColor,
-                                ),
-                                child: const Text('No'),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      communicationComponents.when(
-                        data: (components) {
-                          return Container();
-                        },
-                        error: (error, stacktrace) => Text(error.toString()),
-                        loading: () => const Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      ),
-                    ],
-                  )
-                : selectedTrue(
-                    ref: ref,
-                    arguments: arguments,
-                    componentsModel: component,
-                    component: widget.component,
+            child: (component.isRequired == false &&
+                    component.isSelected == false)
+                ? componentNotRequired(
+                    context: context,
                     applicationId: widget.applicationId,
-                  ),
+                    component: widget.component,
+                    ref: ref,
+                  )
+                : (component.isSelected == false)
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              'Is your client interested in communication components?',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                          const SizedBox(height: 15),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                YesNoButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      communicationDevice = true;
+                                      yesbackgroundColor =
+                                          Colors.purple.withOpacity(0.4);
+                                      nobackgroundColor = Colors.white;
+                                    });
+                                  },
+                                  yesNo: 'Yes',
+                                  background: yesbackgroundColor,
+                                ),
+                                YesNoButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      communicationDevice = false;
+                                      nobackgroundColor =
+                                          Colors.purple.withOpacity(0.4);
+                                      yesbackgroundColor = Colors.white;
+                                    });
+                                    updateRequiredStatus(false);
+                                    updateSelectedStatus(false);
+                                  },
+                                  yesNo: 'No',
+                                  background: nobackgroundColor,
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          (communicationDevice == true)
+                              ? Column(
+                                  children: [
+                                    communicationComponents.when(
+                                      data: (components) {
+                                        return selectCommunicationComponents(
+                                          context: context,
+                                          applicationId: widget.applicationId,
+                                          component: widget.component,
+                                          ref: ref,
+                                          components: components,
+                                        );
+                                      },
+                                      error: (error, stacktrace) =>
+                                          Text(error.toString()),
+                                      loading: () => const Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 40),
+                                    Align(
+                                      alignment: Alignment.topCenter,
+                                      child: ConfirmSelectionButton(
+                                        onPressed: () {
+                                          updateSelectedStatus(true);
+                                          updateComponentCost();
+                                          updateApplicationQuotation();
+                                        },
+                                        message: 'Confirm Selection',
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : Container(),
+                        ],
+                      )
+                    : selectedTrue(
+                        ref: ref,
+                        arguments: arguments,
+                        componentsModel: component,
+                        component: widget.component,
+                        applicationId: widget.applicationId,
+                      ),
           ),
         );
       },
@@ -219,7 +253,8 @@ Widget selectCommunicationComponents({
           ],
         ),
       ),
-      Expanded(
+      SizedBox(
+        height: 100,
         child: ListView.builder(
           itemCount: components.length,
           itemBuilder: ((context, index) {
@@ -237,7 +272,7 @@ Widget selectCommunicationComponents({
                         padding: EdgeInsets.only(
                             bottom: MediaQuery.of(context).viewInsets.bottom),
                         child: FractionallySizedBox(
-                          heightFactor: 0.34,
+                          heightFactor: 0.3,
                           child: CommunicationComponentsWidget(
                             comp: comp,
                             applicationId: applicationId,
@@ -261,7 +296,7 @@ Widget selectCommunicationComponents({
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '${comp.name}\u00b2',
+                      comp.name,
                       style: const TextStyle(
                           fontSize: 16, fontWeight: FontWeight.w500),
                     ),
@@ -276,6 +311,46 @@ Widget selectCommunicationComponents({
             );
           }),
         ),
+      ),
+    ],
+  );
+}
+
+Widget componentNotRequired({
+  required BuildContext context,
+  required String applicationId,
+  required String component,
+  required WidgetRef ref,
+}) {
+  void updateSelectedStatus(bool selected) {
+    ref.watch(solarControllerProvider).updateApplicationComponentSelectedStatus(
+          component,
+          selected,
+          applicationId,
+        );
+  }
+
+  void updateRequiredStatus(bool selected) {
+    ref.watch(solarControllerProvider).updateApplicationComponentRequiredStatus(
+          component,
+          selected,
+          applicationId,
+        );
+  }
+
+  return Column(
+    children: [
+      const Text(
+        'This component is not required for this installation',
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+      ),
+      const SizedBox(height: 40),
+      ConfirmSelectionButton(
+        onPressed: () {
+          updateRequiredStatus(true);
+          updateSelectedStatus(false);
+        },
+        message: 'Edit Selection',
       ),
     ],
   );
@@ -333,7 +408,7 @@ Widget selectedTrue({
     selectedComponents.when(
       data: (components) {
         return SizedBox(
-          height: 200,
+          height: 100,
           child: ListView.builder(
               itemCount: components.length,
               itemBuilder: ((context, index) {
@@ -350,12 +425,12 @@ Widget selectedTrue({
                     children: [
                       (lastName == 'cable')
                           ? Text(
-                              '${comp.name}\u00b2  (${comp.length}m)',
+                              '${comp.name} (${comp.length}m)',
                               style: const TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w500),
                             )
                           : Text(
-                              '${comp.name}\u00b2  (${comp.quantity}m)',
+                              '${comp.name} (${comp.quantity} units)',
                               style: const TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w500),
                             ),
@@ -385,8 +460,8 @@ Widget selectedTrue({
       padding: const EdgeInsets.symmetric(horizontal: 40),
       child: ConfirmSelectionButton(
         onPressed: () {
-          updateApplicationQuotation();
           updateSelectedStatus(false);
+          updateApplicationQuotation();
         },
         message: 'Edit Selection',
       ),

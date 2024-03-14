@@ -61,12 +61,12 @@ class SolarController {
 
   void saveComponent() async {
     ComponentsModel componentsModel = ComponentsModel(
-      name: 'Aluminium Solar Panel Frame',
+      name: 'Miscellaneous',
       cost: 0,
       isRequired: true,
       isSelected: false,
-      number: 36,
-      measurement: ['1 per panel'],
+      number: 46,
+      measurement: [],
       quantity: 0,
       length: 0,
       weight: 0,
@@ -182,10 +182,14 @@ class SolarController {
     int quotation = 0;
     final application =
         await _solarRepository.getAllFutureApplicationComponents(applicationId);
+    if (application.isNotEmpty) {
+      for (ComponentsModel component in application) {
+        quotation = quotation + component.cost;
 
-    for (ComponentsModel component in application) {
-      quotation = quotation + component.cost;
-      _solarRepository.updateApplicationQuotation(applicationId, quotation);
+        _solarRepository.updateApplicationQuotation(applicationId, quotation);
+      }
+    } else {
+      _solarRepository.updateApplicationQuotation(applicationId, 0);
     }
   }
 }

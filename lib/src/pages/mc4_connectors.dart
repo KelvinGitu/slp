@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
+import 'package:solar_project/src/widgets/confirm_selection_button.dart';
 
 class MC4ConnectorsScreen extends ConsumerStatefulWidget {
   final String component;
@@ -79,14 +80,12 @@ class _MC4ConnectorsScreenState extends ConsumerState<MC4ConnectorsScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: (component.isSelected == false)
                 ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          'Measures of determination',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500),
-                        ),
+                      const Text(
+                        'Measures of determination',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w500),
                       ),
                       const SizedBox(height: 10),
                       Container(
@@ -105,52 +104,55 @@ class _MC4ConnectorsScreenState extends ConsumerState<MC4ConnectorsScreen> {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      panelComponent.when(
-                        data: (panelComponent) {
-                          final numberOfConnectors =
-                              panelComponent.quantity * 4;
-                          final costOfConnectors = numberOfConnectors * 120;
-                          return Column(
-                            children: [
-                              Text(
-                                'Number of panels: ${panelComponent.quantity}',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 16,
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: panelComponent.when(
+                          data: (panelComponent) {
+                            final numberOfConnectors =
+                                panelComponent.quantity * 4;
+                            final costOfConnectors = numberOfConnectors * 120;
+                            return Column(
+                              children: [
+                                Text(
+                                  'Number of panels: ${panelComponent.quantity}',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 20),
-                              Text(
-                                'Number of connectors: $numberOfConnectors',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 16,
+                                const SizedBox(height: 20),
+                                Text(
+                                  'Number of connectors: $numberOfConnectors',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 20),
-                              Text(
-                                'Approximate cost: KES $costOfConnectors',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 16,
+                                const SizedBox(height: 20),
+                                Text(
+                                  'Approximate cost: KES $costOfConnectors',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 20),
-                              OutlinedButton(
-                                onPressed: () {
-                                  updateComponentCost(costOfConnectors);
-                                  updateComponentQuantity(numberOfConnectors);
-                                  updateSelectedStatus(true);
-                                  updateApplicationQuotation();
-                                },
-                                child: const Text('Confirm selection'),
-                              )
-                            ],
-                          );
-                        },
-                        error: (error, stacktrace) => Text(error.toString()),
-                        loading: () => const Center(
-                          child: CircularProgressIndicator(),
+                                const SizedBox(height: 40),
+                                ConfirmSelectionButton(
+                                    onPressed: () {
+                                      updateComponentCost(costOfConnectors);
+                                      updateComponentQuantity(
+                                          numberOfConnectors);
+                                      updateSelectedStatus(true);
+                                      updateApplicationQuotation();
+                                    },
+                                    message: 'Confirm Selection'),
+                              ],
+                            );
+                          },
+                          error: (error, stacktrace) => Text(error.toString()),
+                          loading: () => const Center(
+                            child: CircularProgressIndicator(),
+                          ),
                         ),
                       ),
                     ],
