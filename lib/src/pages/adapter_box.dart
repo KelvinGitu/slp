@@ -27,27 +27,9 @@ class _AdapterBoxState extends ConsumerState<AdapterBox> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      saveBoxesToApplication();
-    });
     arguments = [widget.applicationId, widget.component];
 
     super.initState();
-  }
-
-  void saveBoxesToApplication() async {
-    bool componentExist =
-        await ref.read(adapterBoxesControllerProvider).checkBoxExists(
-              widget.applicationId,
-              widget.component,
-              'Plastic',
-            );
-    if (componentExist == false) {
-      ref.read(adapterBoxesControllerProvider).saveBoxesToApplication(
-            applicationId: widget.applicationId,
-            component: widget.component,
-          );
-    }
   }
 
   void updateSelectedStatus(bool selected) {

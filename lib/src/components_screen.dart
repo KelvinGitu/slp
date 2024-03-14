@@ -1,12 +1,15 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:solar_project/src/controller/adapter_boxes_controller.dart';
 import 'package:solar_project/src/controller/battery_breaker_controller.dart';
+import 'package:solar_project/src/controller/battery_cables_conrtroller.dart';
 import 'package:solar_project/src/controller/battery_capacities_controller.dart';
 import 'package:solar_project/src/controller/core_cables_controller.dart';
 import 'package:solar_project/src/controller/dc_breaker_controller.dart';
 import 'package:solar_project/src/controller/dc_breaker_enclosures_controller.dart';
 import 'package:solar_project/src/controller/line_fuse_controller.dart';
+import 'package:solar_project/src/controller/piping_components_controller.dart';
 import 'package:solar_project/src/controller/pv_cables_controller.dart';
 import 'package:solar_project/src/controller/single_core_cables_controller.dart';
 
@@ -37,6 +40,9 @@ class _ComponentsScreenState extends ConsumerState<ComponentsScreen> {
       saveBatteryCapacitiesToApplication();
       saveCoreCablesToApplication();
       savePVCablesToApplication();
+      saveBatteryCablesToApplication();
+      savePipingComponentsToApplication();
+      saveBoxesToApplication();
       saveSingleCoreCablesToApplication();
       saveVoltageGuardsToApplication();
       saveDCBreakersToApplication();
@@ -98,6 +104,54 @@ class _ComponentsScreenState extends ConsumerState<ComponentsScreen> {
       ref.watch(pvCablesControllerProvider).savePVCablesToApplication(
             applicationId: widget.applicationId,
             component: 'PV Cable',
+          );
+    }
+  }
+
+  void saveBatteryCablesToApplication() async {
+    bool cableExists =
+        await ref.read(batteryCablesControllerProvider).checkBatteryCableExists(
+              widget.applicationId,
+              'Battery Cable',
+              '4mm',
+            );
+    if (cableExists == false) {
+      ref.read(batteryCablesControllerProvider).saveBatteryCablesToApplication(
+            applicationId: widget.applicationId,
+            component: 'Battery Cable',
+          );
+    }
+  }
+
+  void savePipingComponentsToApplication() async {
+    bool componentExist = await ref
+        .read(pipingComponentsControllerProvider)
+        .checkPipingComponentExists(
+          widget.applicationId,
+          'Piping',
+          'conduit',
+        );
+    if (componentExist == false) {
+      ref
+          .read(pipingComponentsControllerProvider)
+          .savePipingComponentsToApplication(
+            applicationId: widget.applicationId,
+            component: 'Piping',
+          );
+    }
+  }
+
+  void saveBoxesToApplication() async {
+    bool componentExist =
+        await ref.read(adapterBoxesControllerProvider).checkBoxExists(
+              widget.applicationId,
+              'Adapter Box Enclosure',
+              'Plastic',
+            );
+    if (componentExist == false) {
+      ref.read(adapterBoxesControllerProvider).saveBoxesToApplication(
+            applicationId: widget.applicationId,
+            component: 'Adapter Box Enclosure',
           );
     }
   }

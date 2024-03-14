@@ -29,27 +29,9 @@ class _PipingScreenState extends ConsumerState<PipingScreen> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      savePipingComponentsToApplication();
-    });
     arguments = [widget.applicationId, widget.component];
 
     super.initState();
-  }
-
-  void savePipingComponentsToApplication() async {
-    bool componentExist =
-        await ref.read(pipingComponentsControllerProvider).checkPipingComponentExists(
-              widget.applicationId,
-              widget.component,
-              'conduit',
-            );
-    if (componentExist == false) {
-      ref.read(pipingComponentsControllerProvider).savePipingComponentsToApplication(
-            applicationId: widget.applicationId,
-            component: widget.component,
-          );
-    }
   }
 
   void updateSelectedStatus(bool selected) {

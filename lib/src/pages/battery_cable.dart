@@ -34,26 +34,7 @@ class _BatteryCableState extends ConsumerState<BatteryCable> {
   @override
   void initState() {
     arguments = [widget.applicationId, widget.component];
-
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      saveBatteryCablesToApplication();
-    });
     super.initState();
-  }
-
-  void saveBatteryCablesToApplication() async {
-    bool cableExists =
-        await ref.read(batteryCablesControllerProvider).checkBatteryCableExists(
-              widget.applicationId,
-              widget.component,
-              '4mm',
-            );
-    if (cableExists == false) {
-      ref.read(batteryCablesControllerProvider).saveBatteryCablesToApplication(
-            applicationId: widget.applicationId,
-            component: widget.component,
-          );
-    }
   }
 
   void updateSelectedStatus(bool selected) {
