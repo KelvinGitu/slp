@@ -61,12 +61,12 @@ class SolarController {
 
   void saveComponent() async {
     ComponentsModel componentsModel = ComponentsModel(
-      name: 'DC Battery Breaker',
+      name: 'Aluminium Solar Panel Frame',
       cost: 0,
       isRequired: true,
       isSelected: false,
-      number: 31,
-      measurement: [],
+      number: 36,
+      measurement: ['1 per panel'],
       quantity: 0,
       length: 0,
       weight: 0,

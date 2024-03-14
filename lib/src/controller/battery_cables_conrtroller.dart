@@ -18,7 +18,6 @@ final getSelectedBatteryCablesStreamProvider =
       .getStreamSelectedBatteryCables(arguments[0], arguments[1]);
 });
 
-
 final batteryCablesControllerProvider = Provider(
   (ref) => BatteryCablesController(
     batteryCablesRepository: ref.watch(batteryCablesRepositoryProvider),
@@ -98,5 +97,4 @@ class BatteryCablesController {
     return _batteryCablesRepository.getBatteryCablesFromApplication(
         applicationId, component);
   }
-
 }

@@ -1,27 +1,29 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:solar_project/models/battery_cable_model.dart';
+import 'package:solar_project/models/communication_components_model.dart';
 import 'package:solar_project/models/components_model.dart';
-import 'package:solar_project/src/controller/battery_cables_conrtroller.dart';
+import 'package:solar_project/src/controller/communication_components_controller.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
-import 'package:solar_project/src/widgets/battery_cable_widget.dart';
+import 'package:solar_project/src/widgets/communication_components_widget.dart';
 import 'package:solar_project/src/widgets/confirm_selection_button.dart';
 
-class BatteryCable extends ConsumerStatefulWidget {
+class CommunicationComponents extends ConsumerStatefulWidget {
   final String component;
   final String applicationId;
-  const BatteryCable({
+  const CommunicationComponents({
     super.key,
     required this.component,
     required this.applicationId,
   });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _BatteryCableState();
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _CommuniicationComponentsState();
 }
 
-class _BatteryCableState extends ConsumerState<BatteryCable> {
+class _CommuniicationComponentsState
+    extends ConsumerState<CommunicationComponents> {
   late List<String> arguments;
 
   bool validate = false;
@@ -47,11 +49,12 @@ class _BatteryCableState extends ConsumerState<BatteryCable> {
 
   void updateComponentCost() async {
     int cost = 0;
-    final cables = await ref
-        .read(batteryCablesControllerProvider)
-        .getFutureSelectedBatteryCables(widget.applicationId, widget.component);
-    for (BatteryCableModel cable in cables) {
-      cost = cost + cable.cost;
+    final components = await ref
+        .read(communicationComponentsControllerProvider)
+        .getFutureSelectedCommunicationComponents(
+            widget.applicationId, widget.component);
+    for (CommunicationComponentsModel component in components) {
+      cost = cost + component.cost;
       ref.watch(solarControllerProvider).updateApplicationComponentCost(
             widget.component,
             cost,
@@ -78,8 +81,8 @@ class _BatteryCableState extends ConsumerState<BatteryCable> {
   Widget build(BuildContext context) {
     final component =
         ref.watch(getApplicationComponentStreamProvider(arguments));
-    final batteryCab = ref.watch(getBatteryCablesStreamProvider(arguments));
-
+    final communicationComponents =
+        ref.watch(getCommunicationComponentsStreamProvider(arguments));
     return component.when(
       data: (component) {
         return Scaffold(
@@ -94,6 +97,7 @@ class _BatteryCableState extends ConsumerState<BatteryCable> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: (component.isSelected == false)
                 ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Align(
                         alignment: Alignment.topLeft,
@@ -155,74 +159,15 @@ class _BatteryCableState extends ConsumerState<BatteryCable> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      (storageDevice == true)
-                          ? Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'Measures of determination',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                const SizedBox(height: 15),
-                                Container(
-                                  height: 100,
-                                  width: MediaQuery.of(context).size.width,
-                                  padding: const EdgeInsets.all(15),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.withOpacity(0.3),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: ListView.builder(
-                                    itemCount: component.measurement.length,
-                                    itemBuilder: ((context, index) {
-                                      return Text(component.measurement[index]);
-                                    }),
-                                  ),
-                                ),
-                                const SizedBox(height: 15),
-                                batteryCab.when(
-                                  data: (cables) {
-                                    return batteryCables(
-                                      cables: cables,
-                                      applicationId: widget.applicationId,
-                                      component: widget.component,
-                                    );
-                                  },
-                                  error: (error, stacktrace) =>
-                                      Text(error.toString()),
-                                  loading: () => const Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                ),
-                                const SizedBox(height: 20),
-                                Align(
-                                  alignment: Alignment.topCenter,
-                                  child: ConfirmSelectionButton(
-                                    onPressed: () {
-                                      updateComponentCost();
-                                      updateSelectedStatus(true);
-                                      updateApplicationQuotation();
-                                    },
-                                    message: 'Confirm Selection',
-                                  ),
-                                ),
-                              ],
-                            )
-                          : Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 40),
-                              child: ConfirmSelectionButton(
-                                onPressed: () {
-                                  updateApplicationQuotation();
-                                  updateSelectedStatus(false);
-                                  Navigator.pop(context);
-                                },
-                                message: 'Exit',
-                              ),
-                            ),
-                      const SizedBox(height: 20),
+                      communicationComponents.when(
+                        data: (components) {
+                          return Container();
+                        },
+                        error: (error, stacktrace) => Text(error.toString()),
+                        loading: () => const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
                     ],
                   )
                 : selectedTrue(
@@ -230,7 +175,8 @@ class _BatteryCableState extends ConsumerState<BatteryCable> {
                     arguments: arguments,
                     componentsModel: component,
                     component: widget.component,
-                    applicationId: widget.applicationId),
+                    applicationId: widget.applicationId,
+                  ),
           ),
         );
       },
@@ -242,97 +188,96 @@ class _BatteryCableState extends ConsumerState<BatteryCable> {
   }
 }
 
-Widget batteryCables({
-  required List<BatteryCableModel> cables,
+Widget selectCommunicationComponents({
+  required BuildContext context,
   required String applicationId,
   required String component,
+  required WidgetRef ref,
+  required List<CommunicationComponentsModel> components,
 }) {
-  return SizedBox(
-    height: 350,
-    child: Column(
-      children: [
-        const Text(
-          'Please select all the cables required for the installation',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const Text(
+        'Please select all the cables required for the installation',
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+      ),
+      const SizedBox(height: 10),
+      const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Component',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
+            ),
+            Text(
+              'Price per unit (KES)',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
+            )
+          ],
         ),
-        const SizedBox(height: 10),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Cross Section',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
-              ),
-              Text(
-                'Cost per m (KES)',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
-              )
-            ],
-          ),
-        ),
-        Expanded(
-          child: ListView.builder(
-            itemCount: cables.length,
-            itemBuilder: ((context, index) {
-              final cable = cables[index];
-              return InkWell(
-                onTap: () {
-                  showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      builder: (context) {
-                        return Padding(
-                          padding: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).viewInsets.bottom),
-                          child: FractionallySizedBox(
-                            heightFactor: 0.34,
-                            child: BatteryCableWidget(
-                              cable: cable,
-                              applicationId: applicationId,
-                              component: component,
-                            ),
+      ),
+      Expanded(
+        child: ListView.builder(
+          itemCount: components.length,
+          itemBuilder: ((context, index) {
+            final comp = components[index];
+            return InkWell(
+              onTap: () {
+                showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    builder: (context) {
+                      return Padding(
+                        padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                        child: FractionallySizedBox(
+                          heightFactor: 0.34,
+                          child: CommunicationComponentsWidget(
+                            comp: comp,
+                            applicationId: applicationId,
+                            component: component,
                           ),
-                        );
-                      });
-                },
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                  height: 30,
-                  decoration: BoxDecoration(
-                    // borderRadius: BorderRadius.circular(10),
-                    color: (cable.isSelected == false
-                        ? Colors.white
-                        : Colors.grey.withOpacity(0.2)),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '${cable.crossSection}\u00b2',
-                        style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500),
-                      ),
-                      Text(
-                        cable.price.toString(),
-                        style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500),
-                      ),
-                    ],
-                  ),
+                        ),
+                      );
+                    });
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                height: 30,
+                decoration: BoxDecoration(
+                  // borderRadius: BorderRadius.circular(10),
+                  color: (comp.isSelected == false
+                      ? Colors.white
+                      : Colors.grey.withOpacity(0.2)),
                 ),
-              );
-            }),
-          ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '${comp.name}\u00b2',
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w500),
+                    ),
+                    Text(
+                      comp.price.toString(),
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w500),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }),
         ),
-      ],
-    ),
+      ),
+    ],
   );
 }
 
@@ -357,11 +302,11 @@ Widget selectedTrue({
         );
   }
 
-  final selectedCables =
-      ref.watch(getSelectedBatteryCablesStreamProvider(arguments));
+  final selectedComponents =
+      ref.watch(getSelectedCommunicationComponentsStreamProvider(arguments));
   return Column(children: [
     const Text(
-      'You have selected the following battery cables as part of the installation',
+      'You have selected the following communication components as part of the installation',
       style: TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.w500,
@@ -374,7 +319,7 @@ Widget selectedTrue({
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            'Cross Section (length)',
+            'Component (units)',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
           ),
           Text(
@@ -385,27 +330,37 @@ Widget selectedTrue({
       ),
     ),
     const SizedBox(height: 10),
-    selectedCables.when(
-      data: (cables) {
+    selectedComponents.when(
+      data: (components) {
         return SizedBox(
           height: 200,
           child: ListView.builder(
-              itemCount: cables.length,
+              itemCount: components.length,
               itemBuilder: ((context, index) {
-                final cable = cables[index];
+                final comp = components[index];
+                final name = comp.name;
+                final splitName = name.split(' ');
+                final lastName = splitName.last;
+
                 return Container(
                   margin: const EdgeInsets.fromLTRB(20, 0, 20, 10),
                   height: 30,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      (lastName == 'cable')
+                          ? Text(
+                              '${comp.name}\u00b2  (${comp.length}m)',
+                              style: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w500),
+                            )
+                          : Text(
+                              '${comp.name}\u00b2  (${comp.quantity}m)',
+                              style: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w500),
+                            ),
                       Text(
-                        '${cable.crossSection}\u00b2  (${cable.length}m)',
-                        style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500),
-                      ),
-                      Text(
-                        cable.cost.toString(),
+                        comp.cost.toString(),
                         style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w500),
                       ),

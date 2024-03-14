@@ -24,6 +24,7 @@ class BatteryCableWidget extends ConsumerStatefulWidget {
 
 class _BatteryCableWidgetState extends ConsumerState<BatteryCableWidget> {
   final TextEditingController cableLengthController = TextEditingController();
+  
 
   bool validate = false;
 

@@ -5,6 +5,7 @@ import 'package:solar_project/src/controller/adapter_boxes_controller.dart';
 import 'package:solar_project/src/controller/battery_breaker_controller.dart';
 import 'package:solar_project/src/controller/battery_cables_conrtroller.dart';
 import 'package:solar_project/src/controller/battery_capacities_controller.dart';
+import 'package:solar_project/src/controller/communication_components_controller.dart';
 import 'package:solar_project/src/controller/core_cables_controller.dart';
 import 'package:solar_project/src/controller/dc_breaker_controller.dart';
 import 'package:solar_project/src/controller/dc_breaker_enclosures_controller.dart';
@@ -269,6 +270,24 @@ class _ComponentsScreenState extends ConsumerState<ComponentsScreen> {
           .saveBatteryBreakersToApplication(
             applicationId: widget.applicationId,
             component: 'DC Battery Breaker',
+          );
+    }
+  }
+
+  void saveCommunicationComponentsToApplication() async {
+    bool componentExist = await ref
+        .read(communicationComponentsControllerProvider)
+        .checkCommunicationComponentExists(
+          widget.applicationId,
+          'Commmunication Components',
+          'cable',
+        );
+    if (componentExist == false) {
+      ref
+          .read(communicationComponentsControllerProvider)
+          .saveCommunicationComponentsToApplication(
+            applicationId: widget.applicationId,
+            component: 'Communication Components',
           );
     }
   }
