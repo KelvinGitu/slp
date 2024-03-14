@@ -28,6 +28,19 @@ class PVCablesRepository {
     return cables;
   }
 
+  
+  Future<bool> checkPVCableExists(
+      String applicationId, String component, String name) async {
+    final event = await _applications
+        .doc(applicationId)
+        .collection('components')
+        .doc(component)
+        .collection('cables')
+        .doc(name)
+        .get();
+    return event.exists;
+  }
+
   Future savePVCablesToApplication(String applicationId,
       CoreCableModel coreCableModel, String component) async {
     return _applications

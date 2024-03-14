@@ -35,6 +35,12 @@ class PVCablesController {
     }
   }
 
+    Future<bool> checkPVCableExists(
+      String applicationId, String component, String name) {
+    return _pvCablesRepository.checkPVCableExists(
+        applicationId, component, name);
+  }
+
   Stream<List<CoreCableModel>> getPVCables(
       String applicationId, String component) {
     return _pvCablesRepository.getPVCablesFromApplication(

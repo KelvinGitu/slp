@@ -31,10 +31,6 @@ class _PVCableSixMMState extends ConsumerState<PVCable> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      savePVCablesToApplication();
-    });
-
     arguments = [widget.applicationId, widget.component];
     inverterArguments = [widget.applicationId, 'Inverter Module'];
 
@@ -47,13 +43,6 @@ class _PVCableSixMMState extends ConsumerState<PVCable> {
     cable2LengthController.dispose();
     cable3LengthController.dispose();
     super.dispose();
-  }
-
-  void savePVCablesToApplication() {
-    ref.watch(pvCablesControllerProvider).savePVCablesToApplication(
-          applicationId: widget.applicationId,
-          component: widget.component,
-        );
   }
 
   void updateSelectedStatus(bool selected) {

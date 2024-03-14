@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:solar_project/src/controller/battery_breaker_controller.dart';
 import 'package:solar_project/src/controller/battery_capacities_controller.dart';
+import 'package:solar_project/src/controller/core_cables_controller.dart';
 import 'package:solar_project/src/controller/dc_breaker_controller.dart';
 import 'package:solar_project/src/controller/dc_breaker_enclosures_controller.dart';
 import 'package:solar_project/src/controller/line_fuse_controller.dart';
+import 'package:solar_project/src/controller/pv_cables_controller.dart';
 import 'package:solar_project/src/controller/single_core_cables_controller.dart';
 
 import 'package:solar_project/src/controller/solar_controller.dart';
@@ -33,6 +35,8 @@ class _ComponentsScreenState extends ConsumerState<ComponentsScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       updateApplicationQuotation();
       saveBatteryCapacitiesToApplication();
+      saveCoreCablesToApplication();
+      savePVCablesToApplication();
       saveSingleCoreCablesToApplication();
       saveVoltageGuardsToApplication();
       saveDCBreakersToApplication();
@@ -64,6 +68,36 @@ class _ComponentsScreenState extends ConsumerState<ComponentsScreen> {
           .saveBatteryCapacityToApplication(
             applicationId: widget.applicationId,
             component: 'Batteries',
+          );
+    }
+  }
+
+  void saveCoreCablesToApplication() async {
+    bool componentExist =
+        await ref.read(coreCablesControllerProvider).checkCoreCableExists(
+              widget.applicationId,
+              'Core Cable',
+              '10mm',
+            );
+    if (componentExist == false) {
+      ref.watch(coreCablesControllerProvider).saveCoreCablesToApplication(
+            applicationId: widget.applicationId,
+            component: 'Core Cable',
+          );
+    }
+  }
+
+  void savePVCablesToApplication() async {
+    bool componentExist =
+        await ref.read(pvCablesControllerProvider).checkPVCableExists(
+              widget.applicationId,
+              'PV Cable',
+              '10mm',
+            );
+    if (componentExist == false) {
+      ref.watch(pvCablesControllerProvider).savePVCablesToApplication(
+            applicationId: widget.applicationId,
+            component: 'PV Cable',
           );
     }
   }

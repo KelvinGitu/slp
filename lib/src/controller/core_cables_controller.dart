@@ -33,6 +33,13 @@ class CoreCablesController {
     }
   }
 
+  Future<bool> checkCoreCableExists(
+      String applicationId, String component, String name) {
+    return _coreCablesRepository.checkCoreCableExists(
+        applicationId, component, name);
+  }
+
+
   Stream<List<CoreCableModel>> getCoreCables(
       String applicationId, String component) {
     return _coreCablesRepository.getCoreCablesFromApplication(
