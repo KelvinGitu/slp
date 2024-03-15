@@ -147,7 +147,7 @@ class SolarRepository {
     for (var doc in event.docs) {
       components.add(ComponentsModel.fromMap(doc.data()));
     }
-    print(components);
+    // print(components);
     return components;
   }
 

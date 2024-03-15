@@ -5,6 +5,7 @@ import 'package:solar_project/src/controller/adapter_boxes_controller.dart';
 import 'package:solar_project/src/controller/battery_breaker_controller.dart';
 import 'package:solar_project/src/controller/battery_cables_conrtroller.dart';
 import 'package:solar_project/src/controller/battery_capacities_controller.dart';
+import 'package:solar_project/src/controller/cable_lugs_controller.dart';
 import 'package:solar_project/src/controller/communication_components_controller.dart';
 import 'package:solar_project/src/controller/core_cables_controller.dart';
 import 'package:solar_project/src/controller/dc_breaker_controller.dart';
@@ -52,6 +53,7 @@ class _ComponentsScreenState extends ConsumerState<ComponentsScreen> {
       saveLineFuseToApplication();
       saveBatteryBreakerToApplication();
       saveCommunicationComponentsToApplication();
+      saveCableLugsToApplication();
     });
     super.initState();
   }
@@ -289,6 +291,21 @@ class _ComponentsScreenState extends ConsumerState<ComponentsScreen> {
           .saveCommunicationComponentsToApplication(
             applicationId: widget.applicationId,
             component: 'Communication Components',
+          );
+    }
+  }
+
+  void saveCableLugsToApplication() async {
+    bool componentExist =
+        await ref.read(cableLugsControllerProvider).checkLugExists(
+              widget.applicationId,
+              'Cable Lugs',
+              'earth',
+            );
+    if (componentExist == false) {
+      ref.read(cableLugsControllerProvider).saveLugsToApplication(
+            applicationId: widget.applicationId,
+            component: 'Cable Lugs',
           );
     }
   }
