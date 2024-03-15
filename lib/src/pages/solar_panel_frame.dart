@@ -196,7 +196,7 @@ Widget panelQuantity({
           fontSize: 16,
         ),
       ),
-      const SizedBox(height: 20),
+      const SizedBox(height: 15),
       Text(
         'Number of Solar Frames: $numberOfFrames',
         style: const TextStyle(
@@ -208,7 +208,7 @@ Widget panelQuantity({
       Text(
         'Total cost: KES $costOfFrames',
         style: const TextStyle(
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w700,
           fontSize: 16,
         ),
       ),
@@ -270,15 +270,15 @@ Widget selectedTrue({
         'Number of Solar Frames: ${componentsModel.quantity}',
         style: const TextStyle(
           fontSize: 16,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w500,
         ),
       ),
-      const SizedBox(height: 15),
+      const SizedBox(height: 20),
       Text(
         'Total cost: ${componentsModel.cost}',
         style: const TextStyle(
           fontSize: 16,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w700,
         ),
       ),
       const SizedBox(height: 40),

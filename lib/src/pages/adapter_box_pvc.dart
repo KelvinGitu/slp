@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:solar_project/core/prices.dart';
 import 'package:solar_project/models/components_model.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
 import 'package:solar_project/src/widgets/confirm_selection_button.dart';
@@ -86,7 +87,7 @@ class _AdapterBoxPVCState extends ConsumerState<AdapterBoxPVC> {
                       const Text(
                         'How many pieces are required?',
                         style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w600),
+                            fontSize: 16, fontWeight: FontWeight.w500),
                       ),
                       const SizedBox(height: 15),
                       TextField(
@@ -104,7 +105,7 @@ class _AdapterBoxPVCState extends ConsumerState<AdapterBoxPVC> {
                         ),
                       ),
                       const Text(
-                        '*approximate price: 1 piece = KES 25',
+                        '*approximate price: 1 piece = KES ${Prices.adapterboxPVC}',
                         style: TextStyle(fontSize: 10, color: Colors.red),
                       ),
                       const SizedBox(height: 40),
@@ -118,7 +119,7 @@ class _AdapterBoxPVCState extends ConsumerState<AdapterBoxPVC> {
                             (validate == true)
                                 ? null
                                 : updateComponentCost(
-                                    int.parse(piecesController.text) * 40);
+                                    int.parse(piecesController.text) * Prices.adapterboxPVC);
                             (validate == true)
                                 ? null
                                 : updateComponentQuanity(
@@ -195,17 +196,17 @@ Widget selectedTrue({
       Container(),
       Text(
         'No. of pieces: ${componentsModel.quantity}',
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
       ),
       const SizedBox(height: 15),
       Text(
         'Cross Section: ${componentsModel.crossSection}mm',
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
       ),
-      const SizedBox(height: 15),
+      const SizedBox(height: 25),
       Text(
         'Total cost: ${componentsModel.cost}',
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
       ),
       const SizedBox(height: 40),
       ConfirmSelectionButton(

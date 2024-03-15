@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:solar_project/core/prices.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
 import 'package:solar_project/src/widgets/confirm_selection_button.dart';
 
@@ -85,7 +86,7 @@ class _InsulationTapeState extends ConsumerState<InsulationTape> {
                           '${component.name} of length ${component.length} is required for this installation. Input the number of tapes that satisfy installation requirements',
                           style: const TextStyle(
                             fontSize: 16,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                         const SizedBox(height: 15),
@@ -104,7 +105,7 @@ class _InsulationTapeState extends ConsumerState<InsulationTape> {
                           ),
                         ),
                         const Text(
-                          '*Price per unit: KES 40',
+                          '*Price per unit: KES ${Prices.insulationTape}',
                           style: TextStyle(fontSize: 10, color: Colors.red),
                         ),
                         const SizedBox(height: 40),
@@ -122,7 +123,7 @@ class _InsulationTapeState extends ConsumerState<InsulationTape> {
                               (validate == true)
                                   ? null
                                   : updateComponentCost(
-                                      int.parse(tapeController.text) * 40);
+                                      int.parse(tapeController.text) * Prices.insulationTape);
                               (validate == true)
                                   ? null
                                   : updateSelectedStatus(true);
@@ -142,15 +143,15 @@ class _InsulationTapeState extends ConsumerState<InsulationTape> {
                           'No. of ${component.name}s (${component.length}m): ${component.quantity}',
                           style: const TextStyle(
                             fontSize: 16,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
-                        const SizedBox(height: 15),
+                        const SizedBox(height: 20),
                         Text(
                           'Total cost: KES ${component.cost}',
                           style: const TextStyle(
                             fontSize: 16,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                         const SizedBox(height: 40),

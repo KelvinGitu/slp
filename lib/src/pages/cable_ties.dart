@@ -76,49 +76,46 @@ class _CableTiesState extends ConsumerState<CableTies> {
                       ),
                       const SizedBox(height: 25),
                       Text(
-                        'Approximate cost: KES ${component.cost}',
+                        'Total cost: KES ${component.cost}',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      const SizedBox(height: 25),
-                      OutlinedButton(
+                      const SizedBox(height: 40),
+                      ConfirmSelectionButton(
                         onPressed: () {
-                          // updateComponentCost();
                           updateSelectedStatus(true);
                           updateApplicationQuotation();
                         },
-                        child: const Text('Confirm selection'),
+                        message: 'Confirm Selection',
                       ),
                     ],
                   )
                 : Column(
                     children: [
+                      Container(),
                       const Text(
-                        'The cable ties have already been included in the installation',
+                        'The cable ties have been included in the installation',
                         style: TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 16,
                         ),
                       ),
-                      const SizedBox(height: 15),
+                      const SizedBox(height: 20),
                       Text(
                         'Total cost: ${component.cost}',
                         style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500),
-                      ),
-                      const SizedBox(height: 20),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 40),
-                        child: ConfirmSelectionButton(
-                          onPressed: () {
-                            // updateSelectedStatus(false);
-
-                            Navigator.pop(context);
-                          },
-                          message: 'Exit',
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
                         ),
+                      ),
+                      const SizedBox(height: 40),
+                      ConfirmSelectionButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        message: 'Exit',
                       ),
                     ],
                   ),

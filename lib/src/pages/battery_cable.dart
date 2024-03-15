@@ -7,6 +7,7 @@ import 'package:solar_project/src/controller/battery_cables_conrtroller.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
 import 'package:solar_project/src/widgets/battery_cable_widget.dart';
 import 'package:solar_project/src/widgets/confirm_selection_button.dart';
+import 'package:solar_project/src/widgets/yes_no_button.dart';
 
 class BatteryCable extends ConsumerStatefulWidget {
   final String component;
@@ -45,16 +46,32 @@ class _BatteryCableState extends ConsumerState<BatteryCable> {
         );
   }
 
+  void updateRequiredStatus(bool selected) {
+    ref.watch(solarControllerProvider).updateApplicationComponentRequiredStatus(
+          widget.component,
+          selected,
+          widget.applicationId,
+        );
+  }
+
   void updateComponentCost() async {
     int cost = 0;
     final cables = await ref
         .read(batteryCablesControllerProvider)
         .getFutureSelectedBatteryCables(widget.applicationId, widget.component);
-    for (BatteryCableModel cable in cables) {
-      cost = cost + cable.cost;
+    if (cables.isNotEmpty) {
+      for (BatteryCableModel cable in cables) {
+        cost = cost + cable.cost;
+        ref.watch(solarControllerProvider).updateApplicationComponentCost(
+              widget.component,
+              cost,
+              widget.applicationId,
+            );
+      }
+    } else {
       ref.watch(solarControllerProvider).updateApplicationComponentCost(
             widget.component,
-            cost,
+            0,
             widget.applicationId,
           );
     }
@@ -92,145 +109,102 @@ class _BatteryCableState extends ConsumerState<BatteryCable> {
           ),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: (component.isSelected == false)
-                ? Column(
-                    children: [
-                      const Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          'Is your client interested in a power storage device?',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                      const SizedBox(height: 15),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(
-                              height: 25,
-                              width: 120,
-                              child: OutlinedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    storageDevice = true;
-                                    yesbackgroundColor =
-                                        Colors.purple.withOpacity(0.4);
-                                    nobackgroundColor = Colors.white;
-                                  });
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(6),
-                                  ),
-                                  backgroundColor: yesbackgroundColor,
-                                ),
-                                child: const Text('Yes'),
-                              ),
+            child: (component.isRequired == false &&
+                    component.isSelected == false)
+                ? componentNotRequired(
+                    context: context,
+                    applicationId: widget.applicationId,
+                    component: widget.component,
+                    ref: ref,
+                  )
+                : (component.isSelected == false)
+                    ? Column(
+                        children: [
+                          const Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              'Is your client interested in a power storage device?',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w500),
                             ),
-                            SizedBox(
-                              height: 25,
-                              width: 120,
-                              child: OutlinedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    storageDevice = false;
-                                    nobackgroundColor =
-                                        Colors.purple.withOpacity(0.4);
-                                    yesbackgroundColor = Colors.white;
-                                  });
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(6),
-                                  ),
-                                  backgroundColor: nobackgroundColor,
-                                ),
-                                child: const Text('No'),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      (storageDevice == true)
-                          ? Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                          ),
+                          const SizedBox(height: 15),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text(
-                                  'Measures of determination',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                const SizedBox(height: 15),
-                                Container(
-                                  height: 100,
-                                  width: MediaQuery.of(context).size.width,
-                                  padding: const EdgeInsets.all(15),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.withOpacity(0.3),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: ListView.builder(
-                                    itemCount: component.measurement.length,
-                                    itemBuilder: ((context, index) {
-                                      return Text(component.measurement[index]);
-                                    }),
-                                  ),
-                                ),
-                                const SizedBox(height: 15),
-                                batteryCab.when(
-                                  data: (cables) {
-                                    return batteryCables(
-                                      cables: cables,
-                                      applicationId: widget.applicationId,
-                                      component: widget.component,
-                                    );
+                                YesNoButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      storageDevice = true;
+                                      yesbackgroundColor =
+                                          Colors.purple.withOpacity(0.4);
+                                      nobackgroundColor = Colors.white;
+                                    });
                                   },
-                                  error: (error, stacktrace) =>
-                                      Text(error.toString()),
-                                  loading: () => const Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
+                                  yesNo: 'Yes',
+                                  background: yesbackgroundColor,
                                 ),
-                                const SizedBox(height: 20),
-                                Align(
-                                  alignment: Alignment.topCenter,
-                                  child: ConfirmSelectionButton(
-                                    onPressed: () {
-                                      updateComponentCost();
-                                      updateSelectedStatus(true);
-                                      updateApplicationQuotation();
-                                    },
-                                    message: 'Confirm Selection',
-                                  ),
+                                YesNoButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      storageDevice = false;
+                                      nobackgroundColor =
+                                          Colors.purple.withOpacity(0.4);
+                                      yesbackgroundColor = Colors.white;
+                                    });
+                                    updateRequiredStatus(false);
+                                  },
+                                  yesNo: 'No',
+                                  background: nobackgroundColor,
                                 ),
                               ],
-                            )
-                          : Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 40),
-                              child: ConfirmSelectionButton(
-                                onPressed: () {
-                                  updateApplicationQuotation();
-                                  updateSelectedStatus(false);
-                                  Navigator.pop(context);
-                                },
-                                message: 'Exit',
-                              ),
                             ),
-                      const SizedBox(height: 20),
-                    ],
-                  )
-                : selectedTrue(
-                    ref: ref,
-                    arguments: arguments,
-                    componentsModel: component,
-                    component: widget.component,
-                    applicationId: widget.applicationId),
+                          ),
+                          const SizedBox(height: 20),
+                          (storageDevice == true)
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    batteryCab.when(
+                                      data: (cables) {
+                                        return batteryCables(
+                                          cables: cables,
+                                          applicationId: widget.applicationId,
+                                          component: widget.component,
+                                        );
+                                      },
+                                      error: (error, stacktrace) =>
+                                          Text(error.toString()),
+                                      loading: () => const Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 20),
+                                    Align(
+                                      alignment: Alignment.topCenter,
+                                      child: ConfirmSelectionButton(
+                                        onPressed: () {
+                                          updateComponentCost();
+                                          updateSelectedStatus(true);
+                                          updateApplicationQuotation();
+                                        },
+                                        message: 'Confirm Selection',
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : Container(),
+                          const SizedBox(height: 20),
+                        ],
+                      )
+                    : selectedTrue(
+                        ref: ref,
+                        arguments: arguments,
+                        componentsModel: component,
+                        component: widget.component,
+                        applicationId: widget.applicationId),
           ),
         );
       },
@@ -336,6 +310,53 @@ Widget batteryCables({
   );
 }
 
+Widget componentNotRequired({
+  required BuildContext context,
+  required String applicationId,
+  required String component,
+  required WidgetRef ref,
+}) {
+  void updateSelectedStatus(bool selected) {
+    ref.watch(solarControllerProvider).updateApplicationComponentSelectedStatus(
+          component,
+          selected,
+          applicationId,
+        );
+  }
+
+  void updateApplicationQuotation() {
+    ref.watch(solarControllerProvider).updateApplicationQuotation(
+          applicationId,
+        );
+  }
+
+  void updateRequiredStatus(bool selected) {
+    ref.watch(solarControllerProvider).updateApplicationComponentRequiredStatus(
+          component,
+          selected,
+          applicationId,
+        );
+  }
+
+  return Column(
+    children: [
+      const Text(
+        'This component is not required for this installation',
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+      ),
+      const SizedBox(height: 40),
+      ConfirmSelectionButton(
+        onPressed: () {
+          updateRequiredStatus(true);
+          updateSelectedStatus(false);
+          updateApplicationQuotation();
+        },
+        message: 'Edit Selection',
+      ),
+    ],
+  );
+}
+
 Widget selectedTrue({
   required WidgetRef ref,
   required List<String> arguments,
@@ -425,7 +446,7 @@ Widget selectedTrue({
       'Total cost: KES ${componentsModel.cost}',
       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
     ),
-    const SizedBox(height: 20),
+    const SizedBox(height: 40),
     Padding(
       padding: const EdgeInsets.symmetric(horizontal: 40),
       child: ConfirmSelectionButton(

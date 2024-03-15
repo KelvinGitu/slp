@@ -105,9 +105,9 @@ class _LightningArrestorState extends ConsumerState<LightningArrestor> {
                           const Text(
                             'Add this component to the installation?',
                             style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w600),
+                                fontSize: 16, fontWeight: FontWeight.w500),
                           ),
-                          const SizedBox(height: 15),
+                          const SizedBox(height: 20),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 30),
                             child: Row(
@@ -187,7 +187,7 @@ Widget componentNotRequired({
     children: [
       const Text(
         'This component is not required for this installation',
-        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
       ),
       const SizedBox(height: 40),
       ConfirmSelectionButton(
@@ -223,15 +223,15 @@ Widget selectedTrue({
         'A ${componentsModel.name} will be included in the installation',
         style: const TextStyle(
           fontSize: 16,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w500,
         ),
       ),
-      const SizedBox(height: 15),
+      const SizedBox(height: 20),
       Text(
         'Total cost: ${componentsModel.cost}',
         style: const TextStyle(
           fontSize: 16,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w700,
         ),
       ),
       const SizedBox(height: 40),

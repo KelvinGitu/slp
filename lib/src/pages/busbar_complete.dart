@@ -7,9 +7,10 @@ import 'package:solar_project/src/widgets/confirm_selection_button.dart';
 import 'package:solar_project/src/widgets/yes_no_button.dart';
 
 class BusbarComplete extends ConsumerStatefulWidget {
-      final String component;
+  final String component;
   final String applicationId;
-  const BusbarComplete({super.key, 
+  const BusbarComplete({
+    super.key,
     required this.component,
     required this.applicationId,
   });
@@ -19,8 +20,7 @@ class BusbarComplete extends ConsumerStatefulWidget {
 }
 
 class _BusbarCompleteState extends ConsumerState<BusbarComplete> {
-
-   bool validate = false;
+  bool validate = false;
 
   late List<String> arguments;
 
@@ -125,7 +125,7 @@ class _BusbarCompleteState extends ConsumerState<BusbarComplete> {
                           const Text(
                             'Add this component to the installation?',
                             style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w600),
+                                fontSize: 16, fontWeight: FontWeight.w500),
                           ),
                           const SizedBox(height: 15),
                           Padding(
@@ -182,103 +182,107 @@ class _BusbarCompleteState extends ConsumerState<BusbarComplete> {
     );
   }
 
-
   Widget componentNotRequired({
-  required BuildContext context,
-  required String applicationId,
-  required String component,
-  required WidgetRef ref,
-}) {
-  void updateSelectedStatus(bool selected) {
-    ref.watch(solarControllerProvider).updateApplicationComponentSelectedStatus(
-          component,
-          selected,
-          applicationId,
-        );
-  }
+    required BuildContext context,
+    required String applicationId,
+    required String component,
+    required WidgetRef ref,
+  }) {
+    void updateSelectedStatus(bool selected) {
+      ref
+          .watch(solarControllerProvider)
+          .updateApplicationComponentSelectedStatus(
+            component,
+            selected,
+            applicationId,
+          );
+    }
 
-  void updateApplicationQuotation() {
-    ref.watch(solarControllerProvider).updateApplicationQuotation(
-          applicationId,
-        );
-  }
+    void updateApplicationQuotation() {
+      ref.watch(solarControllerProvider).updateApplicationQuotation(
+            applicationId,
+          );
+    }
 
-  void updateRequiredStatus(bool selected) {
-    ref.watch(solarControllerProvider).updateApplicationComponentRequiredStatus(
-          component,
-          selected,
-          applicationId,
-        );
-  }
+    void updateRequiredStatus(bool selected) {
+      ref
+          .watch(solarControllerProvider)
+          .updateApplicationComponentRequiredStatus(
+            component,
+            selected,
+            applicationId,
+          );
+    }
 
-  return Column(
-    children: [
-      const Text(
-        'This component is not required for this installation',
-        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-      ),
-      const SizedBox(height: 40),
-      ConfirmSelectionButton(
-        onPressed: () {
-          updateRequiredStatus(true);
-          updateSelectedStatus(false);
-          updateApplicationQuotation();
-        },
-        message: 'Edit Selection',
-      ),
-    ],
-  );
-}
-
-Widget selectedTrue({
-  required BuildContext context,
-  required String applicationId,
-  required String component,
-  required ComponentsModel componentsModel,
-  required WidgetRef ref,
-}) {
-  void updateSelectedStatus(bool selected) {
-    ref.watch(solarControllerProvider).updateApplicationComponentSelectedStatus(
-          component,
-          selected,
-          applicationId,
-        );
-  }
-
-  void updateApplicationQuotation() {
-    ref.watch(solarControllerProvider).updateApplicationQuotation(
-          applicationId,
-        );
-  }
-
-  return Column(
-    children: [
-      Container(),
-      Text(
-        'A ${componentsModel.name} will be included in the installation',
-        style: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
+    return Column(
+      children: [
+        const Text(
+          'This component is not required for this installation',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
         ),
-      ),
-      const SizedBox(height: 15),
-      Text(
-        'Total cost: ${componentsModel.cost}',
-        style: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
+        const SizedBox(height: 40),
+        ConfirmSelectionButton(
+          onPressed: () {
+            updateRequiredStatus(true);
+            updateSelectedStatus(false);
+            updateApplicationQuotation();
+          },
+          message: 'Edit Selection',
         ),
-      ),
-      const SizedBox(height: 40),
-      ConfirmSelectionButton(
-        onPressed: () {
-          updateSelectedStatus(false);
-          updateApplicationQuotation();
-        },
-        message: 'Edit Selection',
-      ),
-    ],
-  );
-}
+      ],
+    );
+  }
 
+  Widget selectedTrue({
+    required BuildContext context,
+    required String applicationId,
+    required String component,
+    required ComponentsModel componentsModel,
+    required WidgetRef ref,
+  }) {
+    void updateSelectedStatus(bool selected) {
+      ref
+          .watch(solarControllerProvider)
+          .updateApplicationComponentSelectedStatus(
+            component,
+            selected,
+            applicationId,
+          );
+    }
+
+    void updateApplicationQuotation() {
+      ref.watch(solarControllerProvider).updateApplicationQuotation(
+            applicationId,
+          );
+    }
+
+    return Column(
+      children: [
+        Container(),
+        Text(
+          'A ${componentsModel.name} will be included in the installation',
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(height: 20),
+        Text(
+          'Total cost: ${componentsModel.cost}',
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        const SizedBox(height: 40),
+        ConfirmSelectionButton(
+          onPressed: () {
+            updateSelectedStatus(false);
+            updateApplicationQuotation();
+          },
+          message: 'Edit Selection',
+        ),
+      ],
+    );
+  }
 }

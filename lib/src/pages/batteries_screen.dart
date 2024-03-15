@@ -6,6 +6,7 @@ import 'package:solar_project/models/components_model.dart';
 import 'package:solar_project/src/controller/battery_capacities_controller.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
 import 'package:solar_project/src/widgets/confirm_selection_button.dart';
+import 'package:solar_project/src/widgets/yes_no_button.dart';
 
 class BatteriesScreen extends ConsumerStatefulWidget {
   final String component;
@@ -24,6 +25,13 @@ class BatteriesScreen extends ConsumerStatefulWidget {
 class _BatteriesScreenState extends ConsumerState<BatteriesScreen> {
   final TextEditingController capacityController = TextEditingController();
   final TextEditingController batteriesController = TextEditingController();
+
+  @override
+  void dispose() {
+    capacityController.dispose();
+    batteriesController.dispose();
+    super.dispose();
+  }
 
   bool storageDevice = false;
 
@@ -274,6 +282,7 @@ class _BatteriesScreenState extends ConsumerState<BatteriesScreen> {
                                         fontSize: 16),
                                   )
                                 : Container(),
+                        const SizedBox(height:20),
                         (storageDevice == true)
                             ? Padding(
                                 padding:
@@ -338,7 +347,7 @@ Widget yesNo({
         );
   }
 
-   void updateRequiredStatus(bool required) {
+  void updateRequiredStatus(bool required) {
     ref.watch(solarControllerProvider).updateApplicationComponentRequiredStatus(
           component,
           required,
@@ -376,47 +385,28 @@ Widget yesNo({
         );
   }
 
-
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 20),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        SizedBox(
-          height: 25,
-          width: 120,
-          child: OutlinedButton(
-            onPressed: onYesPressed,
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(6),
-              ),
-              backgroundColor: yesbackgroundColor,
-            ),
-            child: const Text('Yes'),
-          ),
+        YesNoButton(
+          onPressed: onYesPressed,
+          yesNo: 'Yes',
+          background: yesbackgroundColor,
         ),
-        SizedBox(
-          height: 25,
-          width: 120,
-          child: OutlinedButton(
-            onPressed: () {
-              updateSelectedStatus(false);
-                updateRequiredStatus(false);
-                updateComponentCost();
-                updateComponentCapacity();
-                updateComponentQuanity();
-                updateApplicationQuotation();
-            },
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(6),
-              ),
-              backgroundColor: nobackgroundColor,
-            ),
-            child: const Text('No'),
-          ),
-        )
+        YesNoButton(
+          onPressed: () {
+            updateSelectedStatus(false);
+            updateRequiredStatus(false);
+            updateComponentCost();
+            updateComponentCapacity();
+            updateComponentQuanity();
+            updateApplicationQuotation();
+          },
+          yesNo: 'No',
+          background: nobackgroundColor,
+        ),
       ],
     ),
   );
@@ -465,11 +455,11 @@ Widget selectBatteryCapacities({
       children: [
         const Text(
           'Recommended capacities',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
         ),
         const SizedBox(height: 10),
         const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 40),
+          padding: EdgeInsets.symmetric(horizontal: 20),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -486,7 +476,6 @@ Widget selectBatteryCapacities({
         ),
         Expanded(
           child: ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 40),
             itemCount: capacities.length,
             itemBuilder: (context, index) {
               final capacity = capacities[index];
@@ -562,9 +551,9 @@ Widget selectBatteryCapacities({
                         }
                       },
                       child: Container(
-                        height: 30,
+                        height: 35,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
+                          // borderRadius: BorderRadius.circular(10),
                           color: (capacity.isSelected == false
                               ? Colors.white
                               : Colors.grey.withOpacity(0.2)),
@@ -644,19 +633,20 @@ Widget notRequired({
         'Batteries are not required for this application',
         style: TextStyle(
           fontSize: 16,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w500,
         ),
       ),
       const SizedBox(height: 40),
       ConfirmSelectionButton(
-          onPressed: () {
-            updateRequiredStatus(true);
-            updateComponentCost();
-            updateComponentCapacity();
-            updateComponentQuanity();
-            updateApplicationQuotation();
-          },
-          message: 'Edit Selection'),
+        onPressed: () {
+          updateRequiredStatus(true);
+          updateComponentCost();
+          updateComponentCapacity();
+          updateComponentQuanity();
+          updateApplicationQuotation();
+        },
+        message: 'Edit Selection',
+      ),
     ],
   );
 }
@@ -726,15 +716,15 @@ Widget selectedTrue({
             fontWeight: FontWeight.w500,
           ),
         ),
-        const SizedBox(height: 15),
+        const SizedBox(height: 20),
         Text(
           'Total cost: KES ${componentsModel.cost}',
           style: const TextStyle(
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w700,
             fontSize: 16,
           ),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 40),
         ConfirmSelectionButton(
           onPressed: () {
             updateSelectedStatus(false);

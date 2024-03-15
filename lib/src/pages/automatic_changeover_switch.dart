@@ -81,36 +81,35 @@ class _AutomaticChangeOverSwitchState
                         'Approximate cost: KES ${component.cost}',
                         style: const TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
-                      const SizedBox(height: 25),
-                      OutlinedButton(
+                      const SizedBox(height: 40),
+                      ConfirmSelectionButton(
                         onPressed: () {
-                          // updateComponentCost();
                           updateSelectedStatus(true);
                           updateApplicationQuotation();
                         },
-                        child: const Text('Confirm selection'),
+                        message: 'Confirm Selection',
                       ),
                     ],
                   )
                 : Column(
                     children: [
                       const Text(
-                        'The switch has already been included in the installation',
+                        'The switch has been included in the installation requirements.',
                         style: TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 16,
                         ),
                       ),
-                      const SizedBox(height: 15),
+                      const SizedBox(height: 20),
                       Text(
                         'Total cost: ${component.cost}',
                         style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500),
+                            fontSize: 16, fontWeight: FontWeight.w700),
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 40),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 40),
                         child: ConfirmSelectionButton(

@@ -1,7 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:solar_project/core/prices.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
+// import 'package:solar_project/src/pages/panel_screen.dart';
 import 'package:solar_project/src/widgets/confirm_selection_button.dart';
 
 class MC4ConnectorsScreen extends ConsumerStatefulWidget {
@@ -110,7 +112,8 @@ class _MC4ConnectorsScreenState extends ConsumerState<MC4ConnectorsScreen> {
                           data: (panelComponent) {
                             final numberOfConnectors =
                                 panelComponent.quantity * 4;
-                            final costOfConnectors = numberOfConnectors * 120;
+                            final costOfConnectors =
+                                numberOfConnectors * Prices.mc4Connectors;
                             return Column(
                               children: [
                                 Text(
@@ -160,13 +163,13 @@ class _MC4ConnectorsScreenState extends ConsumerState<MC4ConnectorsScreen> {
                 : Column(
                     children: [
                       const Text(
-                        'This component has been included in the installation. To make changes requires changes in the number of panels',
+                        'This component has been included in the installation. Any changes will have to be made in the panels section.',
                         style: TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 16,
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 15),
                       Text(
                         'Number of connectors: ${component.quantity}',
                         style: const TextStyle(
@@ -178,16 +181,26 @@ class _MC4ConnectorsScreenState extends ConsumerState<MC4ConnectorsScreen> {
                       Text(
                         'Approximate cost: KES ${component.cost}',
                         style: const TextStyle(
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w700,
                           fontSize: 16,
                         ),
                       ),
-                      const SizedBox(height: 20),
-                      OutlinedButton(
+                      const SizedBox(height: 40),
+                      ConfirmSelectionButton(
                         onPressed: () {
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: ((context) {
+                          //       return PanelScreen(
+                          //           component: 'Panels',
+                          //           applicationId: widget.applicationId);
+                          //     }),
+                          //   ),
+                          // );
                           updateSelectedStatus(false);
                         },
-                        child: const Text('Edit selection'),
+                        message: 'Edit Selection',
                       ),
                     ],
                   ),

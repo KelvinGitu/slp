@@ -244,7 +244,6 @@ Widget selectBreakerEnclosures({
                 child: Container(
                   height: 40,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
                     color: (enclosure.isSelected == false
                         ? Colors.white
                         : Colors.grey.withOpacity(0.2)),
@@ -315,7 +314,7 @@ Widget selectedTrue({
     padding: const EdgeInsets.symmetric(horizontal: 10),
     child: Column(children: [
       Text(
-        'You have selected the following ${componentsModel.name} as part of the installation',
+        'You have selected the following ${componentsModel.name} for the installation',
         style: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w500,

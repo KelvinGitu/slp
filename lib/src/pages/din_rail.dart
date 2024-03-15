@@ -90,7 +90,7 @@ class _DINRailState extends ConsumerState<DINRail> {
                           Text(
                             'A ${component.name} is determined by the choice of adapter box.',
                             style: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w600),
+                                fontSize: 16, fontWeight: FontWeight.w500),
                           ),
                           const SizedBox(height: 40),
                           ConfirmSelectionButton(
@@ -117,7 +117,7 @@ class _DINRailState extends ConsumerState<DINRail> {
                               Text(
                                 'A ${component.name} is not required as the client has chosen to use a plastic adapter box',
                                 style: const TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w600),
+                                    fontSize: 16, fontWeight: FontWeight.w500),
                               ),
                               const SizedBox(height: 40),
                               ConfirmSelectionButton(
@@ -133,13 +133,13 @@ class _DINRailState extends ConsumerState<DINRail> {
                               const Text(
                                 'The client has selected to use a steel adapter box. A DIN Rail was added automatically to the installation requirements',
                                 style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w600),
+                                    fontSize: 16, fontWeight: FontWeight.w500),
                               ),
-                              const SizedBox(height: 15),
+                              const SizedBox(height: 20),
                               Text(
                                 'Total cost: ${component.cost} KES',
                                 style: const TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w600),
+                                    fontSize: 16, fontWeight: FontWeight.w700),
                               ),
                               const SizedBox(height: 40),
                               ConfirmSelectionButton(

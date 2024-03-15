@@ -376,8 +376,7 @@ Widget selectedTrue({
         'Total cost: KES ${componentsModel.cost}',
         style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
       ),
-      const SizedBox(height: 20),
-      const SizedBox(height: 30),
+      const SizedBox(height: 40),
       Align(
         alignment: Alignment.topCenter,
         child: ConfirmSelectionButton(

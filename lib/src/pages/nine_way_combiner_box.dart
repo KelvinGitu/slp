@@ -84,14 +84,14 @@ class _NineWayCombinerEnclosureState extends ConsumerState<NineWayCombinerBox> {
             child: (component.isSelected == false)
                 ? Column(
                     children: [
-                      const Text(
-                        'One 9 way combiner box will be added automatically as part of the installation',
-                        style: TextStyle(
+                      Text(
+                        'One ${component.name} box will be added as part of the installation',
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      const SizedBox(height: 25),
+                      const SizedBox(height: 15),
                       Text(
                         'Approximate cost: KES ${component.cost}',
                         style: const TextStyle(
@@ -99,34 +99,33 @@ class _NineWayCombinerEnclosureState extends ConsumerState<NineWayCombinerBox> {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      const SizedBox(height: 25),
-                      OutlinedButton(
+                      const SizedBox(height: 40),
+                      ConfirmSelectionButton(
                         onPressed: () {
-                          // updateComponentCost();
                           updateComponentQuanity();
                           updateSelectedStatus(true);
                           updateApplicationQuotation();
                         },
-                        child: const Text('Confirm selection'),
+                        message: 'Confirm Selecction',
                       ),
                     ],
                   )
                 : Column(
                     children: [
-                      const Text(
-                        'The box has already been included in the installation',
-                        style: TextStyle(
+                      Text(
+                        'One ${component.name} has been included in the installation',
+                        style: const TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 16,
                         ),
                       ),
-                      const SizedBox(height: 15),
+                      const SizedBox(height: 20),
                       Text(
                         'Total cost: ${component.cost}',
                         style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500),
+                            fontSize: 16, fontWeight: FontWeight.w700),
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 40),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 40),
                         child: ConfirmSelectionButton(

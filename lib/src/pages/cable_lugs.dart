@@ -185,9 +185,9 @@ Widget selectCableLugs({
     children: [
       const Text(
         'Please select all the cable lugs required for the installation',
-        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
       ),
-      const SizedBox(height: 10),
+      const SizedBox(height: 15),
       const Padding(
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: Row(
@@ -348,7 +348,7 @@ Widget selectedTrue({
       'Total cost: KES ${componentsModel.cost}',
       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
     ),
-    const SizedBox(height: 20),
+    const SizedBox(height: 40),
     Padding(
       padding: const EdgeInsets.symmetric(horizontal: 40),
       child: ConfirmSelectionButton(

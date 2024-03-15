@@ -23,10 +23,6 @@ class PipingScreen extends ConsumerStatefulWidget {
 class _PipingScreenState extends ConsumerState<PipingScreen> {
   late List<String> arguments;
 
-  bool validate = false;
-
-  bool storageDevice = false;
-
   @override
   void initState() {
     arguments = [widget.applicationId, widget.component];
@@ -50,11 +46,19 @@ class _PipingScreenState extends ConsumerState<PipingScreen> {
           widget.applicationId,
           widget.component,
         );
-    for (PipingComponentsModel piping in pipings) {
-      cost = cost + piping.cost;
+    if (pipings.isNotEmpty) {
+      for (PipingComponentsModel piping in pipings) {
+        cost = cost + piping.cost;
+        ref.read(solarControllerProvider).updateApplicationComponentCost(
+              widget.component,
+              cost,
+              widget.applicationId,
+            );
+      }
+    } else {
       ref.read(solarControllerProvider).updateApplicationComponentCost(
             widget.component,
-            cost,
+            0,
             widget.applicationId,
           );
     }
@@ -112,7 +116,7 @@ class _PipingScreenState extends ConsumerState<PipingScreen> {
                           child: CircularProgressIndicator(),
                         ),
                       ),
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 40),
                       Align(
                         alignment: Alignment.topCenter,
                         child: ConfirmSelectionButton(
@@ -221,7 +225,7 @@ Widget pipingComponents({
                 child: Container(
                   height: 40,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
+                    // borderRadius: BorderRadius.circular(10),
                     color: (piping.isSelected == false
                         ? Colors.white
                         : Colors.grey.withOpacity(0.2)),
@@ -284,81 +288,78 @@ Widget selectedTrue({
   }
 
   final size = MediaQuery.of(context).size;
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 10),
-    child: Column(children: [
-      const Text(
-        'You have selected the following battery cables as part of the installation',
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
-        ),
+  return Column(children: [
+    const Text(
+      'You have selected the following piping components for the installation',
+      style: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
       ),
-      const SizedBox(height: 20),
-      const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Component (units)',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
-            ),
-            Text(
-              'Cost',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
-            )
-          ],
-        ),
+    ),
+    const SizedBox(height: 20),
+    const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'Component (units)',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
+          ),
+          Text(
+            'Cost',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
+          )
+        ],
       ),
-      SizedBox(
-        height: size.height * 0.3,
-        child: ListView.builder(
-          itemCount: pipings.length,
-          itemBuilder: ((context, index) {
-            final piping = pipings[index];
-            return SizedBox(
-              height: 40,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '${piping.name} (${piping.quantity})',
-                      style: const TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.w500),
-                    ),
-                    Text(
-                      piping.cost.toString(),
-                      style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.w500),
-                    )
-                  ],
-                ),
+    ),
+    SizedBox(
+      height: size.height * 0.3,
+      child: ListView.builder(
+        itemCount: pipings.length,
+        itemBuilder: ((context, index) {
+          final piping = pipings[index];
+          return SizedBox(
+            height: 40,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '${piping.name} (${piping.quantity})',
+                    style: const TextStyle(
+                        fontSize: 14, fontWeight: FontWeight.w500),
+                  ),
+                  Text(
+                    piping.cost.toString(),
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w500),
+                  )
+                ],
               ),
-            );
-          }),
-        ),
+            ),
+          );
+        }),
       ),
-      const SizedBox(height: 20),
-      Text(
-        'Total cost: KES ${componentsModel.cost}',
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+    ),
+    const SizedBox(height: 20),
+    Text(
+      'Total cost: KES ${componentsModel.cost}',
+      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+    ),
+    const SizedBox(height: 20),
+    const SizedBox(height: 30),
+    Align(
+      alignment: Alignment.topCenter,
+      child: ConfirmSelectionButton(
+        onPressed: () {
+          updateComponentCost(0);
+          updateSelectedStatus(false);
+          updateApplicationQuotation();
+        },
+        message: 'Edit Selection',
       ),
-      const SizedBox(height: 20),
-      const SizedBox(height: 30),
-      Align(
-        alignment: Alignment.topCenter,
-        child: ConfirmSelectionButton(
-          onPressed: () {
-            updateComponentCost(0);
-            updateSelectedStatus(false);
-            updateApplicationQuotation();
-          },
-          message: 'Edit Selection',
-        ),
-      ),
-    ]),
-  );
+    ),
+  ]);
 }

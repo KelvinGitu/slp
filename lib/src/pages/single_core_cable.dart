@@ -254,7 +254,6 @@ Widget chooseCables({
                 child: Container(
                   height: 40,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
                     color: (cable.isSelected == false
                         ? Colors.white
                         : Colors.grey.withOpacity(0.2)),
@@ -317,88 +316,85 @@ Widget selectedTrue({
   }
 
   final size = MediaQuery.of(context).size;
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 10),
-    child: Column(children: [
-      const Text(
-        'You have selected the following single core as part of the installation requirements',
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
-        ),
+  return Column(children: [
+    const Text(
+      'You have selected the following single core cable for the installation',
+      style: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
       ),
-      const SizedBox(height: 20),
-      const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Cable',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
-            ),
-            Text(
-              'Cost (KES)',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
-            )
-          ],
-        ),
+    ),
+    const SizedBox(height: 20),
+    const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'Cable',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
+          ),
+          Text(
+            'Cost (KES)',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
+          )
+        ],
       ),
-      SizedBox(
-        height: size.height * 0.1,
-        child: ListView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: cables.length,
-          itemBuilder: ((context, index) {
-            final cable = cables[index];
-            return SizedBox(
-              height: 45,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      width: 200,
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 12),
-                        child: Text(
-                          '${cable.name} (4m)',
-                          style: const TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.w500),
-                        ),
+    ),
+    SizedBox(
+      height: size.height * 0.1,
+      child: ListView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: cables.length,
+        itemBuilder: ((context, index) {
+          final cable = cables[index];
+          return SizedBox(
+            height: 45,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    width: 200,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 12),
+                      child: Text(
+                        '${cable.name} (4m)',
+                        style: const TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w500),
                       ),
                     ),
-                    Text(
-                      cable.cost.toString(),
-                      style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.w500),
-                    )
-                  ],
-                ),
+                  ),
+                  Text(
+                    cable.cost.toString(),
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w500),
+                  )
+                ],
               ),
-            );
-          }),
-        ),
+            ),
+          );
+        }),
       ),
-      const SizedBox(height: 20),
-      Text(
-        'Total cost: KES ${componentsModel.cost}',
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+    ),
+    const SizedBox(height: 20),
+    Text(
+      'Total cost: KES ${componentsModel.cost}',
+      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+    ),
+    const SizedBox(height: 20),
+    const SizedBox(height: 30),
+    Align(
+      alignment: Alignment.topCenter,
+      child: ConfirmSelectionButton(
+        onPressed: () {
+          updateComponentCost(0);
+          updateSelectedStatus(false);
+          updateApplicationQuotation();
+        },
+        message: 'Edit Selection',
       ),
-      const SizedBox(height: 20),
-      const SizedBox(height: 30),
-      Align(
-        alignment: Alignment.topCenter,
-        child: ConfirmSelectionButton(
-          onPressed: () {
-            updateComponentCost(0);
-            updateSelectedStatus(false);
-            updateApplicationQuotation();
-          },
-          message: 'Edit Selection',
-        ),
-      ),
-    ]),
-  );
+    ),
+  ]);
 }

@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:solar_project/core/prices.dart';
 import 'package:solar_project/src/controller/core_cables_controller.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
 import 'package:solar_project/src/widgets/confirm_selection_button.dart';
@@ -61,7 +62,7 @@ class _TenMMCoreCableState extends ConsumerState<CoreCable> {
   }
 
   void updateComponentCost() {
-    int cost = int.parse(cableLengthController.text) * 2 * 40;
+    int cost = int.parse(cableLengthController.text) * 2 * Prices.coreCable;
     ref.watch(solarControllerProvider).updateApplicationComponentCost(
           widget.component,
           cost,
@@ -118,7 +119,7 @@ class _TenMMCoreCableState extends ConsumerState<CoreCable> {
                       const Text(
                         'Measures of determination',
                         style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500),
+                            fontSize: 16, fontWeight: FontWeight.w600),
                       ),
                       const SizedBox(height: 10),
                       Container(
@@ -169,18 +170,18 @@ class _TenMMCoreCableState extends ConsumerState<CoreCable> {
                                   ),
                                   const SizedBox(height: 15),
                                   const Text(
-                                    'What is the length between inverter and distribution box?',
+                                    'What is the distance between inverter and distribution box?',
                                     style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w500),
                                   ),
-                                  const SizedBox(height: 10),
+                                  const SizedBox(height: 15),
                                   TextField(
                                     controller: cableLengthController,
                                     keyboardType:
                                         const TextInputType.numberWithOptions(),
                                     decoration: InputDecoration(
-                                      hintText: 'Length in metres',
+                                      hintText: 'Distance in metres',
                                       hintStyle: TextStyle(
                                           fontSize: 14,
                                           color: Colors.black.withOpacity(0.6)),
@@ -193,9 +194,9 @@ class _TenMMCoreCableState extends ConsumerState<CoreCable> {
                                     ),
                                   ),
                                   const Text(
-                                    '*Cable cost per metre = KES40',
+                                    '*Cable cost per metre = KES ${Prices.coreCable}',
                                     style: TextStyle(
-                                        fontSize: 12, color: Colors.red),
+                                        fontSize: 10, color: Colors.red),
                                   ),
                                   const SizedBox(height: 20),
                                   Align(
@@ -257,13 +258,13 @@ class _TenMMCoreCableState extends ConsumerState<CoreCable> {
                         style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w500),
                       ),
-                      const SizedBox(height: 15),
+                      const SizedBox(height: 20),
                       Text(
                         'Total cost: ${component.cost}',
                         style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500),
+                            fontSize: 16, fontWeight: FontWeight.w700),
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 40),
                       ConfirmSelectionButton(
                           onPressed: () {
                             updateSelectedStatus(false);

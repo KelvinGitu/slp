@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
+import 'package:solar_project/src/widgets/confirm_selection_button.dart';
 
 class InverterModuleScreen extends ConsumerStatefulWidget {
   final String component;
@@ -46,75 +47,80 @@ class _InverterModelScreenState extends ConsumerState<InverterModuleScreen> {
           ),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Column(
-              children: [
-                const Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Measures of determination',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                    )),
-                const SizedBox(height: 10),
-                Container(
-                  height: 100,
-                  width: MediaQuery.of(context).size.width,
-                  padding: const EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.3),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: ListView.builder(
-                    itemCount: component.measurement.length,
-                    itemBuilder: ((context, index) {
-                      return SizedBox(
-                          height: 30,
-                          child: Text(component.measurement[index]));
-                    }),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                (component.isSelected == false)
-                    ? const Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          'What is the energy output from the panels of choice?',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500),
+            child: (component.isSelected == false)
+                ? Column(
+                    children: [
+                      const Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            'Measures of determination',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w500),
+                          )),
+                      const SizedBox(height: 10),
+                      Container(
+                        height: 100,
+                        width: MediaQuery.of(context).size.width,
+                        padding: const EdgeInsets.all(15),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.withOpacity(0.3),
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                      )
-                    : Container(),
-                const SizedBox(height: 10),
-                (component.isSelected == false)
-                    ? TextField(
-                        controller: powerController,
-                        onSubmitted: (value) {
-                          // calculatePanelCost();
+                        child: ListView.builder(
+                          itemCount: component.measurement.length,
+                          itemBuilder: ((context, index) {
+                            return SizedBox(
+                                height: 30,
+                                child: Text(component.measurement[index]));
+                          }),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      (component.isSelected == false)
+                          ? const Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                'What is the energy output from the panels of choice?',
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w500),
+                              ),
+                            )
+                          : Container(),
+                      const SizedBox(height: 10),
+                      (component.isSelected == false)
+                          ? TextField(
+                              controller: powerController,
+                              onSubmitted: (value) {
+                                // calculatePanelCost();
+                              },
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(),
+                              decoration: InputDecoration(
+                                hintText: 'Energy Output in W/m²',
+                                hintStyle: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.black.withOpacity(0.6)),
+                                border: InputBorder.none,
+                                filled: true,
+                                fillColor: Colors.grey.withOpacity(0.2),
+                                errorText:
+                                    validate ? "Value Can't Be Empty" : null,
+                              ),
+                            )
+                          : Container(),
+                      const SizedBox(height: 40),
+                      ConfirmSelectionButton(
+                        onPressed: () {
+                          setState(() {
+                            validate = powerController.text.isEmpty;
+                          });
+                          (validate == true) ? null : null;
                         },
-                        keyboardType: const TextInputType.numberWithOptions(),
-                        decoration: InputDecoration(
-                          hintText: 'Energy Output in W/m²',
-                          hintStyle: TextStyle(
-                              fontSize: 14,
-                              color: Colors.black.withOpacity(0.6)),
-                          border: InputBorder.none,
-                          filled: true,
-                          fillColor: Colors.grey.withOpacity(0.2),
-                          errorText: validate ? "Value Can't Be Empty" : null,
-                        ),
-                      )
-                    : Container(),
-                const SizedBox(height: 40),
-                OutlinedButton(
-                    onPressed: () {
-                      setState(() {
-                        validate = powerController.text.isEmpty;
-                      });
-                      (validate == true) ? null : null;
-                    },
-                    child: const Text('Confirm Selection'))
-              ],
-            ),
+                        message: 'Confirm Selection',
+                      ),
+                    ],
+                  )
+                : Container(),
           ),
         );
       },

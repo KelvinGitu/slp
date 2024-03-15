@@ -24,7 +24,6 @@ class BatteryCableWidget extends ConsumerStatefulWidget {
 
 class _BatteryCableWidgetState extends ConsumerState<BatteryCableWidget> {
   final TextEditingController cableLengthController = TextEditingController();
-  
 
   bool validate = false;
 
@@ -64,7 +63,7 @@ class _BatteryCableWidgetState extends ConsumerState<BatteryCableWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,32 +113,33 @@ class _BatteryCableWidgetState extends ConsumerState<BatteryCableWidget> {
                 ? Align(
                     alignment: Alignment.topCenter,
                     child: ConfirmSelectionButton(
-                        onPressed: () {
+                      onPressed: () {
+                        setState(() {
                           setState(() {
-                            setState(() {
-                              validate = cableLengthController.text.isEmpty;
-                            });
+                            validate = cableLengthController.text.isEmpty;
                           });
-                          (validate == true)
-                              ? null
-                              : updateSelectedStatus(
-                                  true, widget.cable.crossSection);
-                          (validate == true)
-                              ? null
-                              : updateSelectedCableLength(
-                                  int.parse(cableLengthController.text),
-                                  widget.cable.crossSection,
-                                );
-                          (validate == true)
-                              ? null
-                              : updateSelectedCableCost(
-                                  int.parse(cableLengthController.text) *
-                                      widget.cable.price,
-                                  widget.cable.crossSection,
-                                );
-                          (validate == true) ? null : Navigator.pop(context);
-                        },
-                        message: 'Select'),
+                        });
+                        (validate == true)
+                            ? null
+                            : updateSelectedStatus(
+                                true, widget.cable.crossSection);
+                        (validate == true)
+                            ? null
+                            : updateSelectedCableLength(
+                                int.parse(cableLengthController.text),
+                                widget.cable.crossSection,
+                              );
+                        (validate == true)
+                            ? null
+                            : updateSelectedCableCost(
+                                int.parse(cableLengthController.text) *
+                                    widget.cable.price,
+                                widget.cable.crossSection,
+                              );
+                        (validate == true) ? null : Navigator.pop(context);
+                      },
+                      message: 'Confirm',
+                    ),
                   )
                 : Align(
                     alignment: Alignment.topCenter,

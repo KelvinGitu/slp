@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:solar_project/core/prices.dart';
 import 'package:solar_project/src/controller/pv_cables_controller.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
 import 'package:solar_project/src/widgets/confirm_selection_button.dart';
@@ -28,6 +29,10 @@ class _PVCableSixMMState extends ConsumerState<PVCable> {
   late List<String> inverterArguments;
 
   bool validate = false;
+
+  bool validate2 = false;
+
+  bool validate3 = false;
 
   @override
   void initState() {
@@ -57,7 +62,7 @@ class _PVCableSixMMState extends ConsumerState<PVCable> {
     int cost = ((int.parse(cableLengthController.text) * 2) +
             int.parse(cable2LengthController.text) +
             (int.parse(cable3LengthController.text) * 2)) *
-        40;
+        Prices.pvCable;
     ref.watch(solarControllerProvider).updateApplicationComponentCost(
           widget.component,
           cost,
@@ -231,7 +236,7 @@ class _PVCableSixMMState extends ConsumerState<PVCable> {
                                       border: InputBorder.none,
                                       filled: true,
                                       fillColor: Colors.grey.withOpacity(0.2),
-                                      errorText: validate
+                                      errorText: validate2
                                           ? "Value Can't Be Empty"
                                           : null,
                                     ),
@@ -256,13 +261,13 @@ class _PVCableSixMMState extends ConsumerState<PVCable> {
                                       border: InputBorder.none,
                                       filled: true,
                                       fillColor: Colors.grey.withOpacity(0.2),
-                                      errorText: validate
+                                      errorText: validate3
                                           ? "Value Can't Be Empty"
                                           : null,
                                     ),
                                   ),
                                   const Text(
-                                    '*Cable cost per metre = KES40',
+                                    '*Cable cost per metre = KES ${Prices.pvCable}',
                                     style: TextStyle(
                                         fontSize: 10, color: Colors.red),
                                   ),
@@ -274,21 +279,25 @@ class _PVCableSixMMState extends ConsumerState<PVCable> {
                                         setState(() {
                                           validate = cableLengthController
                                               .text.isEmpty;
+                                          validate2 = cable2LengthController
+                                              .text.isEmpty;
+                                          validate3 = cable3LengthController
+                                              .text.isEmpty;
                                         });
-                                        (validate == true)
+                                        (validate == true || validate2 == true || validate3 == true)
                                             ? null
                                             : updateComponentCost();
-                                        (validate == true)
+                                        (validate == true || validate2 == true || validate3 == true)
                                             ? null
                                             : updateSelectedStatus(true);
-                                        (validate == true)
+                                        (validate == true || validate2 == true || validate3 == true)
                                             ? null
                                             : checkLength(finalCrossSection);
                                         // (validate == true)
                                         //     ? null
                                         //     : updateCompoenentCrossSection(
                                         //         finalCrossSection);
-                                        (validate == true)
+                                        (validate == true  || validate2 == true || validate3 == true)
                                             ? null
                                             : updateApplicationQuotation();
                                       },
@@ -326,13 +335,13 @@ class _PVCableSixMMState extends ConsumerState<PVCable> {
                         style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w500),
                       ),
-                      const SizedBox(height: 15),
+                      const SizedBox(height: 20),
                       Text(
                         'Total cost: ${component.cost}',
                         style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500),
+                            fontSize: 16, fontWeight: FontWeight.w700),
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 40),
                       ConfirmSelectionButton(
                           onPressed: () {
                             updateSelectedStatus(false);

@@ -233,8 +233,8 @@ Widget selectCommunicationComponents({
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       const Text(
-        'Please select all the cables required for the installation',
-        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        'Please select all the components required for the installation',
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
       ),
       const SizedBox(height: 10),
       const Padding(
@@ -285,7 +285,7 @@ Widget selectCommunicationComponents({
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                height: 30,
+                height: 40,
                 decoration: BoxDecoration(
                   // borderRadius: BorderRadius.circular(10),
                   color: (comp.isSelected == false
@@ -342,7 +342,7 @@ Widget componentNotRequired({
     children: [
       const Text(
         'This component is not required for this installation',
-        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
       ),
       const SizedBox(height: 40),
       ConfirmSelectionButton(

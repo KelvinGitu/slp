@@ -215,7 +215,6 @@ Widget chooseBoxes({
           ],
         ),
       ),
-      const SizedBox(height: 15),
       SizedBox(
         height: size.height * 0.15,
         child: ListView.builder(

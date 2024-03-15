@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:solar_project/core/prices.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
 import 'package:solar_project/src/widgets/confirm_selection_button.dart';
 
@@ -135,7 +136,7 @@ class _LabourState extends ConsumerState<Labour> {
                         'How many technicians are required for this installation?',
                         style: TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                       const SizedBox(height: 15),
@@ -154,7 +155,7 @@ class _LabourState extends ConsumerState<Labour> {
                         ),
                       ),
                       const Text(
-                        '*Price per day: KES 2300',
+                        '*Price per day: KES ${Prices.technicians}',
                         style: TextStyle(fontSize: 10, color: Colors.red),
                       ),
                       const SizedBox(height: 15),
@@ -162,7 +163,7 @@ class _LabourState extends ConsumerState<Labour> {
                         'How many days are required to complete the installation?',
                         style: TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                       const SizedBox(height: 15),
@@ -193,7 +194,7 @@ class _LabourState extends ConsumerState<Labour> {
                                 ? null
                                 : updateComponentCost(
                                     int.parse(labourController.text) *
-                                        2300 *
+                                        Prices.technicians *
                                         int.parse(daysController.text));
                             (validate == true || validate2 == true)
                                 ? null
@@ -222,7 +223,7 @@ class _LabourState extends ConsumerState<Labour> {
                         'No. of technicians: ${component.capacity}',
                         style: const TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                       const SizedBox(height: 15),
@@ -230,15 +231,15 @@ class _LabourState extends ConsumerState<Labour> {
                         'No. of days: ${component.quantity}',
                         style: const TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
-                      const SizedBox(height: 15),
+                      const SizedBox(height: 20),
                       Text(
                         'Total cost: KES ${component.cost}',
                         style: const TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                       const SizedBox(height: 40),

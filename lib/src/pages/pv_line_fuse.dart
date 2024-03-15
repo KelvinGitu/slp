@@ -236,7 +236,6 @@ Widget selectFuses({
                 child: Container(
                   height: 40,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
                     color: (fuse.isSelected == false
                         ? Colors.white
                         : Colors.grey.withOpacity(0.2)),
@@ -300,83 +299,80 @@ Widget selectedTrue({
   }
 
   final size = MediaQuery.of(context).size;
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 10),
-    child: Column(children: [
-      Text(
-        'You have selected the following ${componentsModel.name} as part of the installation',
-        style: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
-        ),
+  return Column(children: [
+    Text(
+      'You have selected the following ${componentsModel.name} for the installation',
+      style: const TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
       ),
-      const SizedBox(height: 20),
-      const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Fuse',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
-            ),
-            Text(
-              'Cost (KES)',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
-            )
-          ],
-        ),
+    ),
+    const SizedBox(height: 20),
+    const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'Fuse',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
+          ),
+          Text(
+            'Cost (KES)',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
+          )
+        ],
       ),
-      SizedBox(
-        height: size.height * 0.1,
-        child: ListView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: fuses.length,
-          itemBuilder: ((context, index) {
-            final fuse = fuses[index];
-            return SizedBox(
-              height: 45,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      fuse.name,
-                      textAlign: TextAlign.start,
-                      style: const TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.w500),
-                    ),
-                    Text(
-                      fuse.cost.toString(),
-                      style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.w500),
-                    )
-                  ],
-                ),
+    ),
+    SizedBox(
+      height: size.height * 0.1,
+      child: ListView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: fuses.length,
+        itemBuilder: ((context, index) {
+          final fuse = fuses[index];
+          return SizedBox(
+            height: 45,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    fuse.name,
+                    textAlign: TextAlign.start,
+                    style: const TextStyle(
+                        fontSize: 14, fontWeight: FontWeight.w500),
+                  ),
+                  Text(
+                    fuse.cost.toString(),
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w500),
+                  )
+                ],
               ),
-            );
-          }),
-        ),
+            ),
+          );
+        }),
       ),
-      const SizedBox(height: 20),
-      Text(
-        'Total cost: KES ${componentsModel.cost}',
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+    ),
+    const SizedBox(height: 20),
+    Text(
+      'Total cost: KES ${componentsModel.cost}',
+      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+    ),
+    const SizedBox(height: 20),
+    const SizedBox(height: 30),
+    Align(
+      alignment: Alignment.topCenter,
+      child: ConfirmSelectionButton(
+        onPressed: () {
+          updateComponentCost(0);
+          updateSelectedStatus(false);
+          updateApplicationQuotation();
+        },
+        message: 'Edit Selection',
       ),
-      const SizedBox(height: 20),
-      const SizedBox(height: 30),
-      Align(
-        alignment: Alignment.topCenter,
-        child: ConfirmSelectionButton(
-          onPressed: () {
-            updateComponentCost(0);
-            updateSelectedStatus(false);
-            updateApplicationQuotation();
-          },
-          message: 'Edit Selection',
-        ),
-      ),
-    ]),
-  );
+    ),
+  ]);
 }

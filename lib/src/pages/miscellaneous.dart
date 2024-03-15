@@ -118,7 +118,7 @@ class _MiscellaneousState extends ConsumerState<Miscellaneous> {
                             'Are there any miscellaneous costs that should be included in the application?',
                             style: TextStyle(
                               fontSize: 16,
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                           const SizedBox(height: 15),
@@ -171,7 +171,7 @@ class _MiscellaneousState extends ConsumerState<Miscellaneous> {
                                       'Include the description below',
                                       style: TextStyle(
                                         fontSize: 16,
-                                        fontWeight: FontWeight.w600,
+                                        fontWeight: FontWeight.w500,
                                       ),
                                     ),
                                     const SizedBox(height: 15),
@@ -203,7 +203,7 @@ class _MiscellaneousState extends ConsumerState<Miscellaneous> {
                                       'What is the total cost?',
                                       style: TextStyle(
                                         fontSize: 16,
-                                        fontWeight: FontWeight.w600,
+                                        fontWeight: FontWeight.w500,
                                       ),
                                     ),
                                     const SizedBox(height: 15),
@@ -289,12 +289,12 @@ class _MiscellaneousState extends ConsumerState<Miscellaneous> {
                               }),
                             ),
                           ),
-                          const SizedBox(height: 15),
+                          const SizedBox(height: 20),
                           Text(
                             'Total cost: KES ${component.cost}',
                             style: const TextStyle(
                               fontSize: 16,
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                           const SizedBox(height: 40),
@@ -352,7 +352,7 @@ Widget componentNotRequired({
       Container(),
       const Text(
         'This component is not required for this installation',
-        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
       ),
       const SizedBox(height: 40),
       ConfirmSelectionButton(

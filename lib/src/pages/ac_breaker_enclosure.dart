@@ -96,17 +96,27 @@ class _ACBreakerConsumerState extends ConsumerState<ACBreakerEnclosure> {
           ),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: (component.isSelected == false)
+            child:
+             (component.isRequired == false &&
+                    component.isSelected == false)
+                ? componentNotRequired(
+                    context: context,
+                    applicationId: widget.applicationId,
+                    component: widget.component,
+                    ref: ref,
+                  )
+                : 
+             (component.isSelected == false)
                 ? Column(
                     children: [
                       const Text(
                         'Is a breaker enclosure required for this installation?',
                         style: TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
-                      const SizedBox(height: 15),
+                      const SizedBox(height: 20),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Row(
@@ -132,6 +142,7 @@ class _ACBreakerConsumerState extends ConsumerState<ACBreakerEnclosure> {
                                       Colors.purple.withOpacity(0.4);
                                   yesbackgroundColor = Colors.white;
                                 });
+                                updateRequiredStatus(false);
                               },
                               yesNo: 'No',
                               background: nobackgroundColor,
@@ -147,7 +158,7 @@ class _ACBreakerConsumerState extends ConsumerState<ACBreakerEnclosure> {
                                   'An ${component.name} will be added automatically to the installation requirements',
                                   style: const TextStyle(
                                     fontSize: 16,
-                                    fontWeight: FontWeight.w600,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
                                 const SizedBox(height: 40),
@@ -161,15 +172,7 @@ class _ACBreakerConsumerState extends ConsumerState<ACBreakerEnclosure> {
                                 ),
                               ],
                             )
-                          : ConfirmSelectionButton(
-                              onPressed: () {
-                                updateSelectedStatus(false);
-                                updateRequiredStatus(false);
-                                updateApplicationQuotation();
-                                Navigator.pop(context);
-                              },
-                              message: 'Exit',
-                            ),
+                          : Container(),
                     ],
                   )
                 : Column(
@@ -178,7 +181,7 @@ class _ACBreakerConsumerState extends ConsumerState<ACBreakerEnclosure> {
                         'One ${component.name} was added to the installation requirements',
                         style: const TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                       const SizedBox(height: 15),
@@ -186,7 +189,7 @@ class _ACBreakerConsumerState extends ConsumerState<ACBreakerEnclosure> {
                         'Total cost: ${component.cost}',
                         style: const TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                       const SizedBox(height: 40),
@@ -210,3 +213,51 @@ class _ACBreakerConsumerState extends ConsumerState<ACBreakerEnclosure> {
     );
   }
 }
+
+Widget componentNotRequired({
+  required BuildContext context,
+  required String applicationId,
+  required String component,
+  required WidgetRef ref,
+}) {
+  void updateSelectedStatus(bool selected) {
+    ref.watch(solarControllerProvider).updateApplicationComponentSelectedStatus(
+          component,
+          selected,
+          applicationId,
+        );
+  }
+
+  void updateApplicationQuotation() {
+    ref.watch(solarControllerProvider).updateApplicationQuotation(
+          applicationId,
+        );
+  }
+
+  void updateRequiredStatus(bool selected) {
+    ref.watch(solarControllerProvider).updateApplicationComponentRequiredStatus(
+          component,
+          selected,
+          applicationId,
+        );
+  }
+
+  return Column(
+    children: [
+      const Text(
+        'This component is not required for this installation',
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+      ),
+      const SizedBox(height: 40),
+      ConfirmSelectionButton(
+        onPressed: () {
+          updateRequiredStatus(true);
+          updateSelectedStatus(false);
+          updateApplicationQuotation();
+        },
+        message: 'Edit Selection',
+      ),
+    ],
+  );
+}
+

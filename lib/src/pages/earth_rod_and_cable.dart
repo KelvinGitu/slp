@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:solar_project/core/prices.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
 import 'package:solar_project/src/widgets/confirm_selection_button.dart';
 
@@ -97,28 +98,28 @@ class _EarthRodState extends ConsumerState<EarthRodAndCable> {
             child: (component.isSelected == false)
                 ? ListView(
                     children: [
-                      const Text(
-                        'Measures of determination',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500),
-                      ),
-                      const SizedBox(height: 15),
-                      Container(
-                        height: 100,
-                        width: MediaQuery.of(context).size.width,
-                        padding: const EdgeInsets.all(15),
-                        decoration: BoxDecoration(
-                          color: Colors.grey.withOpacity(0.3),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: ListView.builder(
-                          itemCount: component.measurement.length,
-                          itemBuilder: ((context, index) {
-                            return Text(component.measurement[index]);
-                          }),
-                        ),
-                      ),
-                      const SizedBox(height: 15),
+                      // const Text(
+                      //   'Measures of determination',
+                      //   style: TextStyle(
+                      //       fontSize: 16, fontWeight: FontWeight.w500),
+                      // ),
+                      // const SizedBox(height: 10),
+                      // Container(
+                      //   height: 100,
+                      //   width: MediaQuery.of(context).size.width,
+                      //   padding: const EdgeInsets.all(15),
+                      //   decoration: BoxDecoration(
+                      //     color: Colors.grey.withOpacity(0.3),
+                      //     borderRadius: BorderRadius.circular(10),
+                      //   ),
+                      //   child: ListView.builder(
+                      //     itemCount: component.measurement.length,
+                      //     itemBuilder: ((context, index) {
+                      //       return Text(component.measurement[index]);
+                      //     }),
+                      //   ),
+                      // ),
+                      // const SizedBox(height: 15),
                       const Text(
                         'How many earth rods does the installation require?',
                         style: TextStyle(
@@ -139,6 +140,11 @@ class _EarthRodState extends ConsumerState<EarthRodAndCable> {
                           errorText: validate ? "Value Can't Be Empty" : null,
                         ),
                       ),
+                      const Text(
+                        '*Price per unit = KES ${Prices.earthRod}',
+                        style: TextStyle(fontSize: 10, color: Colors.red),
+                      ),
+                      
                       const SizedBox(height: 15),
                       const Text(
                         'Earthing also requires a 16mm\u00b2 earthing cable. Measure the diatance between panel and earth rod, or metre box if accessible',
@@ -163,7 +169,7 @@ class _EarthRodState extends ConsumerState<EarthRodAndCable> {
                         ),
                       ),
                       const Text(
-                        '*Price per metre = KES 40',
+                        '*Price per metre = KES ${Prices.earthCable}',
                         style: TextStyle(fontSize: 10, color: Colors.red),
                       ),
                       const SizedBox(height: 40),
@@ -186,8 +192,8 @@ class _EarthRodState extends ConsumerState<EarthRodAndCable> {
                               (validate == true || validate2 == true)
                                   ? null
                                   : updateComponentCost(
-                                      int.parse(rodsController.text) * 500 +
-                                          int.parse(cableController.text) * 40);
+                                      int.parse(rodsController.text) * Prices.earthRod +
+                                          int.parse(cableController.text) * Prices.earthCable);
                               (validate == true || validate2 == true)
                                   ? null
                                   : updateSelectedStatus(true);
@@ -209,15 +215,15 @@ class _EarthRodState extends ConsumerState<EarthRodAndCable> {
                       ),
                       const SizedBox(height: 15),
                       Text(
-                        'Length of 16mm\u00b2 earthing cable: ${component.length}',
+                        'Length of 16mm\u00b2 earthing cable: ${component.length}m',
                         style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w500),
                       ),
-                      const SizedBox(height: 15),
+                      const SizedBox(height: 20),
                       Text(
-                        'Total cost: ${component.cost}',
+                        'Total cost: KES ${component.cost}',
                         style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500),
+                            fontSize: 16, fontWeight: FontWeight.w700),
                       ),
                       const SizedBox(height: 40),
                       Align(

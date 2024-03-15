@@ -79,7 +79,7 @@ class _WaterProofScotchTapeState extends ConsumerState<WaterProofScotchTape> {
                           'One ${component.name} is required for this installation',
                           style: const TextStyle(
                             fontSize: 16,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                         const SizedBox(height: 40),
@@ -102,15 +102,15 @@ class _WaterProofScotchTapeState extends ConsumerState<WaterProofScotchTape> {
                           'One ${component.name} was included as part of the installation requirements',
                           style: const TextStyle(
                             fontSize: 16,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
-                        const SizedBox(height: 15),
+                        const SizedBox(height: 20),
                         Text(
                           'Total cost: KES ${component.cost}',
                           style: const TextStyle(
                             fontSize: 16,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                         const SizedBox(height: 40),

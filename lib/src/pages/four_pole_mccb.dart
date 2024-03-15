@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
 import 'package:solar_project/src/widgets/confirm_selection_button.dart';
+import 'package:solar_project/src/widgets/yes_no_button.dart';
 
 class FourPoleMCCB extends ConsumerStatefulWidget {
   final String component;
@@ -117,167 +118,147 @@ class _FourPoleMCBState extends ConsumerState<FourPoleMCCB> {
           ),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: (component.isSelected == false)
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Measures of determination',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500),
-                      ),
-                      const SizedBox(height: 10),
-                      Container(
-                        height: 100,
-                        width: MediaQuery.of(context).size.width,
-                        padding: const EdgeInsets.all(15),
-                        decoration: BoxDecoration(
-                          color: Colors.grey.withOpacity(0.3),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: ListView.builder(
-                          itemCount: component.measurement.length,
-                          itemBuilder: ((context, index) {
-                            return Text(component.measurement[index]);
-                          }),
-                        ),
-                      ),
-                      const SizedBox(height: 15),
-                      const Text(
-                        'Is this component required for the installation?',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const SizedBox(height: 15),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(
-                              height: 25,
-                              width: 120,
-                              child: OutlinedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    isRequired = true;
-                                    yesbackgroundColor =
-                                        Colors.purple.withOpacity(0.4);
-                                    nobackgroundColor = Colors.white;
-                                  });
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(6),
-                                  ),
-                                  backgroundColor: yesbackgroundColor,
-                                ),
-                                child: const Text('Yes'),
-                              ),
+            child: (component.isRequired == false &&
+                    component.isSelected == false)
+                ? componentNotRequired(
+                    context: context,
+                    applicationId: widget.applicationId,
+                    component: widget.component,
+                    ref: ref,
+                  )
+                : (component.isSelected == false)
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Measures of determination',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w500),
+                          ),
+                          const SizedBox(height: 10),
+                          Container(
+                            height: 100,
+                            width: MediaQuery.of(context).size.width,
+                            padding: const EdgeInsets.all(15),
+                            decoration: BoxDecoration(
+                              color: Colors.grey.withOpacity(0.3),
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                            SizedBox(
-                              height: 25,
-                              width: 120,
-                              child: OutlinedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    isRequired = false;
-                                    nobackgroundColor =
-                                        Colors.purple.withOpacity(0.4);
-                                    yesbackgroundColor = Colors.white;
-                                  });
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(6),
-                                  ),
-                                  backgroundColor: nobackgroundColor,
-                                ),
-                                child: const Text('No'),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 40),
-                      (isRequired == true)
-                          ? Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            child: ListView.builder(
+                              itemCount: component.measurement.length,
+                              itemBuilder: ((context, index) {
+                                return Text(component.measurement[index]);
+                              }),
+                            ),
+                          ),
+                          const SizedBox(height: 15),
+                          const Text(
+                            'Is this component required for the installation?',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const SizedBox(height: 15),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  'One ${component.name} circuit breaker will be added automatically as part of the installation',
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                                YesNoButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      isRequired = true;
+                                      yesbackgroundColor =
+                                          Colors.purple.withOpacity(0.4);
+                                      nobackgroundColor = Colors.white;
+                                    });
+                                  },
+                                  yesNo: 'Yes',
+                                  background: yesbackgroundColor,
                                 ),
-                                const SizedBox(height: 40),
-                                Align(
-                                  alignment: Alignment.topCenter,
-                                  child: ConfirmSelectionButton(
-                                    onPressed: () {
-                                      updateSelectedStatus(true);
-                                      updateRequiredStatus(true);
-                                      updateTriplePoleRequiredStatus(false);
-                                      updateDoublePoleRequiredStatus(false);
-                                      updateDoublePoleSelectedStatus(false);
-                                      updateTriplePoleSelectedStatus(false);
-                                      updateComponentQuanity(1);
-                                      updateApplicationQuotation();
-                                    },
-                                    message: 'Confirm Selection',
-                                  ),
+                                YesNoButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      isRequired = false;
+                                      nobackgroundColor =
+                                          Colors.purple.withOpacity(0.4);
+                                      yesbackgroundColor = Colors.white;
+                                    });
+                                    updateRequiredStatus(false);
+                                  },
+                                  yesNo: 'No',
+                                  background: nobackgroundColor,
                                 ),
                               ],
-                            )
-                          : Align(
-                              alignment: Alignment.topCenter,
-                              child: ConfirmSelectionButton(
-                                onPressed: () {
-                                  updateSelectedStatus(false);
-                                  updateRequiredStatus(false);
-                                  updateApplicationQuotation();
-                                  Navigator.pop(context);
-                                },
-                                message: 'Exit',
-                              ),
                             ),
-                    ],
-                  )
-                : Column(
-                    children: [
-                      Text(
-                        'One ${component.name} circuit breaker was added as part of the installation',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                        ),
+                          ),
+                          const SizedBox(height: 40),
+                          (isRequired == true)
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'One ${component.name} circuit breaker will be added automatically as part of the installation',
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 40),
+                                    Align(
+                                      alignment: Alignment.topCenter,
+                                      child: ConfirmSelectionButton(
+                                        onPressed: () {
+                                          updateSelectedStatus(true);
+                                          updateRequiredStatus(true);
+                                          updateTriplePoleRequiredStatus(false);
+                                          updateDoublePoleRequiredStatus(false);
+                                          updateDoublePoleSelectedStatus(false);
+                                          updateTriplePoleSelectedStatus(false);
+                                          updateComponentQuanity(1);
+                                          updateApplicationQuotation();
+                                        },
+                                        message: 'Confirm Selection',
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : Container(),
+                        ],
+                      )
+                    : Column(
+                        children: [
+                          Text(
+                            'One ${component.name} circuit breaker was added as part of the installation',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
+                          ),
+                          const SizedBox(height: 15),
+                          Text(
+                            'Total cost: ${component.cost} KES',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                            ),
+                          ),
+                          const SizedBox(height: 40),
+                          Align(
+                            alignment: Alignment.topCenter,
+                            child: ConfirmSelectionButton(
+                              onPressed: () {
+                                updateSelectedStatus(false);
+                                updateTriplePoleRequiredStatus(true);
+                                updateDoublePoleRequiredStatus(true);
+                                updateComponentQuanity(0);
+                              },
+                              message: 'Edit Selection',
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 15),
-                      Text(
-                        'Total cost: ${component.cost} KES',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                        ),
-                      ),
-                      const SizedBox(height: 40),
-                      Align(
-                        alignment: Alignment.topCenter,
-                        child: ConfirmSelectionButton(
-                          onPressed: () {
-                            updateSelectedStatus(false);
-                            updateTriplePoleRequiredStatus(true);
-                            updateDoublePoleRequiredStatus(true);
-                            updateComponentQuanity(0);
-                          },
-                          message: 'Edit Selection',
-                        ),
-                      ),
-                    ],
-                  ),
           ),
         );
       },
@@ -287,4 +268,51 @@ class _FourPoleMCBState extends ConsumerState<FourPoleMCCB> {
       ),
     );
   }
+}
+
+Widget componentNotRequired({
+  required BuildContext context,
+  required String applicationId,
+  required String component,
+  required WidgetRef ref,
+}) {
+  void updateSelectedStatus(bool selected) {
+    ref.watch(solarControllerProvider).updateApplicationComponentSelectedStatus(
+          component,
+          selected,
+          applicationId,
+        );
+  }
+
+  void updateApplicationQuotation() {
+    ref.watch(solarControllerProvider).updateApplicationQuotation(
+          applicationId,
+        );
+  }
+
+  void updateRequiredStatus(bool selected) {
+    ref.watch(solarControllerProvider).updateApplicationComponentRequiredStatus(
+          component,
+          selected,
+          applicationId,
+        );
+  }
+
+  return Column(
+    children: [
+      const Text(
+        'This component is not required for this installation',
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+      ),
+      const SizedBox(height: 40),
+      ConfirmSelectionButton(
+        onPressed: () {
+          updateRequiredStatus(true);
+          updateSelectedStatus(false);
+          updateApplicationQuotation();
+        },
+        message: 'Edit Selection',
+      ),
+    ],
+  );
 }

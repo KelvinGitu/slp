@@ -134,7 +134,7 @@ class _BatteryFuseState extends ConsumerState<BatteryFuse> {
                             'Does the client prefer a battery fuse to a DC battery breaker?',
                             style: TextStyle(
                               fontSize: 16,
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                           const SizedBox(height: 15),
@@ -224,7 +224,7 @@ Widget componentNotRequired({
     children: [
       const Text(
         'This component is not required for this installation',
-        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
       ),
       const SizedBox(height: 40),
       ConfirmSelectionButton(
@@ -260,7 +260,7 @@ Widget selectedTrue({
         'The client has chosen to use a battery fuse instead of a dc battery breaker',
         style: TextStyle(
           fontSize: 16,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w500,
         ),
       ),
       const SizedBox(height: 15),
@@ -268,7 +268,7 @@ Widget selectedTrue({
         'Total cost: ${componentsModel.cost}',
         style: const TextStyle(
           fontSize: 16,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w700,
         ),
       ),
       const SizedBox(height: 40),

@@ -1,7 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:solar_project/core/prices.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
+import 'package:solar_project/src/widgets/confirm_selection_button.dart';
 
 class PanelScreen extends ConsumerStatefulWidget {
   final String component;
@@ -65,13 +67,6 @@ class _PanelScreenState extends ConsumerState<PanelScreen> {
         );
   }
 
-  int cost = 0;
-
-  Future<int> calculatePanelCost() async {
-    cost = int.parse(panelsController.text) * 10000;
-    return cost;
-  }
-
   @override
   Widget build(BuildContext context) {
     final panelComponent =
@@ -88,21 +83,19 @@ class _PanelScreenState extends ConsumerState<PanelScreen> {
         data: (panel) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Column(
-              children: [
-                (panel.isSelected == false)
-                    ? const Align(
+            child: (panel.isSelected == false)
+                ? Column(
+                    children: [
+                      const Align(
                         alignment: Alignment.topLeft,
                         child: Text(
                           'Measures of determination',
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.w500),
                         ),
-                      )
-                    : Container(),
-                const SizedBox(height: 10),
-                (panel.isSelected == false)
-                    ? Container(
+                      ),
+                      const SizedBox(height: 10),
+                      Container(
                         height: 100,
                         width: MediaQuery.of(context).size.width,
                         padding: const EdgeInsets.all(15),
@@ -116,26 +109,19 @@ class _PanelScreenState extends ConsumerState<PanelScreen> {
                             return Text(panel.measurement[index]);
                           }),
                         ),
-                      )
-                    : Container(),
-                const SizedBox(height: 10),
-                (panel.isSelected == false)
-                    ? const Align(
+                      ),
+                      const SizedBox(height: 10),
+                      const Align(
                         alignment: Alignment.topLeft,
                         child: Text(
                           'How many panels does the client want?',
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.w500),
                         ),
-                      )
-                    : Container(),
-                const SizedBox(height: 10),
-                (panel.isSelected == false)
-                    ? TextField(
+                      ),
+                      const SizedBox(height: 10),
+                      TextField(
                         controller: panelsController,
-                        onSubmitted: (value) {
-                          calculatePanelCost();
-                        },
                         keyboardType: const TextInputType.numberWithOptions(),
                         decoration: InputDecoration(
                           hintText: 'No. of panels',
@@ -147,35 +133,16 @@ class _PanelScreenState extends ConsumerState<PanelScreen> {
                           fillColor: Colors.grey.withOpacity(0.2),
                           errorText: validate ? "Value Can't Be Empty" : null,
                         ),
-                      )
-                    : Align(
+                      ),
+                      const Align(
                         alignment: Alignment.topLeft,
                         child: Text(
-                          'No of panels chosen: ${panel.quantity}',
-                          style: const TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.w500),
+                          '*approximate price: 1 panel = ${Prices.panels}',
+                          style: TextStyle(fontSize: 10, color: Colors.red),
                         ),
                       ),
-                (panel.isSelected == false)
-                    ? const Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          '*approximate price: 1 panel = KES 10,000',
-                          style: TextStyle(fontSize: 10, color: Colors.orange),
-                        ))
-                    : Container(),
-                const SizedBox(height: 20),
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    'Approximate cost: KES ${panel.cost}',
-                    style: const TextStyle(
-                        fontSize: 14, fontWeight: FontWeight.w500),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                (panel.isSelected == false)
-                    ? OutlinedButton(
+                      const SizedBox(height: 40),
+                      ConfirmSelectionButton(
                         onPressed: () {
                           setState(() {
                             validate = panelsController.text.isEmpty;
@@ -183,7 +150,8 @@ class _PanelScreenState extends ConsumerState<PanelScreen> {
                           (validate == true)
                               ? null
                               : updateComponentCost(
-                                  int.parse(panelsController.text) * 10000);
+                                  int.parse(panelsController.text) *
+                                      Prices.panels);
                           (validate == true)
                               ? null
                               : updateComponentQuantity(
@@ -195,31 +163,44 @@ class _PanelScreenState extends ConsumerState<PanelScreen> {
                               ? null
                               : updateApplicationQuotation();
                         },
-                        child: const Text('Confirm selection'),
-                      )
-                    : Column(
-                        children: [
-                          OutlinedButton(
-                            onPressed: () {
-                              updateSelectedStatus(false);
-                              updateComponentCost(0);
-                              updateComponentQuantity(0);
-                              updateApplicationQuotation();
-                            },
-                            child: const Text('Edit selection'),
-                          ),
-                          const SizedBox(height: 10),
-                          const Text(
-                            '*Any changes made here must also be made for the MC4 connecctors',
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: Colors.red,
-                            ),
-                          )
-                        ],
+                        message: 'Confirm Selection',
                       ),
-              ],
-            ),
+                    ],
+                  )
+                : Column(
+                    children: [
+                      Container(),
+                      Text(
+                        'No of panels: ${panel.quantity}',
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w500),
+                      ),
+                      const SizedBox(height: 20),
+                      Text(
+                        'Total Cost: ${panel.cost}',
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w700),
+                      ),
+                      const SizedBox(height: 40),
+                      ConfirmSelectionButton(
+                        onPressed: () {
+                          updateSelectedStatus(false);
+                          updateComponentCost(0);
+                          updateComponentQuantity(0);
+                          updateApplicationQuotation();
+                        },
+                        message: 'Edit Selection',
+                      ),
+                      const SizedBox(height: 10),
+                      const Text(
+                        '*Any changes made here must also be made for the MC4 connecctors',
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: Colors.red,
+                        ),
+                      )
+                    ],
+                  ),
           );
         },
         error: (error, stacktrace) => Text(error.toString()),

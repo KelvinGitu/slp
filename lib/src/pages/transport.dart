@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:solar_project/core/prices.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
 import 'package:solar_project/src/widgets/confirm_selection_button.dart';
 
@@ -113,7 +114,7 @@ class _TransportState extends ConsumerState<Transport> {
                         'What is the time in minutes?',
                         style: TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                       const SizedBox(height: 15),
@@ -132,7 +133,7 @@ class _TransportState extends ConsumerState<Transport> {
                         ),
                       ),
                       const Text(
-                        '*Price per minute: KES 40',
+                        '*Price per minute: KES ${Prices.transport}',
                         style: TextStyle(fontSize: 10, color: Colors.red),
                       ),
                       const SizedBox(height: 40),
@@ -146,7 +147,7 @@ class _TransportState extends ConsumerState<Transport> {
                             (validate == true)
                                 ? null
                                 : updateComponentCost(
-                                    int.parse(timeController.text) * 40);
+                                    int.parse(timeController.text) * Prices.transport);
                             (validate == true)
                                 ? null
                                 : updateComponentQuanity(
@@ -167,18 +168,18 @@ class _TransportState extends ConsumerState<Transport> {
                     children: [
                       Container(),
                       Text(
-                        'Total transport time ${component.quantity} minutes',
+                        'Total transport time: ${component.quantity} minutes',
                         style: const TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
-                      const SizedBox(height: 15),
+                      const SizedBox(height: 20),
                       Text(
                         'Total cost: KES ${component.cost}',
                         style: const TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                       const SizedBox(height: 40),

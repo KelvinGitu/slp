@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:solar_project/src/controller/isolator_switches_controller.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
+import 'package:solar_project/src/widgets/confirm_selection_button.dart';
 
 class InverterManualIsolator extends ConsumerStatefulWidget {
   final String component;
@@ -22,6 +23,12 @@ class _InverterManualIsolatorState
     extends ConsumerState<InverterManualIsolator> {
   final TextEditingController ratingController = TextEditingController();
 
+  @override
+  void dispose() {
+    ratingController.dispose();
+    super.dispose();
+  }
+
   late List<String> arguments;
 
   bool validate = false;
@@ -40,7 +47,9 @@ class _InverterManualIsolatorState
   }
 
   void saveIsolatorsToApplication() {
-    ref.watch(isolatorSwitchesControllerProvider).saveIsolatorSwitchToApplication(
+    ref
+        .watch(isolatorSwitchesControllerProvider)
+        .saveIsolatorSwitchToApplication(
           applicationId: widget.applicationId,
           component: widget.component,
         );
@@ -93,15 +102,12 @@ class _InverterManualIsolatorState
           ),
           body: (component.isSelected == false)
               ? ListView(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   children: [
-                    const Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'Measures of determination',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500),
-                      ),
+                    const Text(
+                      'Measures of determination',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                     ),
                     const SizedBox(height: 10),
                     Container(
@@ -128,7 +134,7 @@ class _InverterManualIsolatorState
                             fontSize: 16, fontWeight: FontWeight.w500),
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 15),
                     TextField(
                       controller: ratingController,
                       onChanged: (value) {
@@ -148,6 +154,7 @@ class _InverterManualIsolatorState
                         errorText: validate ? "Value Can't Be Empty" : null,
                       ),
                     ),
+                    const SizedBox(height: 10),
                     (showRating == true &&
                             ratingController.text.isEmpty == false &&
                             ratingSelected == false)
@@ -161,12 +168,12 @@ class _InverterManualIsolatorState
                                       'Recommended switches',
                                       style: TextStyle(
                                           fontSize: 16,
-                                          fontWeight: FontWeight.w600),
+                                          fontWeight: FontWeight.w500),
                                     ),
                                     const SizedBox(height: 10),
                                     const Padding(
                                       padding:
-                                          EdgeInsets.symmetric(horizontal: 40),
+                                          EdgeInsets.symmetric(horizontal: 20),
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
@@ -189,7 +196,7 @@ class _InverterManualIsolatorState
                                     Expanded(
                                       child: ListView.builder(
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: 40),
+                                            horizontal: 20),
                                         itemCount: isolatorSwitch.length,
                                         itemBuilder: (context, index) {
                                           final isolator =
@@ -208,7 +215,7 @@ class _InverterManualIsolatorState
                                                     });
                                                   },
                                                   child: SizedBox(
-                                                    height: 30,
+                                                    height: 40,
                                                     child: Row(
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
@@ -244,15 +251,15 @@ class _InverterManualIsolatorState
                           )
                         : (ratingSelected == true)
                             ? Text(
-                                'Preffered capacity: ${component.capacity}Ah',
+                                'Preffered capacity: ${component.capacity}A',
                                 style: const TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 16),
+                                    fontWeight: FontWeight.w500, fontSize: 16),
                               )
                             : Container(),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 40),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 40),
-                      child: OutlinedButton(
+                      child: ConfirmSelectionButton(
                         onPressed: () {
                           setState(() {
                             validate = ratingController.text.isEmpty;
@@ -265,7 +272,7 @@ class _InverterManualIsolatorState
                               ? null
                               : updateApplicationQuotation();
                         },
-                        child: const Text('Confirm Selection'),
+                        message: 'Confirm Selection',
                       ),
                     ),
                   ],
@@ -276,22 +283,23 @@ class _InverterManualIsolatorState
                     children: [
                       Container(),
                       Text(
-                        'The switch selected has a rating of : ${component.capacity}',
+                        'The switch selected has a rating of : ${component.capacity}A',
                         style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w500),
                       ),
-                      const SizedBox(height: 15),
+                      const SizedBox(height: 20),
                       Text(
                         'Total cost: KES ${component.cost}',
                         style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500),
+                            fontSize: 16, fontWeight: FontWeight.w700),
                       ),
-                      const SizedBox(height: 15),
-                      OutlinedButton(
-                          onPressed: () {
-                            updateSelectedStatus(false);
-                          },
-                          child: const Text('Edit selection'))
+                      const SizedBox(height: 40),
+                      ConfirmSelectionButton(
+                        onPressed: () {
+                          updateSelectedStatus(false);
+                        },
+                        message: 'Edit Selection',
+                      ),
                     ],
                   ),
                 ),

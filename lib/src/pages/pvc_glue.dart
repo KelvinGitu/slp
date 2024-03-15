@@ -77,7 +77,7 @@ class _PVCGlueState extends ConsumerState<PVCGlue> {
                         'One ${component.name} ${component.quantity}ml is required for this installation',
                         style: const TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                       const SizedBox(height: 40),
@@ -100,15 +100,15 @@ class _PVCGlueState extends ConsumerState<PVCGlue> {
                         'One ${component.name} ${component.quantity}ml was included as part of the installation requirements',
                         style: const TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
-                      const SizedBox(height: 15),
+                      const SizedBox(height: 20),
                       Text(
                         'Total cost: KES ${component.cost}',
                         style: const TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                       const SizedBox(height: 40),

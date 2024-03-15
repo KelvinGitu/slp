@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:solar_project/core/prices.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
 import 'package:solar_project/src/widgets/confirm_selection_button.dart';
 
@@ -19,6 +20,12 @@ class PVCTrunking extends ConsumerStatefulWidget {
 
 class _PVCTrunkingState extends ConsumerState<PVCTrunking> {
   final TextEditingController lengthController = TextEditingController();
+
+  @override
+  void dispose() {
+    lengthController.dispose();
+    super.dispose();
+  }
 
   bool validate = false;
 
@@ -75,7 +82,7 @@ class _PVCTrunkingState extends ConsumerState<PVCTrunking> {
             centerTitle: true,
           ),
           body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: (component.isSelected == false)
                 ? Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,7 +91,7 @@ class _PVCTrunkingState extends ConsumerState<PVCTrunking> {
                         'The recommended length for a standard house is 6m.',
                         style: TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                       const SizedBox(height: 15),
@@ -95,7 +102,7 @@ class _PVCTrunkingState extends ConsumerState<PVCTrunking> {
                             'Input the length of PVC required.',
                             style: TextStyle(
                               fontSize: 16,
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                           const SizedBox(height: 20),
@@ -115,6 +122,7 @@ class _PVCTrunkingState extends ConsumerState<PVCTrunking> {
                                   validate ? "Value Can't Be Empty" : null,
                             ),
                           ),
+                          const Text('*price per metre: KES ${Prices.pvcTrunking}', style: TextStyle(fontSize: 10, color: Colors.red,),),
                           const SizedBox(height: 40),
                           Align(
                             alignment: Alignment.topCenter,
@@ -133,7 +141,7 @@ class _PVCTrunkingState extends ConsumerState<PVCTrunking> {
                                 (validate == true)
                                     ? null
                                     : updateComponentCost(
-                                        int.parse(lengthController.text) * 40);
+                                        int.parse(lengthController.text) * Prices.pvcTrunking);
                                 (validate == true)
                                     ? null
                                     : updateApplicationQuotation();
@@ -147,20 +155,19 @@ class _PVCTrunkingState extends ConsumerState<PVCTrunking> {
                   )
                 : Column(
                     children: [
-                      const SizedBox(height: 20),
                       Container(),
                       Text(
                         'Length of PVC: ${component.length}m',
                         style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w600),
+                            fontSize: 16, fontWeight: FontWeight.w500),
                       ),
-                      const SizedBox(height: 15),
+                      const SizedBox(height: 20),
                       Text(
                         'Total cost: ${component.cost} KES',
                         style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w600),
+                            fontSize: 16, fontWeight: FontWeight.w700),
                       ),
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 40),
                       ConfirmSelectionButton(
                         onPressed: () {
                           updateComponentLength(0);
