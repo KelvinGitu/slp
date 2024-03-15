@@ -10,6 +10,7 @@ import 'package:solar_project/src/pages/ac_contactor_triple_phase.dart';
 import 'package:solar_project/src/pages/adapter_box_pvc.dart';
 import 'package:solar_project/src/pages/battery_cable.dart';
 import 'package:solar_project/src/pages/battery_fuse.dart';
+import 'package:solar_project/src/pages/busbar_complete.dart';
 import 'package:solar_project/src/pages/cable_lugs.dart';
 import 'package:solar_project/src/pages/cable_ties.dart';
 import 'package:solar_project/src/pages/communication_components.dart';
@@ -23,10 +24,15 @@ import 'package:solar_project/src/pages/din_rail.dart';
 import 'package:solar_project/src/pages/double_pole_mcb.dart';
 import 'package:solar_project/src/pages/earth_rod_and_cable.dart';
 import 'package:solar_project/src/pages/four_pole_mccb.dart';
+import 'package:solar_project/src/pages/heat_shrink_tube.dart';
+import 'package:solar_project/src/pages/insulation_tape.dart';
 import 'package:solar_project/src/pages/inverter_manual_isolator.dart';
 import 'package:solar_project/src/pages/inverter_module_screen.dart';
+import 'package:solar_project/src/pages/labour.dart';
 import 'package:solar_project/src/pages/lightning_arrestor.dart';
+import 'package:solar_project/src/pages/marine_board.dart';
 import 'package:solar_project/src/pages/mc4_connectors.dart';
+import 'package:solar_project/src/pages/miscellaneous.dart';
 import 'package:solar_project/src/pages/nine_way_combiner_box.dart';
 import 'package:solar_project/src/pages/panel_screen.dart';
 import 'package:solar_project/src/pages/piping.dart';
@@ -34,12 +40,16 @@ import 'package:solar_project/src/pages/pv_cable.dart';
 import 'package:solar_project/src/pages/pv_combiner_box.dart';
 import 'package:solar_project/src/pages/pv_line_fuse.dart';
 import 'package:solar_project/src/pages/pv_surge_protector.dart';
+import 'package:solar_project/src/pages/pvc_glue.dart';
 import 'package:solar_project/src/pages/pvc_trunking.dart';
 import 'package:solar_project/src/pages/adapter_box.dart';
 import 'package:solar_project/src/pages/single_core_cable.dart';
 import 'package:solar_project/src/pages/solar_panel_frame.dart';
+import 'package:solar_project/src/pages/transport.dart';
 import 'package:solar_project/src/pages/triple_pole_mccb.dart';
 import 'package:solar_project/src/pages/voltage_guard.dart';
+import 'package:solar_project/src/pages/wall_mounting_materials.dart';
+import 'package:solar_project/src/pages/waterproof_scotch_tape.dart';
 import 'package:solar_project/src/widgets/component_widget.dart';
 
 class ExpandableWidget extends ConsumerWidget {
@@ -250,6 +260,56 @@ class ExpandableWidget extends ConsumerWidget {
                       component: applicationComponents[35],
                       navigate: SolarPanelFrame(
                           component: applicationComponents[35].name,
+                          applicationId: applicationId)),
+                  ComponentWidget(
+                      component: applicationComponents[36],
+                      navigate: PVCGlue(
+                          component: applicationComponents[36].name,
+                          applicationId: applicationId)),
+                  ComponentWidget(
+                      component: applicationComponents[37],
+                      navigate: WaterProofScotchTape(
+                          component: applicationComponents[37].name,
+                          applicationId: applicationId)),
+                  ComponentWidget(
+                      component: applicationComponents[38],
+                      navigate: InsulationTape(
+                          component: applicationComponents[38].name,
+                          applicationId: applicationId)),
+                  ComponentWidget(
+                      component: applicationComponents[39],
+                      navigate: HeatShrinkTube(
+                          component: applicationComponents[39].name,
+                          applicationId: applicationId)),
+                  ComponentWidget(
+                      component: applicationComponents[40],
+                      navigate: WallMountingMaterials(
+                          component: applicationComponents[40].name,
+                          applicationId: applicationId)),
+                  ComponentWidget(
+                      component: applicationComponents[41],
+                      navigate: MarineBoard(
+                          component: applicationComponents[41].name,
+                          applicationId: applicationId)),
+                  ComponentWidget(
+                      component: applicationComponents[42],
+                      navigate: BusbarComplete(
+                          component: applicationComponents[42].name,
+                          applicationId: applicationId)),
+                  ComponentWidget(
+                      component: applicationComponents[43],
+                      navigate: Transport(
+                          component: applicationComponents[43].name,
+                          applicationId: applicationId)),
+                  ComponentWidget(
+                      component: applicationComponents[44],
+                      navigate: Labour(
+                          component: applicationComponents[44].name,
+                          applicationId: applicationId)),
+                  ComponentWidget(
+                      component: applicationComponents[45],
+                      navigate: Miscellaneous(
+                          component: applicationComponents[45].name,
                           applicationId: applicationId)),
                 ],
               ),

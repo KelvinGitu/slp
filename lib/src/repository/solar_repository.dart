@@ -147,7 +147,7 @@ class SolarRepository {
     for (var doc in event.docs) {
       components.add(ComponentsModel.fromMap(doc.data()));
     }
-    // print(components);
+    print(components);
     return components;
   }
 
@@ -212,6 +212,17 @@ class SolarRepository {
         .collection('components')
         .doc(component)
         .update({'crossSection': crossSection});
+  }
+
+  Future updateComponentMeasurement(
+      String applicationId, String measurement, String component) async {
+    return _applications
+        .doc(applicationId)
+        .collection('components')
+        .doc(component)
+        .update({
+      'measurement': FieldValue.arrayUnion([measurement])
+    });
   }
 
   Future updateApplicationQuotation(String applicationId, int quotation) async {

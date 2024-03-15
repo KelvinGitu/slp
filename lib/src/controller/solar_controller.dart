@@ -177,6 +177,12 @@ class SolarController {
         applicationId, crossSection, component);
   }
 
+  void updateApplicationComponentMeasurement(
+      String component, String measurement, String applicationId) async {
+    _solarRepository.updateComponentMeasurement(
+        applicationId, measurement, component);
+  }
+
   void updateApplicationQuotation(String applicationId) async {
     // updates the application's quotation based on individual components
     int quotation = 0;

@@ -6,21 +6,21 @@ import 'package:solar_project/src/controller/solar_controller.dart';
 import 'package:solar_project/src/widgets/confirm_selection_button.dart';
 import 'package:solar_project/src/widgets/yes_no_button.dart';
 
-class LightningArrestor extends ConsumerStatefulWidget {
+class MarineBoard extends ConsumerStatefulWidget {
   final String component;
   final String applicationId;
-  const LightningArrestor({
+  const MarineBoard({
     super.key,
     required this.component,
     required this.applicationId,
   });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      _LightningArrestorState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _MarineBoardState();
 }
 
-class _LightningArrestorState extends ConsumerState<LightningArrestor> {
+class _MarineBoardState extends ConsumerState<MarineBoard> {
+
   bool validate = false;
 
   late List<String> arguments;
@@ -77,7 +77,6 @@ class _LightningArrestorState extends ConsumerState<LightningArrestor> {
   Widget build(BuildContext context) {
     final component =
         ref.watch(getApplicationComponentStreamProvider(arguments));
-
     return component.when(
       data: (component) {
         return Scaffold(
@@ -103,6 +102,28 @@ class _LightningArrestorState extends ConsumerState<LightningArrestor> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
+                            'Measures of determination',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w500),
+                          ),
+                          const SizedBox(height: 10),
+                          Container(
+                            height: 100,
+                            width: MediaQuery.of(context).size.width,
+                            padding: const EdgeInsets.all(15),
+                            decoration: BoxDecoration(
+                              color: Colors.grey.withOpacity(0.3),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: ListView.builder(
+                              itemCount: component.measurement.length,
+                              itemBuilder: ((context, index) {
+                                return Text(component.measurement[index]);
+                              }),
+                            ),
+                          ),
+                          const SizedBox(height: 15),
+                          const Text(
                             'Add this component to the installation?',
                             style: TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.w600),
@@ -121,6 +142,7 @@ class _LightningArrestorState extends ConsumerState<LightningArrestor> {
                                       nobackgroundColor = Colors.white;
                                     });
                                     updateSelectedStatus(true);
+                                    updateApplicationQuotation();
                                   },
                                   yesNo: 'Yes',
                                   background: yesbackgroundColor,
@@ -134,6 +156,7 @@ class _LightningArrestorState extends ConsumerState<LightningArrestor> {
                                     });
                                     updateSelectedStatus(false);
                                     updateRequiredStatus(false);
+                                    updateApplicationQuotation();
                                   },
                                   yesNo: 'No',
                                   background: nobackgroundColor,
@@ -175,6 +198,12 @@ Widget componentNotRequired({
         );
   }
 
+  void updateApplicationQuotation() {
+    ref.watch(solarControllerProvider).updateApplicationQuotation(
+          applicationId,
+        );
+  }
+
   void updateRequiredStatus(bool selected) {
     ref.watch(solarControllerProvider).updateApplicationComponentRequiredStatus(
           component,
@@ -194,6 +223,7 @@ Widget componentNotRequired({
         onPressed: () {
           updateRequiredStatus(true);
           updateSelectedStatus(false);
+          updateApplicationQuotation();
         },
         message: 'Edit Selection',
       ),
@@ -212,6 +242,12 @@ Widget selectedTrue({
     ref.watch(solarControllerProvider).updateApplicationComponentSelectedStatus(
           component,
           selected,
+          applicationId,
+        );
+  }
+
+  void updateApplicationQuotation() {
+    ref.watch(solarControllerProvider).updateApplicationQuotation(
           applicationId,
         );
   }
@@ -238,6 +274,7 @@ Widget selectedTrue({
       ConfirmSelectionButton(
         onPressed: () {
           updateSelectedStatus(false);
+          updateApplicationQuotation();
         },
         message: 'Edit Selection',
       ),
