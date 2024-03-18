@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:solar_project/src/applications_screen.dart';
 import 'package:solar_project/src/authentification/controller/auth_controller.dart';
-import 'package:solar_project/src/authentification/views/login_screen.dart';
 import 'package:solar_project/src/components_screen.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
 import 'package:uuid/uuid.dart';
