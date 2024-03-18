@@ -83,9 +83,9 @@ class SolarRepository {
     return _applications.doc(applicationId).update({'isDone': done});
   }
 
-  Stream<List<ApplicationModel>> getAllApplications() {
+  Stream<List<ApplicationModel>> getAllApplications(String uid) {
     return _applications
-        .where('isDone', isEqualTo: false)
+        .where('expertId', isEqualTo: uid)
         .snapshots()
         .map((event) {
       List<ApplicationModel> applications = [];

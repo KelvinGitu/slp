@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:solar_project/models/application_model.dart';
 import 'package:solar_project/models/components_model.dart';
+import 'package:solar_project/src/authentification/controller/auth_controller.dart';
 import 'package:solar_project/src/repository/solar_repository.dart';
 
 final getAllComponentsStreamProvider = StreamProvider((ref) {
@@ -52,6 +53,7 @@ final getApplicationComponentsStreamProvider =
 final solarControllerProvider = Provider(
   (ref) => SolarController(
     solarRepository: ref.watch(solarRepositoryProvider),
+    ref: ref,
   ),
 );
 
@@ -60,9 +62,11 @@ final solarControllerProvider = Provider(
 
 class SolarController {
   final SolarRepository _solarRepository;
+  final Ref _ref;
 
-  SolarController({required SolarRepository solarRepository})
-      : _solarRepository = solarRepository;
+  SolarController({required SolarRepository solarRepository, required Ref ref})
+      : _solarRepository = solarRepository,
+        _ref = ref;
 
   // this function saves components to firestore
 
@@ -98,12 +102,15 @@ class SolarController {
   // updating various component fields such as cost and selected status
   // fetching a stream of applications, fetching an individual application
 
-  void createApplication({required String applicationId, required String clientName}) async {
+  void createApplication(
+      {required String applicationId, required String clientName}) async {
+    final user = _ref.read(userProvider)!;
+
     ApplicationModel applicationModel = ApplicationModel(
       applicationId: applicationId,
       clientName: clientName,
-      expertName: 'expertName',
-      expertId: 'expertId',
+      expertName: user.name,
+      expertId: user.uid,
       quotation: 0,
       isDone: false,
     );
@@ -130,7 +137,8 @@ class SolarController {
   }
 
   Stream<List<ApplicationModel>> getAllApplications() {
-    return _solarRepository.getAllApplications();
+    final user = _ref.read(userProvider)!;
+    return _solarRepository.getAllApplications(user.uid);
   }
 
   Future<ApplicationModel> getFutureApplication(String applicationId) async {

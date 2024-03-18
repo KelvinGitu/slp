@@ -11,8 +11,8 @@ final authStateChangeProvider = StreamProvider((ref) {
   return ref.watch(authControllerProvider).authStateChange;
 });
 
-final getUserDataProvider = StreamProvider.family((ref, String uid) {
-  return ref.watch(authControllerProvider).getUserData(uid);
+final getUserDataProvider = StreamProvider.family((ref, String email) {
+  return ref.watch(authControllerProvider).getUserData(email);
 });
 
 final authControllerProvider = Provider(
@@ -54,7 +54,7 @@ class AuthController {
 
   Stream<User?> get authStateChange => _authRepository.authStateChange;
 
-  Stream<UserModel> getUserData(String uid) {
-    return _authRepository.getUserData(uid);
+  Stream<UserModel> getUserData(String email) {
+    return _authRepository.getUserData(email);
   }
 }

@@ -27,7 +27,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   UserModel? userModel;
   void getData(User? data) async {
     userModel =
-        await ref.watch(authControllerProvider).getUserData(data!.uid).first;
+        await ref.watch(authControllerProvider).getUserData(data!.email!).first;
     ref.read(userProvider.notifier).update((state) => userModel);
     setState(() {});
   }

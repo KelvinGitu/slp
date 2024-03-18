@@ -46,7 +46,7 @@ class AuthRepository {
         );
         await _users.doc(userModel.email).set(userModel.toMap());
       } else {
-        userModel = await getUserData(userCredential.user!.uid).first;
+        userModel = await getUserData(email).first;
       }
       return userModel;
     } on FirebaseAuthException catch (e) {
@@ -65,9 +65,9 @@ class AuthRepository {
         password: password,
       );
 
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-          email: email, password: password);
-      UserModel userModel = await getUserData(userCredential.user!.uid).first;
+      // UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+      //     email: email, password: password);
+      UserModel userModel = await getUserData(email).first;
 
       return userModel;
     } on FirebaseAuthException catch (e) {
@@ -75,8 +75,8 @@ class AuthRepository {
     }
   }
 
-  Stream<UserModel> getUserData(String uid) {
-    return _users.doc(uid).snapshots().map(
+  Stream<UserModel> getUserData(String email) {
+    return _users.doc(email).snapshots().map(
           (event) => UserModel.fromMap(event.data() as Map<String, dynamic>),
         );
   }
