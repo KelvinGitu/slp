@@ -109,7 +109,6 @@ class CableLugsRepository {
     for (var doc in event.docs) {
       lugs.add(CableLugsModel.fromMap(doc.data()));
     }
-    print(lugs);
     return lugs;
   }
 

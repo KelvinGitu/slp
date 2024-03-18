@@ -18,9 +18,11 @@ import 'package:solar_project/src/controller/single_core_cables_controller.dart'
 import 'package:solar_project/src/controller/solar_controller.dart';
 import 'package:solar_project/src/controller/surge_protector_controller.dart';
 import 'package:solar_project/src/controller/voltage_guards_controller.dart';
-import 'package:solar_project/src/home_screen.dart';
+// import 'package:solar_project/src/home_screen.dart';
 
 import 'package:solar_project/src/expandable_widget.dart';
+import 'package:solar_project/src/pdf/pdf_page.dart';
+import 'package:solar_project/src/widgets/confirm_selection_button.dart';
 
 class ComponentsScreen extends ConsumerStatefulWidget {
   final String applicationId;
@@ -323,12 +325,15 @@ class _ComponentsScreenState extends ConsumerState<ComponentsScreen> {
           child: OutlinedButton(
             onPressed: () {
               // ref.watch(solarControllerProvider).saveComponent();
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: ((context) => const HomeScreen()),
-                  ),
-                  (route) => false);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((context) => PDFPage(
+                        applicationId: widget.applicationId,
+                      )),
+                ),
+              );
+              // (route) => false);
             },
             style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(horizontal: 10)),
@@ -355,7 +360,7 @@ class _ComponentsScreenState extends ConsumerState<ComponentsScreen> {
                     Text(
                       'Quotation: KES ${application.quotation.toString()}',
                       style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.w500),
+                          fontSize: 18, fontWeight: FontWeight.w700),
                     ),
                   ],
                 ),
@@ -369,6 +374,12 @@ class _ComponentsScreenState extends ConsumerState<ComponentsScreen> {
           const SizedBox(height: 20),
           ExpandableWidget(
             applicationId: widget.applicationId,
+          ),
+
+          const SizedBox(height: 40,),
+          ConfirmSelectionButton(
+            onPressed: (){},
+            message: 'Close Application'
           ),
         ],
       ),

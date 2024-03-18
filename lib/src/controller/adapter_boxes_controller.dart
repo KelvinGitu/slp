@@ -18,6 +18,13 @@ final getSelectedBoxesStreamProvider =
       .getStreamSelectedBoxes(arguments[0], arguments[1]);
 });
 
+final getFutureSelectedBoxesStreamProvider =
+    FutureProvider.family<List<AdapterBoxModel>, List<String>>(
+        (ref, arguments) {
+  return ref
+      .watch(adapterBoxesControllerProvider)
+      .getFutureSelectedBoxes(arguments[0], arguments[1]);
+});
 
 final adapterBoxesControllerProvider = Provider(
   (ref) => AdapterBoxesController(
@@ -32,7 +39,7 @@ class AdapterBoxesController {
       {required AdapterBoxesRepository adapterBoxesRepository})
       : _adapterBoxesRepository = adapterBoxesRepository;
 
-      // these functions save adapter box enclosures in the application
+  // these functions save adapter box enclosures in the application
   // updates selected boxes status
   // retrieves selected boxes from application
 
@@ -57,7 +64,8 @@ class AdapterBoxesController {
 
   Future<bool> checkBoxExists(
       String applicationId, String component, String name) {
-    return _adapterBoxesRepository.checkBoxExists(applicationId, component, name);
+    return _adapterBoxesRepository.checkBoxExists(
+        applicationId, component, name);
   }
 
   Future<List<AdapterBoxModel>> getFutureSelectedBoxes(
@@ -68,12 +76,13 @@ class AdapterBoxesController {
 
   Stream<List<AdapterBoxModel>> getStreamSelectedBoxes(
       String applicationId, String component) {
-    return _adapterBoxesRepository.getStreamSelectedBoxes(applicationId, component);
+    return _adapterBoxesRepository.getStreamSelectedBoxes(
+        applicationId, component);
   }
 
   Stream<List<AdapterBoxModel>> getBoxesFromApplication(
       String applicationId, String component) {
-    return _adapterBoxesRepository.getBoxesFromApplication(applicationId, component);
+    return _adapterBoxesRepository.getBoxesFromApplication(
+        applicationId, component);
   }
-
 }

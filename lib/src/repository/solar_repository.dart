@@ -135,7 +135,7 @@ class SolarRepository {
     });
   }
 
-  Future<List<ComponentsModel>> getAllFutureApplicationComponents(
+  Future<List<ComponentsModel>> getFutureSelectedApplicationComponents(
       String applicationId) async {
     var event = await _applications
         .doc(applicationId)

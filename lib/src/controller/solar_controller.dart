@@ -35,6 +35,13 @@ final getApplcationComponentFutureProvider =
       .getFutureApplicationComponent(arguments[0], arguments[1]);
 });
 
+final getFutureSelectedApplicationComponentsFutureProvider =
+    FutureProvider.family((ref, String applicationId) {
+  return ref
+      .watch(solarControllerProvider)
+      .getFutureSelectedApplicationComponents(applicationId);
+});
+
 final getApplicationComponentsStreamProvider =
     StreamProvider.family((ref, String applicationId) {
   return ref
@@ -126,6 +133,12 @@ class SolarController {
     return _solarRepository.getApplicationComponents(applicationId);
   }
 
+  Future<List<ComponentsModel>> getFutureSelectedApplicationComponents(
+      String applicationId) async {
+    return await _solarRepository
+        .getFutureSelectedApplicationComponents(applicationId);
+  }
+
   Stream<ComponentsModel> getApplicationComponent(
       String applicationId, String component) {
     return _solarRepository.getApplicationComponent(applicationId, component);
@@ -186,8 +199,8 @@ class SolarController {
   void updateApplicationQuotation(String applicationId) async {
     // updates the application's quotation based on individual components
     int quotation = 0;
-    final application =
-        await _solarRepository.getAllFutureApplicationComponents(applicationId);
+    final application = await _solarRepository
+        .getFutureSelectedApplicationComponents(applicationId);
     if (application.isNotEmpty) {
       for (ComponentsModel component in application) {
         quotation = quotation + component.cost;
