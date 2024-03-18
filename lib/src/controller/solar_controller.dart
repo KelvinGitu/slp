@@ -98,7 +98,7 @@ class SolarController {
   // updating various component fields such as cost and selected status
   // fetching a stream of applications, fetching an individual application
 
-  void createApplication({required applicationId, required clientName}) async {
+  void createApplication({required String applicationId, required String clientName}) async {
     ApplicationModel applicationModel = ApplicationModel(
       applicationId: applicationId,
       clientName: clientName,
@@ -110,11 +110,19 @@ class SolarController {
     await _solarRepository.createApplication(applicationId, applicationModel);
   }
 
+  void deleteApplication({required String applicationId}) async {
+    await _solarRepository.deleteApplication(applicationId);
+  }
+
   void saveComponentsToApplication({required applicationId}) async {
     final allComponents = await _solarRepository.getAllFutureComponents();
     for (ComponentsModel component in allComponents) {
       _solarRepository.saveComponentsToApplication(applicationId, component);
     }
+  }
+
+  void updateApplicationDoneStatus(String applicationId, bool done) async {
+    return _solarRepository.updateApplicationDoneStatus(applicationId, done);
   }
 
   Stream<ApplicationModel> getApplication(String applicationId) {

@@ -30,6 +30,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         );
   }
 
+  void deleteNewApplication(String applicationId) {
+    ref
+        .watch(solarControllerProvider)
+        .deleteApplication(applicationId: applicationId);
+  }
+
   void saveComponentsToApplication(String applicationId) async {
     ref
         .watch(solarControllerProvider)
@@ -160,6 +166,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   ? null
                                   : showDialog(
                                       context: context,
+                                      barrierDismissible: false,
                                       builder: (BuildContext context) {
                                         return AlertDialog(
                                           title: const Text("New Application"),
@@ -169,6 +176,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                             TextButton(
                                               child: const Text("Cancel"),
                                               onPressed: () {
+                                                deleteNewApplication(
+                                                    applicationId);
                                                 Navigator.pop(context);
                                               },
                                             ),

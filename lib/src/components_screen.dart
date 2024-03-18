@@ -21,6 +21,7 @@ import 'package:solar_project/src/controller/voltage_guards_controller.dart';
 // import 'package:solar_project/src/home_screen.dart';
 
 import 'package:solar_project/src/expandable_widget.dart';
+import 'package:solar_project/src/home_screen.dart';
 import 'package:solar_project/src/pdf/pdf_page.dart';
 import 'package:solar_project/src/widgets/confirm_selection_button.dart';
 
@@ -312,6 +313,13 @@ class _ComponentsScreenState extends ConsumerState<ComponentsScreen> {
     }
   }
 
+  void updateApplicationDoneStatus(bool done) {
+    ref.watch(solarControllerProvider).updateApplicationDoneStatus(
+          widget.applicationId,
+          done,
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     final application =
@@ -319,27 +327,11 @@ class _ComponentsScreenState extends ConsumerState<ComponentsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: SizedBox(
-          height: 30,
-          width: 120,
-          child: OutlinedButton(
-            onPressed: () {
-              // ref.watch(solarControllerProvider).saveComponent();
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: ((context) => PDFPage(
-                        applicationId: widget.applicationId,
-                      )),
-                ),
-              );
-              // (route) => false);
-            },
-            style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 10)),
-            child: const Text('Continue later?'),
-          ),
+        title: const Text(
+          'Application',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
+        centerTitle: true,
       ),
       body: ListView(
         padding: const EdgeInsets.all(15),
@@ -375,11 +367,75 @@ class _ComponentsScreenState extends ConsumerState<ComponentsScreen> {
           ExpandableWidget(
             applicationId: widget.applicationId,
           ),
-
-          const SizedBox(height: 40,),
-          ConfirmSelectionButton(
-            onPressed: (){},
-            message: 'Close Application'
+          const SizedBox(
+            height: 40,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: 150,
+                  child: ConfirmSelectionButton(
+                    onPressed: () {
+                      // ref.watch(solarControllerProvider).saveComponent();
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: ((context) => const HomeScreen()),
+                        ),
+                        (route) => false,
+                      );
+                    },
+                    message: 'Continue Later',
+                  ),
+                ),
+                SizedBox(
+                  width: 150,
+                  child: ConfirmSelectionButton(
+                    onPressed: () {
+                      updateApplicationDoneStatus(true);
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text("New Application"),
+                            content:
+                                const Text("Proceed with new application?"),
+                            actions: [
+                              TextButton(
+                                child: const Text("Cancel"),
+                                onPressed: () {
+                                  updateApplicationDoneStatus(false);
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              TextButton(
+                                child: const Text("Continue"),
+                                onPressed: () {
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: ((context) => PDFPage(
+                                            applicationId: widget.applicationId,
+                                          )),
+                                    ),
+                                    (route) => false,
+                                  );
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    message: 'Close Application',
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

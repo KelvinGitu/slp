@@ -62,6 +62,11 @@ class SolarRepository {
     return _applications.doc(applicationId).set(applicationModel.toMap());
   }
 
+  Future deleteApplication(
+      String applicationId) async {
+    return _applications.doc(applicationId).delete();
+  }
+
   Stream<ApplicationModel> getApplication(String applicationId) {
     return _applications.doc(applicationId).snapshots().map((event) =>
         ApplicationModel.fromMap(event.data() as Map<String, dynamic>));
@@ -72,6 +77,10 @@ class SolarRepository {
     final result =
         ApplicationModel.fromMap(event.data() as Map<String, dynamic>);
     return result;
+  }
+
+  Future updateApplicationDoneStatus(String applicationId, bool done) async {
+    return _applications.doc(applicationId).update({'isDone': done});
   }
 
   Stream<List<ApplicationModel>> getAllApplications() {
