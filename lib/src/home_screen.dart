@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:solar_project/src/applications_screen.dart';
 import 'package:solar_project/src/authentification/controller/auth_controller.dart';
+import 'package:solar_project/src/authentification/views/login_screen.dart';
 import 'package:solar_project/src/components_screen.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
 import 'package:uuid/uuid.dart';
@@ -61,9 +62,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               child: Column(
                 children: [
                   const SizedBox(height: 40),
-                   Text(
+                  Text(
                     'Welcome ${user.name}',
-                    style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 30, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 30),
                   const Text(

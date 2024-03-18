@@ -77,6 +77,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               message: 'Login',
             ),
             const SizedBox(height: 40),
+            const Text('New User?'),
+             const SizedBox(height: 5),
             ConfirmSelectionButton(
               onPressed: () {
                 Navigator.push(
@@ -86,7 +88,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                 );
               },
-              message: 'Sign up?',
+              message: 'Sign up',
             )
           ],
         ),
