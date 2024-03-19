@@ -214,7 +214,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               setState(() {
                                 validate = clientNameController.text.isEmpty;
                               });
-                              createNewApplication(applicationId);
+                              (validate == true)
+                                  ? null
+                                  : createNewApplication(applicationId);
                               saveComponentsToApplication(applicationId);
                               (validate == true)
                                   ? null
