@@ -126,7 +126,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 10)),
                           child: const Text(
-                            'Existing application?',
+                            'Existing applications',
                             style: TextStyle(
                               fontSize: 12,
                             ),
