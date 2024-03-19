@@ -33,7 +33,12 @@ class AuthController extends StateNotifier<bool> {
         super(false);
 
   void emailSignUp(
-      String name, String email, String password, BuildContext context) async {
+    String name,
+    String email,
+    String password,
+    BuildContext context,
+  ) async {
+    state = true;
     var uid = const Uuid().v1();
 
     final result = await _authRepository.signUpWithEmail(
@@ -43,11 +48,16 @@ class AuthController extends StateNotifier<bool> {
       context: context,
       uid: uid,
     );
+    state = false;
 
     _ref.read(userProvider.notifier).update((state) => result);
   }
 
-  void emailLogin(String email, String password, BuildContext context) async {
+  void emailLogin(
+    String email,
+    String password,
+    BuildContext context,
+  ) async {
     state = true;
     final result = await _authRepository.loginWithEmail(
         email: email, password: password, context: context);
