@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:solar_project/src/components_screen.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
+import 'package:solar_project/src/pdf/pdf_page.dart';
 
 class ApplicationsScreen extends ConsumerWidget {
   const ApplicationsScreen({super.key});
@@ -27,15 +28,27 @@ class ApplicationsScreen extends ConsumerWidget {
                     final application = applications[index];
                     return GestureDetector(
                       onTap: () {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: ((context) => ComponentsScreen(
-                                  applicationId: application.applicationId,
-                                )),
-                          ),
-                          (route) => false,
-                        );
+                        (application.isDone == true)
+                            ? Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: ((context) => PDFPage(
+                                        applicationId:
+                                            application.applicationId,
+                                      )),
+                                ),
+                                (route) => false,
+                              )
+                            : Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: ((context) => ComponentsScreen(
+                                        applicationId:
+                                            application.applicationId,
+                                      )),
+                                ),
+                                (route) => false,
+                              );
                       },
                       child: Container(
                         height: 60,
@@ -46,19 +59,22 @@ class ApplicationsScreen extends ConsumerWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
                               application.clientName,
                               style: const TextStyle(
                                   fontWeight: FontWeight.w500, fontSize: 16),
                             ),
-                            const Spacer(),
                             Text(
                               application.quotation.toString(),
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 16,
-                                  color: Colors.deepOrangeAccent),
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16,
+                                color: (application.isDone == true)
+                                    ? Colors.deepOrangeAccent
+                                    : Colors.black,
+                              ),
                             ),
                           ],
                         ),
@@ -68,7 +84,6 @@ class ApplicationsScreen extends ConsumerWidget {
                 )
               : Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  // crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(),
                     const Text(

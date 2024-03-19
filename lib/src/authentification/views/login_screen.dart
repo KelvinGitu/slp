@@ -16,6 +16,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
+  bool validate = false;
+  bool validate2 = false;
+
+  bool passwordVisible = false;
+
+  @override
+  void initState() {
+    passwordVisible = true;
+    super.initState();
+  }
+
   @override
   void dispose() {
     emailController.dispose();
@@ -23,76 +34,111 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     super.dispose();
   }
 
-  void loginWithEmail() {
-    ref.watch(authControllerProvider).emailLogin(
+  void loginWithEmail() async {
+    ref.watch(authControllerProvider.notifier).emailLogin(
           emailController.text,
           passwordController.text,
           context,
         );
   }
 
+  void getUser() {
+    ref.watch(authControllerProvider.notifier).authStateChange.listen((user) {
+      if (user != null) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: ((context) => const HomeScreen()),
+          ),
+          (route) => false,
+        );
+      } else {
+        Navigator.pop(context);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isLoading = ref.watch(authControllerProvider);
+
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'Login',
-              style: TextStyle(fontSize: 30),
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              controller: emailController,
-              decoration: const InputDecoration(
-                hintText: 'Email',
-                border: InputBorder.none,
-                filled: true,
-              ),
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              controller: passwordController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                hintText: 'Password',
-                border: InputBorder.none,
-                filled: true,
-              ),
-            ),
-            const SizedBox(height: 40),
-            ConfirmSelectionButton(
-              onPressed: () {
-                loginWithEmail();
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: ((context) => const HomeScreen()),
-                  ),
-                  (route) => false,
-                );
-              },
-              message: 'Login',
-            ),
-            const SizedBox(height: 40),
-            const Text('New User?'),
-             const SizedBox(height: 5),
-            ConfirmSelectionButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: ((context) => const SignUpScreen()),
-                  ),
-                );
-              },
-              message: 'Sign up',
+      body: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
             )
-          ],
-        ),
-      ),
+          : Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Login',
+                    style: TextStyle(fontSize: 30),
+                  ),
+                  const SizedBox(height: 20),
+                  TextField(
+                    controller: emailController,
+                    decoration: InputDecoration(
+                      hintText: 'Email',
+                      border: InputBorder.none,
+                      filled: true,
+                      errorText: validate ? "Email Can't Be Empty" : null,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  TextField(
+                    controller: passwordController,
+                    obscureText: passwordVisible,
+                    decoration: InputDecoration(
+                      hintText: 'Password',
+                      border: InputBorder.none,
+                      filled: true,
+                      suffixIcon: IconButton(
+                        icon: Icon(passwordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off),
+                        onPressed: () {
+                          setState(
+                            () {
+                              passwordVisible = !passwordVisible;
+                            },
+                          );
+                        },
+                      ),
+                      errorText: validate2 ? "Password Can't Be Empty" : null,
+                    ),
+                  ),
+                  const SizedBox(height: 40),
+                  ConfirmSelectionButton(
+                    onPressed: () {
+                      setState(() {
+                        validate = emailController.text.isEmpty;
+                        validate2 = passwordController.text.isEmpty;
+                      });
+                      (validate == true || validate2 == true)
+                          ? null
+                          : loginWithEmail();
+                    },
+                    message: 'Login',
+                  ),
+                  const SizedBox(height: 40),
+                  const Text('New User?'),
+                  const SizedBox(height: 5),
+                  ConfirmSelectionButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: ((context) => const SignUpScreen()),
+                        ),
+                      );
+                    },
+                    message: 'Sign up',
+                  )
+                ],
+              ),
+            ),
     );
   }
 }

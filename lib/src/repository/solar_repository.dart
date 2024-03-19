@@ -62,8 +62,7 @@ class SolarRepository {
     return _applications.doc(applicationId).set(applicationModel.toMap());
   }
 
-  Future deleteApplication(
-      String applicationId) async {
+  Future deleteApplication(String applicationId) async {
     return _applications.doc(applicationId).delete();
   }
 

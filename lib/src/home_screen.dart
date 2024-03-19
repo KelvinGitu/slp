@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:solar_project/src/applications_screen.dart';
 import 'package:solar_project/src/authentification/controller/auth_controller.dart';
+import 'package:solar_project/src/authentification/views/login_screen.dart';
 import 'package:solar_project/src/components_screen.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
+import 'package:solar_project/src/widgets/confirm_selection_button.dart';
 import 'package:uuid/uuid.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -43,10 +45,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         .saveComponentsToApplication(applicationId: applicationId);
   }
 
+  void signOutUser() async {
+    ref.watch(authControllerProvider.notifier).signUserOut();
+  }
+
   @override
   Widget build(BuildContext context) {
     var applicationId = const Uuid().v1();
     final user = ref.watch(userProvider)!;
+    final userName = user.name;
+    final splitUserName = userName.split(' ');
+    final nameUser = splitUserName.first;
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -62,7 +71,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 children: [
                   const SizedBox(height: 40),
                   Text(
-                    'Welcome ${user.name}',
+                    'Welcome $nameUser',
+                    textAlign: TextAlign.center,
                     style: const TextStyle(
                         fontSize: 30, fontWeight: FontWeight.bold),
                   ),
@@ -124,6 +134,47 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         ),
                       ),
                     ],
+                  ),
+                  Expanded(
+                    child: Container(),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: ConfirmSelectionButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text("Sign out"),
+                              content: const Text(
+                                  "Are you sure you want to log out?"),
+                              actions: [
+                                TextButton(
+                                  child: const Text("Cancel"),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                TextButton(
+                                  child: const Text("Continue"),
+                                  onPressed: () {
+                                    signOutUser();
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const LoginScreen()));
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      message: 'Sign Out',
+                    ),
                   ),
                 ],
               ),
@@ -238,7 +289,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),

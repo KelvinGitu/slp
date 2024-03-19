@@ -18,12 +18,10 @@ import 'package:solar_project/src/controller/single_core_cables_controller.dart'
 import 'package:solar_project/src/controller/solar_controller.dart';
 import 'package:solar_project/src/controller/surge_protector_controller.dart';
 import 'package:solar_project/src/controller/voltage_guards_controller.dart';
-// import 'package:solar_project/src/home_screen.dart';
 
 import 'package:solar_project/src/expandable_widget.dart';
 import 'package:solar_project/src/home_screen.dart';
 import 'package:solar_project/src/pdf/pdf_page.dart';
-import 'package:solar_project/src/widgets/confirm_selection_button.dart';
 
 class ComponentsScreen extends ConsumerStatefulWidget {
   final String applicationId;
@@ -371,13 +369,14 @@ class _ComponentsScreenState extends ConsumerState<ComponentsScreen> {
             height: 40,
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
-                  width: 150,
-                  child: ConfirmSelectionButton(
+                  height: 30,
+                  width: 120,
+                  child: OutlinedButton(
                     onPressed: () {
                       // ref.watch(solarControllerProvider).saveComponent();
                       Navigator.pushAndRemoveUntil(
@@ -388,12 +387,20 @@ class _ComponentsScreenState extends ConsumerState<ComponentsScreen> {
                         (route) => false,
                       );
                     },
-                    message: 'Continue Later',
+                    style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(horizontal: 10)),
+                    child: const Text(
+                      'Continue Later',
+                      style: TextStyle(
+                        fontSize: 12,
+                      ),
+                    ),
                   ),
                 ),
                 SizedBox(
-                  width: 150,
-                  child: ConfirmSelectionButton(
+                  height: 30,
+                  width: 120,
+                  child: OutlinedButton(
                     onPressed: () {
                       updateApplicationDoneStatus(true);
                       showDialog(
@@ -401,9 +408,9 @@ class _ComponentsScreenState extends ConsumerState<ComponentsScreen> {
                         barrierDismissible: false,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: const Text("New Application"),
+                            title: const Text("Close Application"),
                             content:
-                                const Text("Proceed with new application?"),
+                                const Text("Close application?"),
                             actions: [
                               TextButton(
                                 child: const Text("Cancel"),
@@ -431,7 +438,14 @@ class _ComponentsScreenState extends ConsumerState<ComponentsScreen> {
                         },
                       );
                     },
-                    message: 'Close Application',
+                    style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(horizontal: 10)),
+                    child: const Text(
+                      'Close application',
+                      style: TextStyle(
+                        fontSize: 12,
+                      ),
+                    ),
                   ),
                 ),
               ],

@@ -16,6 +16,13 @@ final getSelectedLugsStreamProvider =
       .getStreamSelectedLugs(arguments[0], arguments[1]);
 });
 
+final getFutureSelectedLugsFutureProvider =
+    FutureProvider.family<List<CableLugsModel>, List<String>>((ref, arguments) {
+  return ref
+      .watch(cableLugsControllerProvider)
+      .getFutureSelectedLugs(arguments[0], arguments[1]);
+});
+
 final cableLugsControllerProvider = Provider(
   (ref) => CableLugsController(
     cableLugsRepository: ref.watch(cableLugsRepositoryProvider),

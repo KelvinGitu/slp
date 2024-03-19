@@ -205,7 +205,7 @@ Widget selectCableLugs({
         ),
       ),
       SizedBox(
-        height: 100,
+        height: 120,
         child: ListView.builder(
           itemCount: lugs.length,
           itemBuilder: ((context, index) {
@@ -316,7 +316,7 @@ Widget selectedTrue({
     ),
     const SizedBox(height: 10),
     SizedBox(
-      height: 100,
+      height: 120,
       child: ListView.builder(
           itemCount: lugs.length,
           itemBuilder: ((context, index) {

@@ -9,7 +9,7 @@ import 'package:pdf/widgets.dart' as pw;
 final pdfControllerProvider = Provider((ref) => PDFController());
 
 class PDFController {
-  Future<Uint8List> generate(Invoice invoice) async {
+  Future<Uint8List> generateInvoice(Invoice invoice) async {
     final pdf = Document();
 
     pdf.addPage(MultiPage(
@@ -25,8 +25,6 @@ class PDFController {
     ));
 
     return pdf.save();
-
-    // return await _pdfRepository.saveDocument(name: 'my_invoice.pdf', pdf: pdf);
   }
 
   static Widget buildHeader(Invoice invoice) => Column(
@@ -209,7 +207,6 @@ class PDFController {
     required String title,
     required String value,
     double width = double.infinity,
-    // TextStyle? titleStyle,
     bool unite = false,
   }) {
     final style = TextStyle(fontWeight: FontWeight.bold);
@@ -224,4 +221,106 @@ class PDFController {
       ),
     );
   }
+
+  Future<Uint8List> generateComponentsList(Invoice invoice) async {
+    final pdf = Document();
+
+    pdf.addPage(MultiPage(
+      maxPages: 50,
+      build: (context) => [
+        showComponents(invoice),
+      ],
+      footer: (context) => buildFooter(invoice),
+    ));
+
+    return pdf.save();
+  }
+
+  Widget showComponents(Invoice invoice) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            paddedText('Description'),
+            paddedText('Total cost'),
+          ],
+        ),
+        componentsList(invoice),
+      ],
+    );
+  }
+
+  Widget componentsList(Invoice invoice) {
+    final List<InvoiceItem> components = invoice.items;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: List.generate(components.length, (index) {
+        final component = components[index].description;
+        final value = components[index].cost;
+        final specificItems = components[index].specificItems;
+
+        return SizedBox(
+            height: (specificItems.isNotEmpty) ? 100 : 40,
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(component,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        )),
+                    Text(value.toString()),
+                  ],
+                ),
+                (specificItems.isNotEmpty)
+                    ? subComponentList(invoice, index)
+                    : Container(),
+              ],
+            ));
+      }),
+    );
+  }
+
+  Widget subComponentList(Invoice invoice, int index) {
+    final List<SpecificInvoiceItem> specificItems =
+        invoice.items[index].specificItems;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: List.generate(
+        specificItems.length,
+        (index) {
+          final component = specificItems[index].description;
+          final value = specificItems[index].cost;
+
+          return Padding(
+            padding: const EdgeInsets.only(left: 40),
+            child: Row(
+              children: [
+                Text(component),
+                SizedBox(width: 100),
+                Text(value.toString()),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget paddedText(
+    final String text, {
+    final TextAlign align = TextAlign.left,
+  }) =>
+      Padding(
+        padding: const EdgeInsets.all(10),
+        child: Text(
+          text,
+          textAlign: align,
+        ),
+      );
 }
