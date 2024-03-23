@@ -46,15 +46,12 @@ class InvoiceItem {
 
 class SpecificInvoiceItem {
   final String description;
-  final int quantity;
-  final int unitPrice;
-  final int cost;
+  final String units;
+
 
   const SpecificInvoiceItem({
     required this.description,
-    required this.quantity,
-    required this.unitPrice,
-    required this.cost,
+    required this.units,
   });
 }
 

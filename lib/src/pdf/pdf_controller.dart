@@ -227,14 +227,28 @@ class PDFController {
 
     pdf.addPage(MultiPage(
       build: (context) => [
+        Padding(
+          padding: const EdgeInsets.only(left: 150),
+          child: Text('Components List', style: const TextStyle(fontSize: 24))),
         showComponents(invoice),
         componentsList(invoice),
       ],
-      footer: (context) => buildFooter(invoice),
+      footer: (context) => buildSecondFooter(invoice),
     ));
 
     return pdf.save();
   }
+
+    static Widget buildSecondFooter(Invoice invoice) => Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Divider(),
+          SizedBox(height: 2 * PdfPageFormat.mm),
+          buildSimpleText(title: 'Client', value: invoice.customer.name),
+          // SizedBox(height: 1 * PdfPageFormat.mm),
+          // buildSimpleText(title: 'Paypal', value: invoice.supplier.paymentInfo),
+        ],
+      );
 
   Widget showComponents(Invoice invoice) {
     return Column(
@@ -242,13 +256,23 @@ class PDFController {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            paddedText('Description'),
-            paddedText('Total cost'),
+            Text(
+              'Component',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(width: 340),
+            Text(
+              'Cost',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 40),
           ],
         ),
       ],
     );
   }
+
+
 
   Widget componentsList(Invoice invoice) {
     final List<InvoiceItem> components = invoice.items;
@@ -261,7 +285,15 @@ class PDFController {
         final specificItems = components[index].specificItems;
 
         return SizedBox(
-            height: (specificItems.isNotEmpty) ? 100 : 40,
+            height: (specificItems.length >= 5)
+                ? 120
+                : (specificItems.length >= 3)
+                    ? 80
+                    : (specificItems.length >= 2)
+                        ? 60
+                        : (specificItems.length == 1)
+                            ? 50
+                            : 40,
             child: Column(
               children: [
                 Row(
@@ -270,11 +302,12 @@ class PDFController {
                     Text(component,
                         style: TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.normal,
                         )),
                     Text(value.toString()),
                   ],
                 ),
+                SizedBox(height: 5),
                 (specificItems.isNotEmpty)
                     ? subComponentList(invoice, index)
                     : Container(),
@@ -294,15 +327,13 @@ class PDFController {
         specificItems.length,
         (index) {
           final component = specificItems[index].description;
-          final value = specificItems[index].cost;
+          final value = specificItems[index].units;
 
           return Padding(
-            padding: const EdgeInsets.only(left: 40),
+            padding: const EdgeInsets.only(left: 20),
             child: Row(
               children: [
-                Text(component),
-                SizedBox(width: 100),
-                Text(value.toString()),
+                Text('$component ($value)'),
               ],
             ),
           );

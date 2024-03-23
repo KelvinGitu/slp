@@ -18,6 +18,14 @@ final getSelectedBreakerEnclosuresStreamProvider =
       .getStreamSelectedBreakerEnclosures(arguments[0], arguments[1]);
 });
 
+final getFutureSelectedBreakerEnclosuresProvider =
+    FutureProvider.family<List<DCBreakerEnclosureModel>, List<String>>(
+        (ref, arguments) {
+  return ref
+      .watch(dcBreakerEnclosureControllerProvider)
+      .getFutureSelectedBreakerEnclosures(arguments[0], arguments[1]);
+});
+
 final dcBreakerEnclosureControllerProvider = Provider(
   (ref) => DCBreakerEnclosureController(
     dcBreakerEnclosureRepository:

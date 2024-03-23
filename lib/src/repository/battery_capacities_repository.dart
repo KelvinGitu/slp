@@ -58,6 +58,23 @@ class BatteryCapacitiesRepository {
     });
   }
 
+  Future<List<BatteryCapacityModel>> getFutureSelectedBatteryCapacity(
+      String applicationId, String component) async {
+    var event = await _applications
+        .doc(applicationId)
+        .collection('components')
+        .doc(component)
+        .collection('capacities')
+        .where('isSelected', isEqualTo: true)
+        .get();
+
+    List<BatteryCapacityModel> capacities = [];
+    for (var doc in event.docs) {
+      capacities.add(BatteryCapacityModel.fromMap(doc.data()));
+    }
+    return capacities;
+  }
+
   Future updateBatteryCapacitySelectedStatus(String applicationId,
       bool selected, String component, int capacity) async {
     return _applications

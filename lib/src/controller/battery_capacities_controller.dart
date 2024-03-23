@@ -10,6 +10,14 @@ final getBatteryCapacityStreamProvider =
       .getBatteryCapacity(arguments[0], arguments[1]);
 });
 
+final getFutureSelectedBatteryCapacityProvider =
+    FutureProvider.family<List<BatteryCapacityModel>, List<String>>(
+        (ref, arguments) {
+  return ref
+      .watch(batteryCapacitiesControllerProvider)
+      .getFutureSelectedBatteryCapacities(arguments[0], arguments[1]);
+});
+
 final batteryCapacitiesControllerProvider = Provider(
   (ref) => BatteryCapacitiesController(
     batteryCapacitiesRepository: ref.watch(batteryCapacityRepositoryProvider),
@@ -47,6 +55,12 @@ class BatteryCapacitiesController {
       String applicationId, String component, String name) {
     return _batteryCapacitiesRepository.checkBatteryCapcityExists(
         applicationId, component, name);
+  }
+
+   Future<List<BatteryCapacityModel>> getFutureSelectedBatteryCapacities(
+      String applicationId, String component) async {
+    return await _batteryCapacitiesRepository.getFutureSelectedBatteryCapacity(
+        applicationId, component);
   }
 
   Stream<List<BatteryCapacityModel>> getBatteryCapacity(

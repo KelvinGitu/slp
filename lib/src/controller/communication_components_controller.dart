@@ -18,6 +18,14 @@ final getSelectedCommunicationComponentsStreamProvider =
       .getStreamSelectedCommunicationComponents(arguments[0], arguments[1]);
 });
 
+final getFutureSelectedCommunicationComponentsProvider =
+    FutureProvider.family<List<CommunicationComponentsModel>, List<String>>(
+        (ref, arguments) {
+  return ref
+      .watch(communicationComponentsControllerProvider)
+      .getFutureSelectedCommunicationComponents(arguments[0], arguments[1]);
+});
+
 final communicationComponentsControllerProvider = Provider(
   (ref) => CommunicationComponentsController(
     communicationComponentsRepository:
@@ -65,15 +73,15 @@ class CommunicationComponentsController {
         applicationId, length, component, componentName);
   }
 
-  
   void updateCommunicationComponentQuantity({
     required String applicationId,
     required String component,
     required String componentName,
     required int quantity,
   }) async {
-    await _communicationComponentsRepository.updateCommunicationComponentQuantity(
-        applicationId, quantity, component, componentName);
+    await _communicationComponentsRepository
+        .updateCommunicationComponentQuantity(
+            applicationId, quantity, component, componentName);
   }
 
   void updateCommunicationComponentCost({

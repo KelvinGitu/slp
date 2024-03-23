@@ -18,6 +18,15 @@ final getSelectedBatteryCablesStreamProvider =
       .getStreamSelectedBatteryCables(arguments[0], arguments[1]);
 });
 
+
+final getFutureSelectedBatteryCablesProvider =
+    FutureProvider.family<List<BatteryCableModel>, List<String>>(
+        (ref, arguments) {
+  return ref
+      .watch(batteryCablesControllerProvider)
+      .getFutureSelectedBatteryCables(arguments[0], arguments[1]);
+});
+
 final batteryCablesControllerProvider = Provider(
   (ref) => BatteryCablesController(
     batteryCablesRepository: ref.watch(batteryCablesRepositoryProvider),

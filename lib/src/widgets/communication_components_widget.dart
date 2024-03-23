@@ -33,7 +33,7 @@ class _CommunicationComponentsWidgetState
     super.dispose();
   }
 
-  void updateSelectedStatus(bool selected, String componentName) {
+  void updateSelectedCommunicationComponentStatus(bool selected, String componentName) {
     ref
         .watch(communicationComponentsControllerProvider)
         .updateCommunicationComponentSelectedStatus(
@@ -44,7 +44,7 @@ class _CommunicationComponentsWidgetState
         );
   }
 
-  void updateSelectedCommunicationCompoentCost(int cost, String componentName) {
+  void updateSelectedCommunicationComponentCost(int cost, String componentName) {
     ref
         .watch(communicationComponentsControllerProvider)
         .updateCommunicationComponentCost(
@@ -173,7 +173,7 @@ class _CommunicationComponentsWidgetState
                             });
                             (validate == true)
                                 ? null
-                                : updateSelectedStatus(true, widget.comp.name);
+                                : updateSelectedCommunicationComponentStatus(true, widget.comp.name);
                             (validate == true)
                                 ? null
                                 : updateSelectedCommunicationComponentLength(
@@ -183,7 +183,7 @@ class _CommunicationComponentsWidgetState
 
                             (validate == true)
                                 ? null
-                                : updateSelectedCommunicationCompoentCost(
+                                : updateSelectedCommunicationComponentCost(
                                     int.parse(cableLengthController.text) *
                                         widget.comp.price,
                                     widget.comp.name,
@@ -204,7 +204,7 @@ class _CommunicationComponentsWidgetState
                               });
                               (validate == true)
                                   ? null
-                                  : updateSelectedStatus(
+                                  : updateSelectedCommunicationComponentStatus(
                                       true, widget.comp.name);
                               (validate == true)
                                   ? null
@@ -213,7 +213,7 @@ class _CommunicationComponentsWidgetState
                                       widget.comp.name);
                               (validate == true)
                                   ? null
-                                  : updateSelectedCommunicationCompoentCost(
+                                  : updateSelectedCommunicationComponentCost(
                                       int.parse(unitsController.text) *
                                           widget.comp.price,
                                       widget.comp.name);
@@ -228,11 +228,11 @@ class _CommunicationComponentsWidgetState
                         alignment: Alignment.topCenter,
                         child: ConfirmSelectionButton(
                             onPressed: () {
-                              updateSelectedStatus(false, widget.comp.name);
+                              updateSelectedCommunicationComponentStatus(false, widget.comp.name);
 
                               updateSelectedCommunicationComponentLength(
                                   0, widget.comp.name);
-                              updateSelectedCommunicationCompoentCost(
+                              updateSelectedCommunicationComponentCost(
                                   0, widget.comp.name);
                               Navigator.pop(context);
                             },
@@ -242,11 +242,11 @@ class _CommunicationComponentsWidgetState
                         alignment: Alignment.topCenter,
                         child: ConfirmSelectionButton(
                             onPressed: () {
-                              updateSelectedStatus(false, widget.comp.name);
+                              updateSelectedCommunicationComponentStatus(false, widget.comp.name);
 
                               updateSelectedCommunicationComponentQuantity(
                                   0, widget.comp.name);
-                              updateSelectedCommunicationCompoentCost(
+                              updateSelectedCommunicationComponentCost(
                                   0, widget.comp.name);
                               Navigator.pop(context);
                             },

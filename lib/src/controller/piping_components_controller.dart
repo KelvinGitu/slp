@@ -18,6 +18,14 @@ final getSelectedPipingComponentsStreamProvider =
       .getStreamSelectedPipingComponents(arguments[0], arguments[1]);
 });
 
+final getFutureSelectedPipingComponentsProvider =
+    FutureProvider.family<List<PipingComponentsModel>, List<String>>(
+        (ref, arguments) {
+  return ref
+      .watch(pipingComponentsControllerProvider)
+      .getFutureSelectedPipingComponents(arguments[0], arguments[1]);
+});
+
 final pipingComponentsControllerProvider = Provider(
   (ref) => PipingComponentsController(
     pipingComponentsRepository: ref.watch(pipingComponentsRepositoryProvider),

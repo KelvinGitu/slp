@@ -9,11 +9,15 @@ final getCoreCablesStreamProvider =
       .getCoreCables(arguments[0], arguments[1]);
 });
 
+
 final coreCablesControllerProvider = Provider(
   (ref) => CoreCablesController(
     coreCablesRepository: ref.watch(coreCablesRepositoryProvider),
   ),
 );
+
+
+
 
 class CoreCablesController {
   final CoreCablesRepository _coreCablesRepository;

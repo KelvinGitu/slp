@@ -16,6 +16,13 @@ final getSelectedLineFusesStreamProvider =
       .getStreamSelectedFuses(arguments[0], arguments[1]);
 });
 
+final getFutureSelectedLineFusesProvider =
+    FutureProvider.family<List<LineFuseModel>, List<String>>((ref, arguments) {
+  return ref
+      .watch(lineFuseControllerProvider)
+      .getFutureSelectedFuses(arguments[0], arguments[1]);
+});
+
 final lineFuseControllerProvider = Provider(
   (ref) => LineFuseController(
     lineFuseRepository: ref.watch(lineFuseRepositoryPrrovider),

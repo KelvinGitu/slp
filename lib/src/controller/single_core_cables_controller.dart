@@ -18,6 +18,14 @@ final getSelectedSingleCoreCablesStreamProvider =
       .getStreamSelectedSingleCables(arguments[0], arguments[1]);
 });
 
+final getFutureSelectedSingleCoreCablesProvider =
+    FutureProvider.family<List<SingleCoreCableModel>, List<String>>(
+        (ref, arguments) {
+  return ref
+      .watch(singleCoreCablesControllerProvider)
+      .getFutureSelectedSingleCoreCables(arguments[0], arguments[1]);
+});
+
 final singleCoreCablesControllerProvider = Provider(
   (ref) => SingleCoreCablesController(
     singleCoreCablesRepository: ref.watch(singleCoreCablesRepositoryProvider),

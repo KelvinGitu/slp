@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:solar_project/models/battery_cable_model.dart';
 import 'package:solar_project/models/components_model.dart';
-import 'package:solar_project/src/controller/battery_cables_conrtroller.dart';
+import 'package:solar_project/src/controller/battery_cables_controller.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
 import 'package:solar_project/src/widgets/battery_cable_widget.dart';
 import 'package:solar_project/src/widgets/confirm_selection_button.dart';

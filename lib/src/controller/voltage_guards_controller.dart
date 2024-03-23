@@ -18,6 +18,14 @@ final getSelectedVoltageGuardsStreamProvider =
       .getStreamSelectedVoltageGuards(arguments[0], arguments[1]);
 });
 
+final getFutureSelectedVoltageGuardsProvider =
+    FutureProvider.family<List<VoltagGuardModel>, List<String>>(
+        (ref, arguments) {
+  return ref
+      .watch(voltageGuardsControllerProvider)
+      .getFutureSelectedVoltageGuards(arguments[0], arguments[1]);
+});
+
 final voltageGuardsControllerProvider = Provider(
   (ref) => VoltageGuardsController(
     voltageGuardRepository: ref.watch(voltageGuardRepositoryProvider),

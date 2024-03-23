@@ -18,6 +18,14 @@ final getSelectedModulesStreamProvider =
       .getStreamSelectedModules(arguments[0], arguments[1]);
 });
 
+final getFutureSelectedModulesProvider =
+    FutureProvider.family<List<InverterModuleModel>, List<String>>(
+        (ref, arguments) {
+  return ref
+      .watch(inverterModuleControllerProvider)
+      .getFutureSelectedModules(arguments[0], arguments[1]);
+});
+
 final inverterModuleControllerProvider = Provider(
   (ref) => InverterModuleController(
     inverterModuleRepository: ref.watch(inverterModuleRepositoryProvider),

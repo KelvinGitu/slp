@@ -18,6 +18,14 @@ final getSelectedSurgeProtectorsStreamProvider =
       .getStreamSelectedSurgeProtectors(arguments[0], arguments[1]);
 });
 
+final getFutureSelectedSurgeProtectorsProvider =
+    FutureProvider.family<List<SurgeProtectorModel>, List<String>>(
+        (ref, arguments) {
+  return ref
+      .watch(surgeProtectorControllerProvider)
+      .getFutureSelectedSurgeProtectors(arguments[0], arguments[1]);
+});
+
 final surgeProtectorControllerProvider = Provider(
   (ref) => SurgeProtectorController(
     surgeProtectorRepository: ref.watch(surgeProtectorRepositoryProvider),

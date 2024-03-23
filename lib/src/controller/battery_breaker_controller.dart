@@ -18,6 +18,14 @@ final getSelectedBatteryBreakersStreamProvider =
       .getStreamSelectedBatteryBreakers(arguments[0], arguments[1]);
 });
 
+final getFutureSelectedBatteryBreakersProvider =
+    FutureProvider.family<List<DCBatteryBreakerModel>, List<String>>(
+        (ref, arguments) async {
+  return ref
+      .watch(batteryBreakerControllerProvider)
+      .getFutureSelectedBatteryBreakers(arguments[0], arguments[1]);
+});
+
 final batteryBreakerControllerProvider = Provider(
   (ref) => BatteryBreakerController(
     batteryBreakersRepository: ref.watch(batteryBreakerRepositoryProvider),
