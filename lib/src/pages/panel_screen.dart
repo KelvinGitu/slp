@@ -177,7 +177,7 @@ class _PanelScreenState extends ConsumerState<PanelScreen> {
                       ),
                       const SizedBox(height: 20),
                       Text(
-                        'Total Cost: ${panel.cost}',
+                        'Total Cost: KES ${panel.cost}',
                         style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w700),
                       ),

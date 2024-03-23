@@ -137,7 +137,7 @@ class _DINRailState extends ConsumerState<DINRail> {
                               ),
                               const SizedBox(height: 20),
                               Text(
-                                'Total cost: ${component.cost} KES',
+                                'Total cost: KES ${component.cost}',
                                 style: const TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.w700),
                               ),

@@ -70,7 +70,7 @@ class _AutomaticChangeOverSwitchState
                 ? Column(
                     children: [
                       const Text(
-                        'One automatic changeover switch will be added automatically as part of the installation',
+                        'One automatic changeover switch will be added as part of the installation',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -105,7 +105,7 @@ class _AutomaticChangeOverSwitchState
                       ),
                       const SizedBox(height: 20),
                       Text(
-                        'Total cost: ${component.cost}',
+                        'Total cost: KES ${component.cost}',
                         style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w700),
                       ),

@@ -256,7 +256,7 @@ Widget selectedTrue({
     children: [
       Container(),
       Text(
-        'A ${componentsModel.name} will be included in the installation',
+        'A ${componentsModel.name} was added to the installation',
         style: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w500,

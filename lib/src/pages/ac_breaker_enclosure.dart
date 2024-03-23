@@ -184,9 +184,9 @@ class _ACBreakerConsumerState extends ConsumerState<ACBreakerEnclosure> {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      const SizedBox(height: 15),
+                      const SizedBox(height: 20),
                       Text(
-                        'Total cost: ${component.cost}',
+                        'Total cost: KES ${component.cost}',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,

@@ -205,7 +205,7 @@ Widget selectedTrue({
       ),
       const SizedBox(height: 25),
       Text(
-        'Total cost: ${componentsModel.cost}',
+        'Total cost: KES ${componentsModel.cost}',
         style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
       ),
       const SizedBox(height: 40),

@@ -163,7 +163,7 @@ class _PVCTrunkingState extends ConsumerState<PVCTrunking> {
                       ),
                       const SizedBox(height: 20),
                       Text(
-                        'Total cost: ${component.cost} KES',
+                        'Total cost: KES ${component.cost}',
                         style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w700),
                       ),

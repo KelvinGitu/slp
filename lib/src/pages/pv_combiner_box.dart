@@ -76,7 +76,7 @@ class _PVCombinerBoxState extends ConsumerState<PVCombinerBox> {
                 ? Column(
                     children: [
                       const Text(
-                        'One PV combiner box will be added automatically as part of the installation',
+                        'One PV combiner box will be added to the installation',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -84,10 +84,10 @@ class _PVCombinerBoxState extends ConsumerState<PVCombinerBox> {
                       ),
                       const SizedBox(height: 25),
                       Text(
-                        'Approximate cost: KES ${component.cost}',
+                        'Total cost: KES ${component.cost}',
                         style: const TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                       const SizedBox(height: 40),

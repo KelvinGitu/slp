@@ -230,7 +230,7 @@ class _ACContactorSingleState extends ConsumerState<ACContactorSingle> {
                           ),
                           const SizedBox(height: 15),
                           Text(
-                            'Total cost: ${component.cost}',
+                            'Total cost: KES ${component.cost}',
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w700,

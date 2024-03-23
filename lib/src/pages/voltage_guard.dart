@@ -239,7 +239,6 @@ Widget selectGuards({
                 child: Container(
                   height: 40,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
                     color: (guard.isSelected == false
                         ? Colors.white
                         : Colors.grey.withOpacity(0.2)),

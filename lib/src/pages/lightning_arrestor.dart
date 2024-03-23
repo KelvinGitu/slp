@@ -220,7 +220,7 @@ Widget selectedTrue({
     children: [
       Container(),
       Text(
-        'A ${componentsModel.name} will be included in the installation',
+        'A ${componentsModel.name} was added to the installation',
         style: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w500,
@@ -228,7 +228,7 @@ Widget selectedTrue({
       ),
       const SizedBox(height: 20),
       Text(
-        'Total cost: ${componentsModel.cost}',
+        'Total cost: KES ${componentsModel.cost}',
         style: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w700,

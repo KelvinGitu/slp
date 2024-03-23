@@ -260,7 +260,7 @@ class _BusbarCompleteState extends ConsumerState<BusbarComplete> {
       children: [
         Container(),
         Text(
-          'A ${componentsModel.name} will be included in the installation',
+          'A ${componentsModel.name} was included in the installation',
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w500,

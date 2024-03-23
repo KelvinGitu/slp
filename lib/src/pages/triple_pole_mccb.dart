@@ -248,7 +248,7 @@ class _TriplePoleMCCBState extends ConsumerState<TriplePoleMCCB> {
                           ),
                           const SizedBox(height: 20),
                           Text(
-                            'Total cost: ${component.cost} KES',
+                            'Total cost: KES ${component.cost}',
                             style: const TextStyle(
                               fontWeight: FontWeight.w700,
                               fontSize: 16,

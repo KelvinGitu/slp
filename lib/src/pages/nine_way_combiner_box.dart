@@ -106,7 +106,7 @@ class _NineWayCombinerEnclosureState extends ConsumerState<NineWayCombinerBox> {
                           updateSelectedStatus(true);
                           updateApplicationQuotation();
                         },
-                        message: 'Confirm Selecction',
+                        message: 'Confirm Selection',
                       ),
                     ],
                   )
@@ -121,7 +121,7 @@ class _NineWayCombinerEnclosureState extends ConsumerState<NineWayCombinerBox> {
                       ),
                       const SizedBox(height: 20),
                       Text(
-                        'Total cost: ${component.cost}',
+                        'Total cost: KES ${component.cost}',
                         style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w700),
                       ),
@@ -130,8 +130,6 @@ class _NineWayCombinerEnclosureState extends ConsumerState<NineWayCombinerBox> {
                         padding: const EdgeInsets.symmetric(horizontal: 40),
                         child: ConfirmSelectionButton(
                           onPressed: () {
-                            // updateApplicationQuotation();
-                            // updateSelectedStatus(true);
                             Navigator.pop(context);
                           },
                           message: 'Exit',
