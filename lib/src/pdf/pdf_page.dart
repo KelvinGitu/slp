@@ -36,6 +36,7 @@ import 'package:solar_project/src/home_screen.dart';
 import 'package:solar_project/src/pdf/pdf_list_viewer.dart';
 import 'package:solar_project/src/pdf/pdf_model.dart';
 import 'package:solar_project/src/pdf/pdf_viewer.dart';
+import 'package:solar_project/src/widgets/confirm_selection_button.dart';
 
 class PDFPage extends ConsumerStatefulWidget {
   final String applicationId;
@@ -220,7 +221,7 @@ class _PDFPageState extends ConsumerState<PDFPage> {
                     Text(
                       'Quotation: ${application.quotation}',
                       style: const TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.w500),
+                          fontSize: 18, fontWeight: FontWeight.w700),
                     ),
                     const SizedBox(height: 40),
                     showOptions(
@@ -284,10 +285,7 @@ Widget showOptions({
   final size = MediaQuery.of(context).size;
   return Align(
     alignment: Alignment.topCenter,
-    child: SizedBox(
-      height: 35,
-      width: 100,
-      child: OutlinedButton(
+    child:  ConfirmSelectionButton(
         onPressed: () {
           showModalBottomSheet(
               context: context,
@@ -422,13 +420,9 @@ Widget showOptions({
                 );
               });
         },
-        style: ElevatedButton.styleFrom(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(2))),
-        child: const Icon(Icons.add),
+        message: 'See options',
       ),
-    ),
-  );
+    );
 }
 
 Widget generateSubComponents({
