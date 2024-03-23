@@ -226,9 +226,9 @@ class PDFController {
     final pdf = Document();
 
     pdf.addPage(MultiPage(
-      maxPages: 50,
       build: (context) => [
         showComponents(invoice),
+        componentsList(invoice),
       ],
       footer: (context) => buildFooter(invoice),
     ));
@@ -246,7 +246,6 @@ class PDFController {
             paddedText('Total cost'),
           ],
         ),
-        componentsList(invoice),
       ],
     );
   }

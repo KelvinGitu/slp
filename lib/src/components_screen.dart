@@ -10,6 +10,7 @@ import 'package:solar_project/src/controller/communication_components_controller
 import 'package:solar_project/src/controller/core_cables_controller.dart';
 import 'package:solar_project/src/controller/dc_breaker_controller.dart';
 import 'package:solar_project/src/controller/dc_breaker_enclosures_controller.dart';
+import 'package:solar_project/src/controller/inverter_module_controller.dart';
 import 'package:solar_project/src/controller/line_fuse_controller.dart';
 import 'package:solar_project/src/controller/piping_components_controller.dart';
 import 'package:solar_project/src/controller/pv_cables_controller.dart';
@@ -55,6 +56,7 @@ class _ComponentsScreenState extends ConsumerState<ComponentsScreen> {
       saveBatteryBreakerToApplication();
       saveCommunicationComponentsToApplication();
       saveCableLugsToApplication();
+      saveInverterModulesToApplication();
     });
     super.initState();
   }
@@ -311,7 +313,22 @@ class _ComponentsScreenState extends ConsumerState<ComponentsScreen> {
     }
   }
 
-  void updateApplicationDoneStatus(bool done) {
+  void saveInverterModulesToApplication() async {
+    bool componentExist =
+        await ref.read(inverterModuleControllerProvider).checkModuleExists(
+              widget.applicationId,
+              'Inverter Module',
+              '1000W',
+            );
+    if (componentExist == false) {
+      ref.read(inverterModuleControllerProvider).saveModulesToApplication(
+            applicationId: widget.applicationId,
+            component: 'Inverter Module',
+          );
+    }
+  }
+
+  void updateApplicationDoneStatus(bool done) async {
     ref.watch(solarControllerProvider).updateApplicationDoneStatus(
           widget.applicationId,
           done,
@@ -409,8 +426,7 @@ class _ComponentsScreenState extends ConsumerState<ComponentsScreen> {
                         builder: (BuildContext context) {
                           return AlertDialog(
                             title: const Text("Close Application"),
-                            content:
-                                const Text("Close application?"),
+                            content: const Text("Close application?"),
                             actions: [
                               TextButton(
                                 child: const Text("Cancel"),
