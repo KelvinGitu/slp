@@ -54,73 +54,94 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
             )
           : Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    'Sign Up',
-                    style: TextStyle(fontSize: 30),
-                  ),
-                  const SizedBox(height: 20),
-                  TextField(
-                    controller: nameController,
-                    decoration: InputDecoration(
-                      hintText: 'UserName',
-                      border: InputBorder.none,
-                      filled: true,
-                      errorText: validate ? "Name Can't Be Empty" : null,
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 150),
+                    Text(
+                      'Solartide'.toUpperCase(),
+                      style: const TextStyle(fontSize: 50),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  TextField(
-                    controller: emailController,
-                    decoration: InputDecoration(
-                      hintText: 'Email',
-                      border: InputBorder.none,
-                      filled: true,
-                      errorText: validate2 ? "Email Can't Be Empty" : null,
+                    const SizedBox(height: 50),
+                    const Text(
+                      'Welcome',
+                      style: TextStyle(fontSize: 30),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  TextField(
-                    controller: passwordController,
-                    obscureText: passwordVisible,
-                    decoration: InputDecoration(
-                      hintText: 'Password',
-                      border: InputBorder.none,
-                      filled: true,
-                      suffixIcon: IconButton(
-                        icon: Icon(passwordVisible
-                            ? Icons.visibility
-                            : Icons.visibility_off),
-                        onPressed: () {
-                          setState(
-                            () {
-                              passwordVisible = !passwordVisible;
-                            },
-                          );
-                        },
+                    const SizedBox(height: 20),
+                    TextField(
+                      controller: nameController,
+                      decoration: InputDecoration(
+                        hintText: 'Username',
+                        hintStyle: const TextStyle(fontSize: 14),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(18),
+                          borderSide: const BorderSide(),
+                        ),
+                        filled: true,
+                        errorText: validate ? "Name Can't Be Empty" : null,
                       ),
-                      errorText: validate3 ? "Password Can't Be Empty" : null,
                     ),
-                  ),
-                  const SizedBox(height: 40),
-                  ConfirmSelectionButton(
-                    onPressed: () {
-                      setState(() {
-                        validate = nameController.text.isEmpty;
-                        validate2 = emailController.text.isEmpty;
-                        validate3 = passwordController.text.isEmpty;
-                      });
-                      (validate == true ||
-                              validate2 == true ||
-                              validate3 == true)
-                          ? null
-                          : emailSignUp();
-                    },
-                    message: 'Sign Up',
-                  )
-                ],
+                    const SizedBox(height: 20),
+                    TextField(
+                      controller: emailController,
+                      decoration: InputDecoration(
+                        hintText: 'Email',
+                        hintStyle: const TextStyle(fontSize: 14),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(18),
+                          borderSide: const BorderSide(),
+                        ),
+                        filled: true,
+                        errorText: validate2 ? "Email Can't Be Empty" : null,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    TextField(
+                      controller: passwordController,
+                      obscureText: passwordVisible,
+                      decoration: InputDecoration(
+                        hintText: 'Password',
+                        hintStyle: const TextStyle(fontSize: 14),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(18),
+                          borderSide: const BorderSide(),
+                        ),
+                        filled: true,
+                        suffixIcon: IconButton(
+                          icon: Icon(passwordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off),
+                          onPressed: () {
+                            setState(
+                              () {
+                                passwordVisible = !passwordVisible;
+                              },
+                            );
+                          },
+                        ),
+                        errorText: validate3 ? "Password Can't Be Empty" : null,
+                      ),
+                    ),
+                    const SizedBox(height: 40),
+                    ConfirmSelectionButton(
+                      onPressed: () {
+                        setState(() {
+                          validate = nameController.text.isEmpty;
+                          validate2 = emailController.text.isEmpty;
+                          validate3 = passwordController.text.isEmpty;
+                        });
+                        (validate == true ||
+                                validate2 == true ||
+                                validate3 == true)
+                            ? null
+                            : emailSignUp();
+                      },
+                      message: 'Sign Up',
+                    )
+                  ],
+                ),
               ),
             ),
     );

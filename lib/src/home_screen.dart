@@ -59,7 +59,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Company name',
+          'SolarTide',
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -195,12 +195,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     controller: clientNameController,
                     decoration: InputDecoration(
                       hintText: 'Client name',
-                      border: InputBorder.none,
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(14)),
                       filled: true,
                       errorText: validate ? "Name Can't Be Empty" : null,
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 40),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Row(
