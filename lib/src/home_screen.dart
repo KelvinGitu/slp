@@ -161,11 +161,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   child: const Text("Continue"),
                                   onPressed: () {
                                     signOutUser();
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const LoginScreen()));
+                                    Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: ((context) =>
+                                            const LoginScreen()),
+                                      ),
+                                      (route) => false,
+                                    );
                                   },
                                 ),
                               ],
