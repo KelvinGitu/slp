@@ -28,7 +28,7 @@ class _EarthingCableState extends ConsumerState<EarthingCable> {
   }
 
   void updateSelectedStatus(bool selected) {
-    ref.watch(solarControllerProvider).updateApplicationSelectedStatus(
+    ref.watch(solarControllerProvider).updateApplicationComponentSelectedStatus(
           widget.component,
           selected,
           widget.applicationId,
@@ -36,7 +36,7 @@ class _EarthingCableState extends ConsumerState<EarthingCable> {
   }
 
   void updateComponentCost(int cost) {
-    ref.watch(solarControllerProvider).updateComponentCost(
+    ref.watch(solarControllerProvider).updateApplicationComponentCost(
           widget.component,
           cost,
           widget.applicationId,
@@ -50,7 +50,7 @@ class _EarthingCableState extends ConsumerState<EarthingCable> {
   }
 
   void updateComponentLength(int length) {
-    ref.watch(solarControllerProvider).updateComponentLength(
+    ref.watch(solarControllerProvider).updateApplicationComponentLength(
           widget.component,
           length * 2,
           widget.applicationId,

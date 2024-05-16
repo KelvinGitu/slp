@@ -190,7 +190,7 @@ class _CommunicationComponentsWidgetState
                                   );
                             (validate == true) ? null : Navigator.pop(context);
                           },
-                          message: 'Select',
+                          message: 'Confirm',
                         ),
                       )
                     : Align(

@@ -62,6 +62,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget build(BuildContext context) {
     final isLoading = ref.watch(authControllerProvider);
 
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
       body: isLoading
           ? const Center(
@@ -71,88 +73,90 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 150),
-                    Text(
-                      'Solartide'.toUpperCase(),
-                      style: const TextStyle(fontSize: 50),
-                    ),
-                    const SizedBox(height: 50),
-                    const Text(
-                      'Welcome back',
-                      style: TextStyle(fontSize: 30),
-                    ),
-                    const SizedBox(height: 20),
-                    TextField(
-                      controller: emailController,
-                      decoration: InputDecoration(
-                        hintText: 'Email',
-                        hintStyle: const TextStyle(fontSize: 14),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(18),
-                          borderSide: const BorderSide(),
-                        ),
-                        filled: true,
-                        errorText: validate ? "Email Can't Be Empty" : null,
+                child: SizedBox(
+                  height: size.height,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // const SizedBox(height: 150),
+                      const Image(
+                        image: AssetImage('assets/logos/logo_transparent.png'),
                       ),
-                    ),
-                    const SizedBox(height: 20),
-                    TextField(
-                      controller: passwordController,
-                      obscureText: passwordVisible,
-                      decoration: InputDecoration(
-                        hintText: 'Password',
-                        hintStyle: const TextStyle(fontSize: 14),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(18),
-                          borderSide: const BorderSide(),
-                        ),
-                        filled: true,
-                        suffixIcon: IconButton(
-                          icon: Icon(passwordVisible
-                              ? Icons.visibility
-                              : Icons.visibility_off),
-                          onPressed: () {
-                            setState(
-                              () {
-                                passwordVisible = !passwordVisible;
-                              },
-                            );
-                          },
-                        ),
-                        errorText: validate2 ? "Password Can't Be Empty" : null,
+                      const Text(
+                        'Welcome back',
+                        style: TextStyle(fontSize: 30),
                       ),
-                    ),
-                    const SizedBox(height: 40),
-                    ConfirmSelectionButton(
-                      onPressed: () {
-                        setState(() {
-                          validate = emailController.text.isEmpty;
-                          validate2 = passwordController.text.isEmpty;
-                        });
-                        (validate == true || validate2 == true)
-                            ? null
-                            : loginWithEmail();
-                      },
-                      message: 'Login',
-                    ),
-                    const SizedBox(height: 40),
-                    const Text('New User?'),
-                    const SizedBox(height: 5),
-                    ConfirmSelectionButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: ((context) => const SignUpScreen()),
+                      const SizedBox(height: 20),
+                      TextField(
+                        controller: emailController,
+                        decoration: InputDecoration(
+                          hintText: 'Email',
+                          hintStyle: const TextStyle(fontSize: 14),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(18),
+                            borderSide: const BorderSide(),
                           ),
-                        );
-                      },
-                      message: 'Sign up',
-                    )
-                  ],
+                          filled: true,
+                          errorText: validate ? "Email Can't Be Empty" : null,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      TextField(
+                        controller: passwordController,
+                        obscureText: passwordVisible,
+                        decoration: InputDecoration(
+                          hintText: 'Password',
+                          hintStyle: const TextStyle(fontSize: 14),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(18),
+                            borderSide: const BorderSide(),
+                          ),
+                          filled: true,
+                          suffixIcon: IconButton(
+                            icon: Icon(passwordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off),
+                            onPressed: () {
+                              setState(
+                                () {
+                                  passwordVisible = !passwordVisible;
+                                },
+                              );
+                            },
+                          ),
+                          errorText:
+                              validate2 ? "Password Can't Be Empty" : null,
+                        ),
+                      ),
+                      const SizedBox(height: 40),
+                      ConfirmSelectionButton(
+                        onPressed: () {
+                          setState(() {
+                            validate = emailController.text.isEmpty;
+                            validate2 = passwordController.text.isEmpty;
+                          });
+                          (validate == true || validate2 == true)
+                              ? null
+                              : loginWithEmail();
+                        },
+                        message: 'Login',
+                      ),
+                      const SizedBox(height: 40),
+                      const Text('New User?'),
+                      const SizedBox(height: 5),
+                      ConfirmSelectionButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: ((context) => const SignUpScreen()),
+                            ),
+                          );
+                        },
+                        message: 'Sign up',
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
