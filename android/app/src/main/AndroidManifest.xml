@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="com.android.vending.BILLING"/>
     <application
-        android:label="solar_project"
+        android:label="SolarTide"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
