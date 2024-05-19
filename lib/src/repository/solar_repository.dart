@@ -82,6 +82,10 @@ class SolarRepository {
     return _applications.doc(applicationId).update({'isDone': done});
   }
 
+   Future updateApplicationDeleteStatus(String applicationId, bool delete) async {
+    return _applications.doc(applicationId).update({'isDeleted': delete});
+  }
+
   Stream<List<ApplicationModel>> getAllApplications(String uid) {
     return _applications
         .where('expertId', isEqualTo: uid)

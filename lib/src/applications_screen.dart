@@ -1,11 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:solar_project/src/components_screen.dart';
 import 'package:solar_project/src/controller/solar_controller.dart';
 import 'package:solar_project/src/pdf/pdf_page.dart';
 
 class ApplicationsScreen extends ConsumerWidget {
   const ApplicationsScreen({super.key});
+
+  void updateApplicationDeleteStatus(
+    bool delete,
+    WidgetRef ref,
+    String applicationId,
+  ) async {
+    ref.watch(solarControllerProvider).updateApplicationDeleteStatus(
+          applicationId,
+          delete,
+        );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -20,12 +32,18 @@ class ApplicationsScreen extends ConsumerWidget {
       ),
       body: allApplications.when(
         data: (applications) {
+          applications.removeWhere((element) => element.isDeleted == true);
+
           return (applications.isNotEmpty)
               ? ListView.builder(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   itemCount: applications.length,
                   itemBuilder: ((context, index) {
                     final application = applications[index];
+                    final appTime = application.createdAt;
+                    final formattedDate = DateFormat("yMMMMd").format(appTime);
+                    final todayDate =
+                        DateFormat("yMMMMd").format(DateTime.now());
                     return GestureDetector(
                       onTap: () {
                         (application.isDone == true)
@@ -50,6 +68,38 @@ class ApplicationsScreen extends ConsumerWidget {
                                 (route) => false,
                               );
                       },
+                      onLongPress: () {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text("Delete application?"),
+                              content: const Text(
+                                  "Are you sure you want to delete this application?"),
+                              actions: [
+                                TextButton(
+                                  child: const Text("Cancel"),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                TextButton(
+                                  child: const Text("Continue"),
+                                  onPressed: () {
+                                    updateApplicationDeleteStatus(
+                                      true,
+                                      ref,
+                                      application.applicationId,
+                                    );
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
                       child: Container(
                         height: 60,
                         margin: const EdgeInsets.only(bottom: 10),
@@ -59,13 +109,24 @@ class ApplicationsScreen extends ConsumerWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
+                            Text(
+                              (todayDate == formattedDate)
+                                  ? 'Today'
+                                  : formattedDate,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16,
+                                color: Colors.green,
+                              ),
+                            ),
+                            const SizedBox(width: 20),
                             Text(
                               application.clientName,
                               style: const TextStyle(
                                   fontWeight: FontWeight.w500, fontSize: 16),
                             ),
+                            const Spacer(),
                             Text(
                               application.quotation.toString(),
                               style: TextStyle(

@@ -134,6 +134,10 @@ class SolarController {
     return _solarRepository.updateApplicationDoneStatus(applicationId, done);
   }
 
+   void updateApplicationDeleteStatus(String applicationId, bool delete) async {
+    return _solarRepository.updateApplicationDeleteStatus(applicationId, delete);
+  }
+
   Stream<ApplicationModel> getApplication(String applicationId) {
     return _solarRepository.getApplication(applicationId);
   }
