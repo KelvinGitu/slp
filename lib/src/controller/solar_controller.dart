@@ -113,6 +113,8 @@ class SolarController {
       expertId: user.uid,
       quotation: 0,
       isDone: false,
+      isDeleted: false,
+      createdAt: DateTime.now(),
     );
     await _solarRepository.createApplication(applicationId, applicationModel);
   }

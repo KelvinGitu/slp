@@ -5,6 +5,8 @@ class ApplicationModel {
   final String expertId;
   final int quotation;
   final bool isDone;
+  final bool isDeleted;
+  final DateTime createdAt;
   ApplicationModel({
     required this.applicationId,
     required this.clientName,
@@ -12,25 +14,9 @@ class ApplicationModel {
     required this.expertId,
     required this.quotation,
     required this.isDone,
+    required this.isDeleted,
+    required this.createdAt,
   });
-
-  ApplicationModel copyWith({
-    String? applicationId,
-    String? clientName,
-    String? expertName,
-    String? expertId,
-    int? quotation,
-    bool? isDone,
-  }) {
-    return ApplicationModel(
-      applicationId: applicationId ?? this.applicationId,
-      clientName: clientName ?? this.clientName,
-      expertName: expertName ?? this.expertName,
-      expertId: expertId ?? this.expertId,
-      quotation: quotation ?? this.quotation,
-      isDone: isDone ?? this.isDone,
-    );
-  }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -40,6 +26,8 @@ class ApplicationModel {
       'expertId': expertId,
       'quotation': quotation,
       'isDone': isDone,
+      'isDeleted': isDeleted,
+      'createdAt': createdAt.millisecondsSinceEpoch,
     };
   }
 
@@ -51,7 +39,8 @@ class ApplicationModel {
       expertId: map['expertId'] as String,
       quotation: map['quotation'] as int,
       isDone: map['isDone'] as bool,
+      isDeleted: map['isDeleted'] as bool,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
     );
   }
-
-  }
+}

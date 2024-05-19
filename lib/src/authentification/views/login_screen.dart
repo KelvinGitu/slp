@@ -65,11 +65,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: isLoading
+      body: 
+      isLoading
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : Padding(
+          : 
+          Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
