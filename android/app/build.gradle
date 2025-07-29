@@ -1,6 +1,10 @@
 plugins {
     id "com.android.application"
+    // START: FlutterFire Configuration
+    id 'com.google.gms.google-services'
+    // END: FlutterFire Configuration
     id "kotlin-android"
+    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
 }
 
@@ -30,7 +34,7 @@ def keystoreProperties = new Properties()
 
 android {
     namespace "com.example.solar_project"
-    compileSdkVersion 34
+    compileSdkVersion 35
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -39,11 +43,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
-    }
-
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
+        jvmTarget = JavaVersion.VERSION_1_8
     }
 
     defaultConfig {
@@ -51,9 +51,9 @@ android {
         applicationId "com.solar.project"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion 21
-        targetSdkVersion 33
-        versionCode 3
+        minSdkVersion 23
+        targetSdkVersion 35
+        versionCode 4
         versionName '1.0.0'
         multiDexEnabled true
     }
@@ -76,5 +76,3 @@ android {
 flutter {
     source '../..'
 }
-
-dependencies {}
