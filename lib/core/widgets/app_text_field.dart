@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:solartide/core/theme/app_palette.dart';
 import 'package:solartide/core/theme/app_text.dart';
 import 'package:solartide/core/theme/app_tokens.dart';
@@ -21,6 +22,10 @@ class AppTextField extends StatelessWidget {
     this.onSubmitted,
     this.icon,
     this.suffix,
+    this.inputFormatters,
+    this.onChanged,
+    this.maxLines = 1,
+    this.textCapitalization = TextCapitalization.none,
   });
 
   final String label;
@@ -38,6 +43,32 @@ class AppTextField extends StatelessWidget {
 
   /// Trailing control, such as the password visibility toggle.
   final Widget? suffix;
+  final List<TextInputFormatter>? inputFormatters;
+  final ValueChanged<String>? onChanged;
+  final int maxLines;
+  final TextCapitalization textCapitalization;
+
+  /// A whole-number field: digits only, so a stray "." or "-" can never
+  /// reach `int.parse` (the original app crashed on exactly that).
+  const AppTextField.number({
+    super.key,
+    required this.label,
+    this.controller,
+    this.hint,
+    this.validator,
+    this.textInputAction,
+    this.onSubmitted,
+    this.icon,
+    this.suffix,
+    this.onChanged,
+  })  : keyboardType = TextInputType.number,
+        obscureText = false,
+        autofillHints = null,
+        inputFormatters = const [_digitsOnly],
+        maxLines = 1,
+        textCapitalization = TextCapitalization.none;
+
+  static const _digitsOnly = _DigitsOnlyFormatter();
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +96,14 @@ class AppTextField extends StatelessWidget {
                 obscureText: obscureText,
                 autofillHints: autofillHints,
                 onSubmitted: onSubmitted,
-                onChanged: field.didChange,
+                inputFormatters: inputFormatters,
+                maxLines: maxLines,
+                minLines: 1,
+                textCapitalization: textCapitalization,
+                onChanged: (v) {
+                  field.didChange(v);
+                  onChanged?.call(v);
+                },
                 style: AppText.body.copyWith(color: p.textPrimary),
                 decoration: InputDecoration(
                   hintText: hint,
@@ -93,5 +131,20 @@ class AppTextField extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+/// Same as `FilteringTextInputFormatter.digitsOnly`, but const so the
+/// `.number` constructor can stay const.
+class _DigitsOnlyFormatter extends TextInputFormatter {
+  const _DigitsOnlyFormatter();
+
+  static final _nonDigit = RegExp(r'[^0-9]');
+
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    if (!_nonDigit.hasMatch(newValue.text)) return newValue;
+    final text = newValue.text.replaceAll(_nonDigit, '');
+    return TextEditingValue(text: text, selection: TextSelection.collapsed(offset: text.length));
   }
 }

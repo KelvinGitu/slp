@@ -14,26 +14,43 @@ import 'package:solartide/core/theme/app_tokens.dart';
 /// SnackBar belongs to the page's Scaffold, so one raised from inside a
 /// bottom sheet or dialog appeared *under* it and was missed. The overlay sits
 /// above every route, sheet and dialog.
-void showSnackBar(BuildContext context, String message) {
+///
+/// [actionLabel] and [onAction] add one text action, such as Undo.
+void showSnackBar(BuildContext context, String message, {String? actionLabel, VoidCallback? onAction}) {
   final overlay = Overlay.maybeOf(context, rootOverlay: true);
   if (overlay == null) return;
   _current?.dismiss();
-  _current = _Toast(overlay, message, Directionality.of(context), View.of(context))..show();
+  _current = _Toast(overlay, message, Directionality.of(context), View.of(context), actionLabel, onAction)..show();
 }
 
 _Toast? _current;
 
 class _Toast {
-  _Toast(this._overlay, this._message, this._direction, this._view);
+  _Toast(this._overlay, this._message, this._direction, this._view, this._actionLabel, this._onAction);
 
   final OverlayState _overlay;
   final String _message;
   final TextDirection _direction;
   final FlutterView _view;
+  final String? _actionLabel;
+  final VoidCallback? _onAction;
 
-  static const _visibleFor = Duration(seconds: 4);
+  // Longer with an action, so there's time to reach for Undo.
+  Duration get _visibleFor => Duration(seconds: _actionLabel == null ? 4 : 6);
 
-  late final OverlayEntry _entry = OverlayEntry(builder: (_) => _ToastView(message: _message, onDismiss: dismiss));
+  late final OverlayEntry _entry = OverlayEntry(
+    builder: (_) => _ToastView(
+      message: _message,
+      onDismiss: dismiss,
+      actionLabel: _actionLabel,
+      onAction: _onAction == null
+          ? null
+          : () {
+              dismiss();
+              _onAction();
+            },
+    ),
+  );
   Timer? _timer;
   bool _removed = false;
 
@@ -54,10 +71,12 @@ class _Toast {
 }
 
 class _ToastView extends StatefulWidget {
-  const _ToastView({required this.message, required this.onDismiss});
+  const _ToastView({required this.message, required this.onDismiss, this.actionLabel, this.onAction});
 
   final String message;
   final VoidCallback onDismiss;
+  final String? actionLabel;
+  final VoidCallback? onAction;
 
   @override
   State<_ToastView> createState() => _ToastViewState();
@@ -102,7 +121,23 @@ class _ToastViewState extends State<_ToastView> {
                 onTap: widget.onDismiss,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: AppSpace.lg, vertical: AppSpace.md),
-                  child: Text(widget.message, style: AppText.body.copyWith(color: p.scaffold)),
+                  child: Row(
+                    children: [
+                      Expanded(child: Text(widget.message, style: AppText.body.copyWith(color: p.scaffold))),
+                      if (widget.actionLabel != null && widget.onAction != null) ...[
+                        const SizedBox(width: AppSpace.md),
+                        TextButton(
+                          onPressed: widget.onAction,
+                          style: TextButton.styleFrom(
+                            foregroundColor: AppColors.mint,
+                            minimumSize: const Size(AppSize.minTouch, AppSize.minTouch),
+                            textStyle: AppText.bodyStrong.copyWith(fontFamily: AppText.fontFamily),
+                          ),
+                          child: Text(widget.actionLabel!),
+                        ),
+                      ],
+                    ],
+                  ),
                 ),
               ),
             ),
