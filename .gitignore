@@ -41,3 +41,11 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Native build intermediates
+.cxx/
+**/android/app/.cxx/
+
+# Local secrets
+*-firebase-adminsdk-*.json
+tool/service-account.json
