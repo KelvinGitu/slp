@@ -47,7 +47,7 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAImH2gdYsPus1-pRIK5Ob37lzam0XQHic',
+    apiKey: 'AIzaSyDy7vRqAm-dPk9PwTtvcgo7B5mELFYTuHk',
     appId: '1:189902921041:web:45fa086cd54e0e47f7c770',
     messagingSenderId: '189902921041',
     projectId: 'solar-project-6a8a9',
@@ -57,14 +57,14 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyD2NNjG-j_f-9YaAFB1zvdhoyE34RN0slg',
+    apiKey: 'AIzaSyC28hnkUszz8y9I3iVYQ6_e9TyDvNVNTlU',
     appId: '1:189902921041:android:2a3522bb1f522104f7c770',
     messagingSenderId: '189902921041',
     projectId: 'solar-project-6a8a9',
     storageBucket: 'solar-project-6a8a9.appspot.com',
   );
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyD073Os2cJFZv1ESDBkTvZVs7IkLOQRRF8',
+    apiKey: 'AIzaSyCnj_GoPjqEhJFE9iTMiAPZDj82hnEUp0I',
     appId: '1:189902921041:ios:85f6f235ce17e341f7c770',
     messagingSenderId: '189902921041',
     projectId: 'solar-project-6a8a9',
