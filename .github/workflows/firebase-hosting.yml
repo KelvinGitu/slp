@@ -1,12 +1,12 @@
 name: Deploy web app to Firebase Hosting
 
-# Builds the Flutter web app and deploys it to Firebase Hosting on every push
-# to main that touches the app. Pull requests get a preview channel.
+# Builds the Flutter web app and deploys it to
+# https://solar-project-6a8a9.web.app on every push to main that touches the
+# app. Pull requests only build and test.
 #
-# Repository secret:
-#   FIREBASE_SERVICE_ACCOUNT_SOLAR_PROJECT
-#     JSON key for a service account with the Firebase Hosting Admin role.
-#     `firebase init hosting:github` creates it and the secret for you.
+# No secrets: GitHub's OIDC token is exchanged for short-lived credentials on
+# github-actions-hosting@ through Workload Identity Federation, which only
+# accepts tokens from KelvinGitu/slp.
 
 on:
   push:
@@ -29,8 +29,7 @@ concurrency:
 
 permissions:
   contents: read
-  checks: write
-  pull-requests: write
+  id-token: write  # required for Workload Identity Federation
 
 jobs:
   build_and_deploy:
@@ -61,11 +60,15 @@ jobs:
       - name: Build web
         run: flutter build web --release
 
-      - name: Deploy
-        uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: Authenticate to Google Cloud
+        if: github.event_name != 'pull_request'
+        uses: google-github-actions/auth@v2
         with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SOLAR_PROJECT }}
-          projectId: solar-project-6a8a9
-          # Pushes to main go live; pull requests get a 7-day preview URL.
-          channelId: ${{ github.event_name == 'pull_request' && '' || 'live' }}
+          workload_identity_provider: projects/189902921041/locations/global/workloadIdentityPools/github-actions-pool/providers/github-provider
+          service_account: github-actions-hosting@solar-project-6a8a9.iam.gserviceaccount.com
+
+      # Pinned as in lisabem: 15.22.2/15.22.3 break ADC / Workload Identity auth
+      # (https://github.com/firebase/firebase-tools/issues/10716).
+      - name: Deploy to Firebase Hosting
+        if: github.event_name != 'pull_request'
+        run: npx firebase-tools@15.22.1 deploy --only hosting --project solar-project-6a8a9 --non-interactive
