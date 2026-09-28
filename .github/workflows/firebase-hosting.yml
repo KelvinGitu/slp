@@ -1,0 +1,71 @@
+name: Deploy web app to Firebase Hosting
+
+# Builds the Flutter web app and deploys it to Firebase Hosting on every push
+# to master that touches the app. Pull requests get a preview channel.
+#
+# Repository secret:
+#   FIREBASE_SERVICE_ACCOUNT_SOLAR_PROJECT
+#     JSON key for a service account with the Firebase Hosting Admin role.
+#     `firebase init hosting:github` creates it and the secret for you.
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'lib/**'
+      - 'web/**'
+      - 'assets/**'
+      - 'pubspec.yaml'
+      - 'pubspec.lock'
+      - 'firebase.json'
+      - '.github/workflows/firebase-hosting.yml'
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: hosting-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+
+jobs:
+  build_and_deploy:
+    name: Build and deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          # Keep in lockstep with the local SDK.
+          flutter-version: '3.41.4'
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze and test
+        run: |
+          flutter analyze
+          flutter test
+
+      - name: Build web
+        run: flutter build web --release
+
+      - name: Deploy
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SOLAR_PROJECT }}
+          projectId: solar-project-6a8a9
+          # Pushes to master go live; pull requests get a 7-day preview URL.
+          channelId: ${{ github.event_name == 'pull_request' && '' || 'live' }}

@@ -3,8 +3,6 @@ include: package:flutter_lints/flutter.yaml
 analyzer:
   exclude:
     - lib/firebase_options.dart
-    # Pre-2026 code, kept only as a reference while porting. Deleted once the rebuild is done.
-    - legacy/**
   language:
     strict-casts: true
 
