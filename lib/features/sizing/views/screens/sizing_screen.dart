@@ -150,14 +150,15 @@ class _SizingScreenState extends ConsumerState<SizingScreen> {
           note: ready ? '${formatPower(result.arrayWatts)} for ${formatEnergy(result.dailyWh)} a day' : null,
         ),
         const SectionLabel('Load'),
-        Row(
+        Wrap(
+          spacing: AppSpace.sm,
+          runSpacing: AppSpace.sm,
           children: [
             PillButton(
               label: 'Appliances',
               selected: _mode == _LoadMode.appliances,
               onPressed: () => setState(() => _mode = _LoadMode.appliances),
             ),
-            const SizedBox(width: AppSpace.sm),
             PillButton(
               label: 'Monthly bill',
               selected: _mode == _LoadMode.monthly,

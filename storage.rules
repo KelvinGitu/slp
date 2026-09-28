@@ -1,0 +1,15 @@
+rules_version = '2';
+
+// Business logos: logos/{uid}. Readable by anyone with the link (it's printed
+// on quotes); writable only by the owner, as an image under 2 MB.
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /logos/{uid} {
+      allow read;
+      allow write: if request.auth != null
+        && request.auth.uid == uid
+        && request.resource.size < 2 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+    }
+  }
+}

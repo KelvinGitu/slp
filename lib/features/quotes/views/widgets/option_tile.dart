@@ -58,7 +58,19 @@ class OptionTile extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: AppSpace.md),
-              trailing ?? Text(perUnit, style: AppText.amount.copyWith(color: p.textPrimary)),
+              trailing ??
+                  // Gives way to the label at large text sizes rather than
+                  // overflowing the tile.
+                  Flexible(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: AppSize.listTrailingMax),
+                      child: Text(
+                        perUnit,
+                        textAlign: TextAlign.end,
+                        style: AppText.amount.copyWith(color: p.textPrimary),
+                      ),
+                    ),
+                  ),
             ],
           ),
         ),

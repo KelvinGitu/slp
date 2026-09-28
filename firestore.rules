@@ -1,0 +1,16 @@
+rules_version = '2';
+
+// Everything an installer owns lives under users/{uid}. Nothing else is
+// readable or writable. This replaces the open rules the 2024 app ran on,
+// under which anyone with the web API key could read the whole catalogue.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+
+      match /{document=**} {
+        allow read, write: if request.auth != null && request.auth.uid == uid;
+      }
+    }
+  }
+}
