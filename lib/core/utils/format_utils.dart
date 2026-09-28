@@ -35,6 +35,13 @@ String formatAmount(num amount) => _kes.format(amount);
 String formatQuoteNumber(String prefix, int year, int sequence) =>
     '$prefix-$year-${sequence.toString().padLeft(4, '0')}';
 
+/// "12 panels", "35 m", "90 min", "1 roll".
+String formatUnits(int quantity, String unit) => switch (unit) {
+      'm' => '$quantity m',
+      'minute' => '$quantity min',
+      _ => quantity == 1 ? '1 $unit' : '$quantity ${unit}s',
+    };
+
 /// "3.2 kWp", "850 W". Keeps sizing results readable whatever the magnitude.
 String formatPower(double watts) =>
     watts >= 1000 ? '${(watts / 1000).toStringAsFixed(1)} kW' : '${watts.round()} W';

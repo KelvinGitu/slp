@@ -39,6 +39,9 @@ abstract final class AppSize {
   static const double chipPaddingH = 10;
   static const double input = 56;
 
+  /// A quantity field beside an option (cable lugs, piping).
+  static const double qtyField = 96;
+
   // Navigation (§5.9, §6.3).
   static const double bottomNav = 72;
   static const double railWidth = 240;

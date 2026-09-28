@@ -6,17 +6,16 @@ import 'package:solartide/core/utils/format_utils.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 /// Screen header (STYLE_GUIDE §5.1): menu, time-of-day greeting over the name,
-/// then the date and a bell with an unread dot.
+/// then the date, and an optional [trailing] action on the right.
 class ScreenHeader extends StatelessWidget {
-  const ScreenHeader({super.key, required this.name, required this.now, this.onMenu, this.onBell, this.hasUnread = false});
+  const ScreenHeader({super.key, required this.name, required this.now, this.onMenu, this.trailing});
 
   final String name;
 
   /// Local time; drives the greeting and the date.
   final DateTime now;
   final VoidCallback? onMenu;
-  final VoidCallback? onBell;
-  final bool hasUnread;
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +42,7 @@ class ScreenHeader extends StatelessWidget {
               children: [
                 Semantics(
                   header: true,
-                  child: Text('${greetingFor(now)}, $name',style: AppText.title1.copyWith(color: p.textPrimary)),
+                  child: Text('${greetingFor(now)}, $name', style: AppText.title1.copyWith(color: p.textPrimary)),
                 ),
                 const SizedBox(height: AppSpace.xs),
                 Text(formatDate(now), style: AppText.label.copyWith(color: p.textSecondary)),
@@ -51,17 +50,7 @@ class ScreenHeader extends StatelessWidget {
             ),
           ),
         ),
-        IconButton(
-          onPressed: onBell,
-          tooltip: hasUnread ? 'Alerts, unread' : 'Alerts',
-          style: IconButton.styleFrom(minimumSize: const Size.square(AppSize.minTouch)),
-          icon: Badge(
-            isLabelVisible: hasUnread,
-            smallSize: AppSpace.sm,
-            backgroundColor: AppColors.danger,
-            child: Icon(PhosphorIconsRegular.bell, size: AppSize.iconNav, color: p.textPrimary),
-          ),
-        ),
+        ?trailing,
       ],
     );
   }
