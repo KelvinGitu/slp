@@ -47,29 +47,28 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCfDtevV8qJ5ijfIRFNEs8toahn0R4DCnA',
-    appId: '1:189902921041:web:1a4d32bdb2c956a1f7c770',
+    apiKey: 'AIzaSyAImH2gdYsPus1-pRIK5Ob37lzam0XQHic',
+    appId: '1:189902921041:web:45fa086cd54e0e47f7c770',
     messagingSenderId: '189902921041',
     projectId: 'solar-project-6a8a9',
     authDomain: 'solar-project-6a8a9.firebaseapp.com',
     storageBucket: 'solar-project-6a8a9.appspot.com',
-    measurementId: 'G-F0VHRZ8SPE',
+    measurementId: 'G-D9LERY7QGQ',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyD2NNjG-j_f-9YaAFB1zvdhoyE34RN0slg',
-    appId: '1:189902921041:android:c827d70681708840f7c770',
+    appId: '1:189902921041:android:2a3522bb1f522104f7c770',
     messagingSenderId: '189902921041',
     projectId: 'solar-project-6a8a9',
     storageBucket: 'solar-project-6a8a9.appspot.com',
   );
-
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyD073Os2cJFZv1ESDBkTvZVs7IkLOQRRF8',
-    appId: '1:189902921041:ios:96385e548138b5aaf7c770',
+    appId: '1:189902921041:ios:85f6f235ce17e341f7c770',
     messagingSenderId: '189902921041',
     projectId: 'solar-project-6a8a9',
     storageBucket: 'solar-project-6a8a9.appspot.com',
-    iosBundleId: 'com.example.solarProject',
+    iosBundleId: 'com.solartide.app',
   );
 }

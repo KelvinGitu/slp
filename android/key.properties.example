@@ -1,5 +1,10 @@
-# Copy to key.properties (gitignored) and fill in for release builds.
-storeFile=/absolute/path/to/solartide-upload.jks
+# Copy to android/key.properties and fill in. That file is gitignored;
+# this template is not. storeFile is relative to android/app/.
+#
+# Values come from when the keystore was created (keytool -genkey ...).
+# If you lose them, the keystore is unusable: you'd need to create a new
+# upload key and register it with Play Console instead.
 storePassword=
-keyAlias=upload
 keyPassword=
+keyAlias=upload
+storeFile=upload-keystore.jks

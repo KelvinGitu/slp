@@ -49,3 +49,6 @@ app.*.map.json
 # Local secrets
 *-firebase-adminsdk-*.json
 tool/service-account.json
+
+# Kotlin compiler caches
+/android/.kotlin/
