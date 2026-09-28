@@ -13,3 +13,16 @@ DateTime? dateFrom(Object? value) => switch (value) {
 Timestamp? timestampFrom(DateTime? value) => value == null ? null : Timestamp.fromDate(value);
 
 double? doubleFrom(Object? value) => value is num ? value.toDouble() : null;
+
+/// Whole number from any numeric field; Firestore hands back doubles for
+/// values a web client wrote as `1.0`.
+int? intFrom(Object? value) => value is num ? value.round() : null;
+
+/// A list of maps, skipping anything malformed rather than throwing the whole
+/// document away.
+List<Map<String, dynamic>> mapListFrom(Object? value) => value is List
+    ? value.whereType<Map<Object?, Object?>>().map((m) => m.cast<String, dynamic>()).toList()
+    : const [];
+
+List<String> stringListFrom(Object? value) =>
+    value is List ? value.whereType<String>().toList() : const [];
