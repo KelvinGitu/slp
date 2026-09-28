@@ -49,7 +49,7 @@ flutter analyze && flutter test
   - Run `flutter build appbundle`.
   - Release builds refuse to build without signing or Firebase config.
 - **Web:**
-  - Pushes to `master` deploy to Firebase Hosting (`.github/workflows/firebase-hosting.yml`).
+  - Pushes to `main` deploy to Firebase Hosting (`.github/workflows/firebase-hosting.yml`).
   - The workflow needs the repository secret `FIREBASE_SERVICE_ACCOUNT_SOLAR_PROJECT`; `firebase init hosting:github` creates it.
   - To deploy by hand: `flutter build web && firebase deploy --only hosting`.
 
